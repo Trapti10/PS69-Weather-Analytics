@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# Environment/secrets
+.env
+
+# Large/raw datasets
+*.zip
+data/raw/*.csv
+data/raw/*.json
+
+# Generated Phase 2 outputs
+data/phase2/fused/
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
+
+# OS files
+.DS_Store
+Thumbs.db

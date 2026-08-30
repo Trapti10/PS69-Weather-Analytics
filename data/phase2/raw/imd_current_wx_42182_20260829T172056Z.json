@@ -1,0 +1,17 @@
+[
+  {
+    "_fixture_note": "IMD's api_reference.html publishes a FIELD TABLE for current_wx (Station Id, Station, Date/Time of Observation, M.S.L.P, Wind Direction, Wind Speed, Temperature, Weather Code, Nebulosity, Humidity, Last 24 hrs Rainfall) but does NOT publish a literal sample JSON for this endpoint. This fixture uses IMD's documented field names/types with representative test values so imd_client.py can be exercised offline. It is NOT a real IMD response \u2014 do not present it as one.",
+    "Station Id": "42182",
+    "Station": "NAGPUR",
+    "Date of Observation": "2026-08-29",
+    "Time of Observation": "06:00",
+    "M.S.L.P": "1005.2",
+    "Wind Direction": "270",
+    "Wind Speed": "8",
+    "Temperature": "29.4",
+    "Weather Code": "02",
+    "Nebulosity": "3",
+    "Humidity": "62",
+    "Last 24 hrs Rainfall": "0.0"
+  }
+]

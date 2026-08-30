@@ -1,0 +1,25 @@
+[
+  {
+    "_fixture_note": "This is copied verbatim from IMD's own published sample response for the aws_data endpoint (api.imd.gov.in/public/api_reference.html), used here only for offline testing since live access requires IP whitelisting we do not yet have.",
+    "ID": "B48970CA",
+    "CALL_SIGN": "NDL",
+    "DISTRICT": "NEW_DELHI",
+    "STATE": "DELHI",
+    "STATION": "LODI ROAD",
+    "DATE": "2024-06-06",
+    "TIME": "07:00:00",
+    "CURR_TEMP": "40.8",
+    "DEW_POINT_TEMP": "13.7",
+    "RH": "20",
+    "WIND_DIRECTION": "189",
+    "WIND_SPEED": "1",
+    "MSLP": "1003.0",
+    "MIN_TEMP": "39.9",
+    "MAX_TEMP": "40.9",
+    "Latitude": "28.5885",
+    "Longitude": "77.2224",
+    "WEATHER_CODE": "5",
+    "NEBULOSITY": "4",
+    "Feel Like": "40.5"
+  }
+]

@@ -1,0 +1,2 @@
+id,source,station_id,timestamp,ingested_at,country,state,district,city,latitude,longitude,temperature,humidity,pressure,rainfall,wind_speed,wind_direction,event_type,description,verification_status,confidence_score,quality_flags
+bdd278ea-ff1e-45af-8128-d8efa928d8ed,IMD,42182,2026-08-29T06:00:00Z,2026-08-29T17:20:56.990651+00:00,India,,,NAGPUR,,,29.4,62.0,1005.2,0.0,2.222,270.0,current_observation,IMD current weather code 02,validated,0.9,
