@@ -1,0 +1,40 @@
+{
+  "n_era5_records": 17544,
+  "n_openmeteo_records": 17544,
+  "n_pairs_with_matching_timestamp": 17544,
+  "n_matched_temporal_and_spatial": 17544,
+  "n_not_matched": 0,
+  "grid_distance_km": 1.808,
+  "variable_agreement_stats": {
+    "temperature": {
+      "SOURCE_AGREEMENT_HIGH": 9725,
+      "SOURCE_AGREEMENT_MEDIUM": 7169,
+      "SOURCE_DISAGREEMENT": 650
+    },
+    "pressure": {
+      "SOURCE_AGREEMENT_HIGH": 17544
+    },
+    "rainfall": {
+      "SOURCE_AGREEMENT_HIGH": 16504,
+      "SOURCE_AGREEMENT_MEDIUM": 919,
+      "SOURCE_DISAGREEMENT": 121
+    },
+    "wind_speed": {
+      "SOURCE_DISAGREEMENT": 10950,
+      "SOURCE_AGREEMENT_MEDIUM": 4339,
+      "SOURCE_AGREEMENT_HIGH": 2255
+    },
+    "wind_gust_bonus": {
+      "SOURCE_DISAGREEMENT": 9195,
+      "SOURCE_AGREEMENT_MEDIUM": 5472,
+      "SOURCE_AGREEMENT_HIGH": 2877
+    }
+  },
+  "confidence_score_stats": {
+    "n": 17544,
+    "min": 0.4,
+    "max": 1.0,
+    "mean": 0.7955
+  },
+  "scientific_note": "Open-Meteo Historical Weather API is a model/reanalysis blend (best_match: ECMWF IFS + ERA5/ERA5-Land), NOT an independent ground observation. This is a cross-model comparison against ERA5, not a model-vs-truth validation. IMD (Phase 2A) remains the only observational source in this architecture. Pressure comparison uses ERA5 mean-sea-level pressure vs Open-Meteo surface pressure -- a real, elevation-driven (~390m) systematic offset, not a genuine weather disagreement."
+}

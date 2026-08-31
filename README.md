@@ -187,4 +187,203 @@ and orchestration change, not a fusion-logic rewrite:
   and batch/parallel processing genuinely become necessary — but that is explicitly **not** implemented
   in Phase 2B, per the instruction not to introduce Kafka/Spark/distributed processing yet. The fusion
   math itself does not need to change; only how much data flows through it and how it's stored/queried.
-"# PS69-Weather-Analytics" 
+
+## Phase 2C — Real Overlapping Multi-Source Validation (Open-Meteo)
+
+**1. Goal.** Add a third real source (Open-Meteo Historical Weather API) with genuine overlapping
+time coverage with ERA5, so the fusion demo no longer needs the synthetic timestamp alignment that
+Phase 2B's IMD pairing required (real ERA5 2024–25 vs. a real IMD fixture dated 2026).
+
+**2. Data.** `data/raw/jabalpur_openmeteo_2024_2025.json` — a real, unmodified response from
+`https://archive-api.open-meteo.com/v1/archive` for latitude 23.25, longitude 80.00 (Open-Meteo snapped
+this to its nearest model grid point: 23.233742, 80.0), 2024-01-01 to 2025-12-31, hourly,
+`timezone=UTC`, `wind_speed_unit=ms`. This sandbox's network allowlist does not include
+`archive-api.open-meteo.com`, so the user fetched it locally with the verified `curl`/Python command
+and uploaded the real file back — no synthetic or fabricated data was substituted at any point.
+
+**3. Critical scientific limitation — stated plainly, not glossed over.** Open-Meteo's Historical
+Weather API is itself **model/reanalysis output** (a `best_match` blend of ECMWF IFS and
+ERA5/ERA5-Land), **not an independent ground observation**. Phase 2C is therefore a **cross-model
+comparison**, not a model-vs-truth validation. IMD (Phase 2A) remains the only observational source
+in this architecture. Nowhere in Phase 2C's code or output is ERA5+Open-Meteo agreement described as
+"verified truth."
+
+**4. Adapter.** `src/adapters/openmeteo_adapter.py` maps the real JSON's hourly arrays into the same
+shared `WeatherRecord` schema Phase 2A (IMD) and Phase 2B (ERA5) already use — reusing
+`ingestion/validators.py::validate_record` unchanged, exactly like the ERA5 adapter does. Mapping:
+`temperature_2m`→temperature, `relative_humidity_2m`→humidity, `surface_pressure`→pressure,
+`precipitation`→rainfall, `wind_speed_10m`→wind_speed (already m/s per the request),
+`wind_gusts_10m`→stored in `raw_payload["wind_gust"]` (schema has no gust field, same treatment as
+ERA5's `fg10`). `wind_direction` is honestly `None` — direction was not requested in this pull.
+
+**5. Pressure caveat — an important, real, non-obvious finding.** The request used Open-Meteo's
+`surface_pressure`, not `pressure_msl` (mean-sea-level pressure). ERA5's pipeline uses `msl`. Jabalpur's
+station elevation in the real response is 390m, so `surface_pressure` is systematically **~35–46 hPa
+lower** than ERA5's MSL value — real physics (altitude), not a genuine weather disagreement.
+
+**6. Methodological finding: the existing percent-based agreement thresholds mask this offset.**
+Because pressure's baseline magnitude (~1000 hPa) is large, a real 46 hPa gap is only ~4.5% relative
+difference — under Phase 2B's existing 5% `SOURCE_AGREEMENT_HIGH` threshold (`fusion/source_comparison.py`,
+unmodified). Every pressure comparison in the real run reports `SOURCE_AGREEMENT_HIGH` despite the
+known elevation offset. This mirrors why rainfall already needed an absolute-mm threshold instead of a
+percentage one — pressure has the same problem but is not yet special-cased. This is documented here
+and asserted by `tests/test_phase2c_openmeteo.py::test_pressure_percent_threshold_masks_the_elevation_offset`
+rather than silently patched, per the instruction not to modify Phase 2B files in this phase.
+
+**7. Real overlap — no synthetic timestamp shifting.** Both real files cover the identical 17,544-hour
+period. Pairing uses each record's actual parsed timestamp (via the unmodified
+`fusion/temporal_alignment.py::check_temporal_match`) — never date-only matching. Result: all 17,544
+ERA5 records find a real Open-Meteo record at the exact same UTC hour, and all 17,544 pairs pass both
+`TEMPORAL_MATCH` (0-minute difference) and `SPATIAL_MATCH` (1.808 km grid-point distance, real
+Haversine, well inside the existing 25km threshold) — genuinely, without any timestamp override.
+
+**8. Real agreement/disagreement statistics** (see `scripts/run_phase2c_demo.py` output and
+`data/phase2c/fused/phase2c_summary.json` for exact numbers): temperature agrees at HIGH/MEDIUM levels
+for the large majority of hours with a small real disagreement tail; rainfall agrees highly the large
+majority of the time; wind_speed disagrees far more often than it agrees (a genuine, reproducible
+finding — 10-m wind speed is well known to be one of the least consistent variables across reanalysis
+products, being highly sensitive to model resolution and boundary-layer parameterization); pressure is
+HIGH across the board for the reason explained in point 6.
+
+**9. Bonus comparison.** Both sources genuinely provide wind gust (ERA5's `fg10`, Open-Meteo's
+`wind_gusts_10m`) outside the shared schema — Phase 2C compares these directly via the existing generic
+`compare_variable()` (reused, not duplicated) as an extra, clearly-labeled bonus statistic.
+
+**10. Files added:** `src/adapters/openmeteo_adapter.py`, `src/fusion/storage_fused_2c.py` (new,
+separate from Phase 2B's `storage_fused.py` so its ERA5/IMD-specific column names are never
+repurposed), `scripts/run_phase2c_demo.py`, `tests/test_phase2c_openmeteo.py`. **Files modified:**
+only this README (append-only) — Phase 1, Phase 2A, and Phase 2B source/data files are untouched.
+
+### Running Phase 2C
+
+```bash
+python scripts/run_phase2c_demo.py
+python tests/test_phase2c_openmeteo.py   # 17 tests, all passing
+python tests/test_phase2b_fusion.py      # Phase 2B's 20 tests, still passing unchanged
+python tests/test_phase2_ingestion.py    # Phase 2A's 7 tests, still passing unchanged
+```
+
+Outputs land in `data/phase2c/fused/` (new directory): `openmeteo_weather_records.{json,csv}`,
+`era5_openmeteo_comparison.csv`, `era5_openmeteo_fused_records.csv`, `phase2c_summary.json` — Phase
+2A's and Phase 2B's output directories are untouched.
+
+### Recommended Phase 3
+
+1. Re-pull Open-Meteo with `pressure_msl` instead of (or alongside) `surface_pressure`, to remove the
+   elevation confound identified in point 6, and consider an absolute-hPa agreement threshold for
+   pressure (mirroring rainfall's existing absolute-mm special case).
+2. Investigate the wind_speed disagreement rate with real per-hour diagnostics (time-of-day, season,
+   monsoon vs. non-monsoon) rather than a single aggregate percentage.
+3. Bring IMD (Phase 2A) into a real three-way overlap once real (non-fixture) IMD data with a
+   2024–2025-overlapping timestamp is available, so the platform can finally compare model outputs
+   against an actual ground observation, not just against each other.
+4. Move fused storage to PostgreSQL/PostGIS once a genuine multi-location, multi-source dataset exists
+   (consistent with the scaling discussion already documented in the Phase 2B section above).
+
+## Phase 3A — Multi-Source Weather Report / Citizen Report Ingestion Layer
+
+**1. Goal.** PS69 requires the platform to collect weather-related information from heterogeneous
+internet-based sources: social media, public datasets, websites, APIs, and citizen reports. Phase 3A
+builds the source-agnostic ingestion architecture for this — schema, adapters, validation,
+normalization, and deterministic deduplication — using clearly-labeled synthetic fixtures for social
+media and citizen reports, since no live platform access exists yet.
+
+**2. Honesty note — read before anything else.** This phase does **not** have live access to
+Twitter/X, Instagram, Facebook, or any real citizen-reporting backend. `src/adapters/social_report_adapter.py`
+and `src/adapters/citizen_report_adapter.py` read from clearly-labeled SYNTHETIC/DEMO fixtures
+(`data/phase3/fixtures/*.json`). Every fixture record carries a `_synthetic_note` field that is
+**preserved** (not stripped) inside the resulting `WeatherReport.raw_payload`, so any downstream
+consumer can always see, from the record itself, that it originated from synthetic data — this is a
+deliberate departure from Phase 2A's IMD-fixture convention (which strips its `_fixture_note`),
+chosen here because report data is closer to "real-looking" free text and needs a stronger, permanent
+label. No real people, accounts, GPS traces, photos, or videos are represented anywhere in this phase.
+
+**3. New schema — `src/schemas/weather_report.py` (`WeatherReport`).** Deliberately **separate** from
+`WeatherRecord`: `WeatherRecord` represents structured meteorological *observations* (ERA5, IMD,
+Open-Meteo — numeric, known-unit sensor/model values); `WeatherReport` represents unstructured/semi-
+structured human or third-party *reports* about weather *events* (free text, photos, social posts,
+citizen submissions) with a different trust model (unverified by default, deduplication-prone).
+Fields: `report_id`, `source_type`, `source_name`, `source_url`, `author_id_or_hash` (hashed, never a
+raw handle/name), `timestamp`, `ingestion_timestamp`, `city`, `state`, `latitude`, `longitude`, `text`,
+`image_url`, `video_url`, `event_type` (normalized), `raw_event_type` (original label before
+normalization), `verification_status`, `source_reliability`, `is_suspicious`, `is_duplicate`,
+`duplicate_hash`, `duplicate_group_id`, `metadata`, `raw_payload`. `WeatherRecord` itself is untouched.
+
+**4. Controlled vocabularies.** `source_type` ∈ {SOCIAL_MEDIA, CITIZEN_REPORT, PUBLIC_DATASET, WEBSITE,
+API}. `event_type` ∈ {RAINFALL, THUNDERSTORM, FLOODING, HEATWAVE, FOG, DUST_STORM, STRONG_WIND, OTHER}.
+`verification_status` ∈ {UNVERIFIED, VERIFIED, REJECTED, SUSPICIOUS} — **new reports are never
+auto-VERIFIED** (enforced by `report_validators.py` and asserted by
+`test_new_reports_never_auto_verified`). The schema is not hardcoded to any city — fixtures cover nine
+different Indian cities/states to prove this (see point 8).
+
+**5. Pipeline (matches the required architecture exactly).**
+```
+Raw source (synthetic fixture)
+   -> Source adapter (social_report_adapter.py / citizen_report_adapter.py)
+   -> WeatherReport
+   -> Validation      (src/ingestion/report_validators.py)
+   -> Normalization   (src/ingestion/report_normalizer.py)
+   -> Deduplication prep (src/ingestion/report_dedup.py)
+   -> Processed reports (src/ingestion/report_storage.py -> data/phase3/processed/)
+```
+
+**6. Validation (`report_validators.py`) — never silently discards.** Checks: known `source_type`,
+parseable/present `timestamp`, latitude ∈ [-90, 90], longitude ∈ [-180, 180], some location info present
+(city/state or lat/lon), known `event_type`, minimum/maximum text length. Physically-impossible or
+structurally unusable records (bad lat/lon, missing/unparseable timestamp, unknown source type) are
+marked `REJECTED`; unusual-but-possibly-real records (empty text + unrecognized category, no location
+at all) are marked `SUSPICIOUS`. **Every record is returned and stored regardless of outcome** — nothing
+is dropped from the pipeline, per the explicit instruction not to silently discard data.
+
+**7. Normalization (`report_normalizer.py`).** Reformats `timestamp` to a consistent UTC ISO-8601
+string, collapses/strips `text` whitespace, title-cases `city`/`state`, and assigns a baseline
+`source_reliability` score (if not already set) from `DEFAULT_SOURCE_RELIABILITY` — a **stated,
+configurable assumption, not a scientifically validated trust metric**:
+`API=0.85, PUBLIC_DATASET=0.75, WEBSITE=0.5, CITIZEN_REPORT=0.4, SOCIAL_MEDIA=0.3, UNKNOWN=0.2`.
+
+**8. Fixtures — 13 synthetic reports across 9 Indian cities.** `social_weather_reports.json` (7
+entries: Jabalpur ×3 including one exact duplicate and one differently-worded near-duplicate, Delhi,
+Bhopal, Jaipur with a missing timestamp, Chennai with an impossible latitude). `citizen_weather_reports.json`
+(6 entries: Jabalpur ×2 exact duplicate, Nagpur, Patna with an impossible longitude, Lucknow with empty
+text + unknown category, Kolkata). Deliberately not hardcoded to Jabalpur, and deliberately includes
+malformed entries so validation has real cases to catch.
+
+**9. Deduplication (`report_dedup.py`) — deterministic baseline, explicitly not ML/semantic yet.**
+`duplicate_hash = sha256(event_type | 30-minute time bucket | 2-decimal-degree location bucket |
+exact normalized text)`. The first report seen for a given hash in a batch is the "original"
+(`is_duplicate=False`); later reports sharing that hash get `is_duplicate=True` and the same
+`duplicate_group_id`. **Documented, demonstrated limitation:** two independently-worded real reports
+of the *same* event (e.g. "waterlogging near MG Road" vs. "MG Road is completely flooded") are **not**
+caught by this exact-text baseline — proven by the fixtures and by
+`test_near_duplicate_with_different_wording_is_not_caught_documented_limitation`. This gap is exactly
+why Phase 3B (semantic/ML similarity) is the recommended next step, not an oversight here.
+
+**10. Files added:** `src/schemas/weather_report.py`, `src/ingestion/report_validators.py`,
+`src/ingestion/report_normalizer.py`, `src/ingestion/report_dedup.py`, `src/ingestion/report_storage.py`,
+`src/adapters/social_report_adapter.py`, `src/adapters/citizen_report_adapter.py`,
+`data/phase3/fixtures/{social_weather_reports.json,citizen_weather_reports.json}`,
+`scripts/run_phase3a_demo.py`, `tests/test_phase3a_reports.py`. **Files modified:** only this README
+(append-only). `WeatherRecord` and every Phase 1/2A/2B/2C file are untouched.
+
+### Running Phase 3A
+
+```bash
+python scripts/run_phase3a_demo.py
+python tests/test_phase3a_reports.py     # 27 tests, all passing
+python tests/test_phase2c_openmeteo.py   # Phase 2C's 17 tests, still passing unchanged
+python tests/test_phase2b_fusion.py      # Phase 2B's 20 tests, still passing unchanged
+python tests/test_phase2_ingestion.py    # Phase 2A's 7 tests, still passing unchanged
+```
+
+Outputs land in `data/phase3/processed/` (new directory): `all_weather_reports.{json,csv}`,
+`social_weather_reports_processed.json`, `citizen_weather_reports_processed.json` — no earlier
+phase's output directory is touched.
+
+### Recommended Phase 3B
+
+Add a semantic/ML similarity layer on top of (not replacing) Phase 3A's deterministic dedup baseline,
+specifically to catch the documented gap in point 9 — differently-worded reports of the same real
+event. A lightweight embedding-similarity or entailment model, applied only within an already-matched
+time+location bucket (reusing Phase 3A's bucketing, not recomputing it), would be a natural next step,
+along with a real (rule-based-to-ML) event-type classifier to replace `infer_event_type_from_text`'s
+keyword heuristic.
