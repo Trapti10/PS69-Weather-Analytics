@@ -1,0 +1,370 @@
+[
+  {
+    "sources": {
+      "ERA5": {
+        "id": "023195be-a0a5-4d7c-8488-95b551b990b2",
+        "source": "ERA5",
+        "station_id": null,
+        "timestamp": "2024-01-01T06:00:00Z",
+        "ingested_at": "2026-08-30T04:08:38.791855+00:00",
+        "country": "India",
+        "state": null,
+        "district": null,
+        "city": null,
+        "latitude": 23.25,
+        "longitude": 80.0,
+        "temperature": 21.874,
+        "humidity": null,
+        "pressure": 1017.407,
+        "rainfall": 0.0,
+        "wind_speed": 1.58,
+        "wind_direction": 354.21,
+        "event_type": "reanalysis_gridpoint",
+        "description": "ERA5 hourly reanalysis (Copernicus CDS)",
+        "verification_status": "validated",
+        "confidence_score": 0.85,
+        "quality_flags": [],
+        "raw_payload": {
+          "valid_time": "2024-01-01 06:00:00",
+          "u10": -0.15937805,
+          "v10": 1.5721741,
+          "fg10": 5.4432206,
+          "d2m": 288.8278,
+          "t2m": 295.0243,
+          "msl": 101740.69,
+          "tp": 0.0,
+          "latitude": 23.25,
+          "longitude": 80.0
+        }
+      },
+      "IMD": {
+        "id": "a4f0a9d4-1153-400d-9b87-29e0f7d559f8",
+        "source": "IMD",
+        "station_id": "42182",
+        "timestamp": "2026-08-29T06:00:00Z",
+        "ingested_at": "2026-08-30T04:08:46.710917+00:00",
+        "country": "India",
+        "state": null,
+        "district": null,
+        "city": "NAGPUR",
+        "latitude": null,
+        "longitude": null,
+        "temperature": 29.4,
+        "humidity": 62.0,
+        "pressure": 1005.2,
+        "rainfall": 0.0,
+        "wind_speed": 2.222,
+        "wind_direction": 270.0,
+        "event_type": "current_observation",
+        "description": "IMD current weather code 02",
+        "verification_status": "validated",
+        "confidence_score": 0.9,
+        "quality_flags": [],
+        "raw_payload": {
+          "Station Id": "42182",
+          "Station": "NAGPUR",
+          "Date of Observation": "2026-08-29",
+          "Time of Observation": "06:00",
+          "M.S.L.P": "1005.2",
+          "Wind Direction": "270",
+          "Wind Speed": "8",
+          "Temperature": "29.4",
+          "Weather Code": "02",
+          "Nebulosity": "3",
+          "Humidity": "62",
+          "Last 24 hrs Rainfall": "0.0"
+        }
+      }
+    },
+    "temporal_alignment": {
+      "era5_timestamp": "2024-01-01T06:00:00Z",
+      "imd_timestamp": "2026-08-29T06:00:00Z",
+      "time_difference_minutes": 1398240.0,
+      "is_match": false,
+      "flag": "TEMPORAL_MISMATCH"
+    },
+    "spatial_alignment": {
+      "era5_latitude": 23.25,
+      "era5_longitude": 80.0,
+      "imd_latitude": null,
+      "imd_longitude": null,
+      "distance_km": null,
+      "is_match": false,
+      "flag": "SPATIAL_UNKNOWN"
+    },
+    "match_status": "NOT_MATCHED",
+    "comparison": {},
+    "fusion": {
+      "note": "Fusion not attempted: records are not temporally/spatially matched.",
+      "confidence_score": null
+    }
+  },
+  {
+    "sources": {
+      "ERA5": {
+        "id": "023195be-a0a5-4d7c-8488-95b551b990b2",
+        "source": "ERA5",
+        "station_id": null,
+        "timestamp": "2024-01-01T06:00:00Z",
+        "ingested_at": "2026-08-30T04:08:38.791855+00:00",
+        "country": "India",
+        "state": null,
+        "district": null,
+        "city": null,
+        "latitude": 23.25,
+        "longitude": 80.0,
+        "temperature": 21.874,
+        "humidity": null,
+        "pressure": 1017.407,
+        "rainfall": 0.0,
+        "wind_speed": 1.58,
+        "wind_direction": 354.21,
+        "event_type": "reanalysis_gridpoint",
+        "description": "ERA5 hourly reanalysis (Copernicus CDS)",
+        "verification_status": "validated",
+        "confidence_score": 0.85,
+        "quality_flags": [],
+        "raw_payload": {
+          "valid_time": "2024-01-01 06:00:00",
+          "u10": -0.15937805,
+          "v10": 1.5721741,
+          "fg10": 5.4432206,
+          "d2m": 288.8278,
+          "t2m": 295.0243,
+          "msl": 101740.69,
+          "tp": 0.0,
+          "latitude": 23.25,
+          "longitude": 80.0
+        }
+      },
+      "IMD": {
+        "id": "a4f0a9d4-1153-400d-9b87-29e0f7d559f8",
+        "source": "IMD",
+        "station_id": "42182",
+        "timestamp": "2024-01-01T06:00:00Z",
+        "ingested_at": "2026-08-30T04:08:46.710917+00:00",
+        "country": "India",
+        "state": null,
+        "district": null,
+        "city": "NAGPUR",
+        "latitude": 23.18,
+        "longitude": 79.95,
+        "temperature": 29.4,
+        "humidity": 62.0,
+        "pressure": 1005.2,
+        "rainfall": 0.0,
+        "wind_speed": 2.222,
+        "wind_direction": 270.0,
+        "event_type": "current_observation",
+        "description": "IMD current weather code 02",
+        "verification_status": "validated",
+        "confidence_score": 0.9,
+        "quality_flags": [],
+        "raw_payload": {
+          "Station Id": "42182",
+          "Station": "NAGPUR",
+          "Date of Observation": "2026-08-29",
+          "Time of Observation": "06:00",
+          "M.S.L.P": "1005.2",
+          "Wind Direction": "270",
+          "Wind Speed": "8",
+          "Temperature": "29.4",
+          "Weather Code": "02",
+          "Nebulosity": "3",
+          "Humidity": "62",
+          "Last 24 hrs Rainfall": "0.0"
+        }
+      }
+    },
+    "temporal_alignment": {
+      "era5_timestamp": "2024-01-01T06:00:00Z",
+      "imd_timestamp": "2024-01-01T06:00:00Z",
+      "time_difference_minutes": 0.0,
+      "is_match": true,
+      "flag": "TEMPORAL_MATCH"
+    },
+    "spatial_alignment": {
+      "era5_latitude": 23.25,
+      "era5_longitude": 80.0,
+      "imd_latitude": 23.18,
+      "imd_longitude": 79.95,
+      "distance_km": 9.311,
+      "is_match": true,
+      "flag": "SPATIAL_MATCH"
+    },
+    "match_status": "MATCHED",
+    "comparison": {
+      "temperature": {
+        "era5_value": 21.874,
+        "imd_value": 29.4,
+        "absolute_difference": 7.526,
+        "percent_difference": 25.599,
+        "agreement_flag": "SOURCE_DISAGREEMENT"
+      },
+      "pressure": {
+        "era5_value": 1017.407,
+        "imd_value": 1005.2,
+        "absolute_difference": 12.207,
+        "percent_difference": 1.2,
+        "agreement_flag": "SOURCE_AGREEMENT_HIGH"
+      },
+      "rainfall": {
+        "era5_value": 0.0,
+        "imd_value": 0.0,
+        "absolute_difference": 0.0,
+        "percent_difference": null,
+        "agreement_flag": "SOURCE_AGREEMENT_HIGH"
+      },
+      "wind_speed": {
+        "era5_value": 1.58,
+        "imd_value": 2.222,
+        "absolute_difference": 0.642,
+        "percent_difference": 28.893,
+        "agreement_flag": "SOURCE_DISAGREEMENT"
+      }
+    },
+    "fusion": {
+      "temperature": null,
+      "pressure": 1011.303,
+      "rainfall": 0.0,
+      "wind_speed": null,
+      "confidence_score": 0.6,
+      "confidence_label": "source_agreement_confidence",
+      "marginal_match": false
+    }
+  },
+  {
+    "sources": {
+      "ERA5": {
+        "id": "023195be-a0a5-4d7c-8488-95b551b990b2",
+        "source": "ERA5",
+        "station_id": null,
+        "timestamp": "2024-01-01T06:00:00Z",
+        "ingested_at": "2026-08-30T04:08:38.791855+00:00",
+        "country": "India",
+        "state": null,
+        "district": null,
+        "city": null,
+        "latitude": 23.25,
+        "longitude": 80.0,
+        "temperature": 21.874,
+        "humidity": null,
+        "pressure": 1017.407,
+        "rainfall": 0.0,
+        "wind_speed": 1.58,
+        "wind_direction": 354.21,
+        "event_type": "reanalysis_gridpoint",
+        "description": "ERA5 hourly reanalysis (Copernicus CDS)",
+        "verification_status": "validated",
+        "confidence_score": 0.85,
+        "quality_flags": [],
+        "raw_payload": {
+          "valid_time": "2024-01-01 06:00:00",
+          "u10": -0.15937805,
+          "v10": 1.5721741,
+          "fg10": 5.4432206,
+          "d2m": 288.8278,
+          "t2m": 295.0243,
+          "msl": 101740.69,
+          "tp": 0.0,
+          "latitude": 23.25,
+          "longitude": 80.0
+        }
+      },
+      "IMD": {
+        "id": "a4f0a9d4-1153-400d-9b87-29e0f7d559f8",
+        "source": "IMD",
+        "station_id": "42182",
+        "timestamp": "2024-01-01T06:00:00Z",
+        "ingested_at": "2026-08-30T04:08:46.710917+00:00",
+        "country": "India",
+        "state": null,
+        "district": null,
+        "city": "NAGPUR",
+        "latitude": 23.18,
+        "longitude": 79.95,
+        "temperature": 29.874,
+        "humidity": 62.0,
+        "pressure": 1005.2,
+        "rainfall": 0.0,
+        "wind_speed": 2.222,
+        "wind_direction": 270.0,
+        "event_type": "current_observation",
+        "description": "IMD current weather code 02",
+        "verification_status": "validated",
+        "confidence_score": 0.9,
+        "quality_flags": [],
+        "raw_payload": {
+          "Station Id": "42182",
+          "Station": "NAGPUR",
+          "Date of Observation": "2026-08-29",
+          "Time of Observation": "06:00",
+          "M.S.L.P": "1005.2",
+          "Wind Direction": "270",
+          "Wind Speed": "8",
+          "Temperature": "29.4",
+          "Weather Code": "02",
+          "Nebulosity": "3",
+          "Humidity": "62",
+          "Last 24 hrs Rainfall": "0.0"
+        }
+      }
+    },
+    "temporal_alignment": {
+      "era5_timestamp": "2024-01-01T06:00:00Z",
+      "imd_timestamp": "2024-01-01T06:00:00Z",
+      "time_difference_minutes": 0.0,
+      "is_match": true,
+      "flag": "TEMPORAL_MATCH"
+    },
+    "spatial_alignment": {
+      "era5_latitude": 23.25,
+      "era5_longitude": 80.0,
+      "imd_latitude": 23.18,
+      "imd_longitude": 79.95,
+      "distance_km": 9.311,
+      "is_match": true,
+      "flag": "SPATIAL_MATCH"
+    },
+    "match_status": "MATCHED",
+    "comparison": {
+      "temperature": {
+        "era5_value": 21.874,
+        "imd_value": 29.874,
+        "absolute_difference": 8.0,
+        "percent_difference": 26.779,
+        "agreement_flag": "SOURCE_DISAGREEMENT"
+      },
+      "pressure": {
+        "era5_value": 1017.407,
+        "imd_value": 1005.2,
+        "absolute_difference": 12.207,
+        "percent_difference": 1.2,
+        "agreement_flag": "SOURCE_AGREEMENT_HIGH"
+      },
+      "rainfall": {
+        "era5_value": 0.0,
+        "imd_value": 0.0,
+        "absolute_difference": 0.0,
+        "percent_difference": null,
+        "agreement_flag": "SOURCE_AGREEMENT_HIGH"
+      },
+      "wind_speed": {
+        "era5_value": 1.58,
+        "imd_value": 2.222,
+        "absolute_difference": 0.642,
+        "percent_difference": 28.893,
+        "agreement_flag": "SOURCE_DISAGREEMENT"
+      }
+    },
+    "fusion": {
+      "temperature": null,
+      "pressure": 1011.303,
+      "rainfall": 0.0,
+      "wind_speed": null,
+      "confidence_score": 0.6,
+      "confidence_label": "source_agreement_confidence",
+      "marginal_match": false
+    }
+  }
+]

@@ -1,0 +1,320 @@
+[
+  {
+    "id": "907bb1d7-4f5c-4cc4-8299-72ebfa6a0808",
+    "generated_at": "2026-09-01T09:28:11.428775+00:00",
+    "timestamp": "2024-01-15T09:00:00Z",
+    "latitude": 23.25,
+    "longitude": 80.0,
+    "country": "India",
+    "state": null,
+    "district": null,
+    "city": null,
+    "weather_variables": {
+      "temperature": 22.591,
+      "humidity": null,
+      "pressure": 991.933,
+      "rainfall": 0.0,
+      "wind_speed": null,
+      "wind_direction": null
+    },
+    "contributing_sources": [
+      "ERA5",
+      "Open-Meteo"
+    ],
+    "source_agreement_confidence": 0.8,
+    "source_agreement_match_status": "MATCHED",
+    "source_agreement_details": {
+      "temperature": {
+        "era5_value": 22.683,
+        "open-meteo_value": 22.5,
+        "absolute_difference": 0.183,
+        "percent_difference": 0.807,
+        "agreement_flag": "SOURCE_AGREEMENT_HIGH"
+      },
+      "pressure": {
+        "era5_value": 1014.366,
+        "open-meteo_value": 969.5,
+        "absolute_difference": 44.866,
+        "percent_difference": 4.423,
+        "agreement_flag": "SOURCE_AGREEMENT_HIGH"
+      },
+      "rainfall": {
+        "era5_value": 0.0,
+        "open-meteo_value": 0.0,
+        "absolute_difference": 0.0,
+        "percent_difference": null,
+        "agreement_flag": "SOURCE_AGREEMENT_HIGH"
+      },
+      "wind_speed": {
+        "era5_value": 2.461,
+        "open-meteo_value": 3.14,
+        "absolute_difference": 0.679,
+        "percent_difference": 21.624,
+        "agreement_flag": "SOURCE_DISAGREEMENT"
+      }
+    },
+    "source_agreement_marginal": false,
+    "report_evidence": [
+      {
+        "report_id": "EDGE_RAIN_CONFLICTING",
+        "event_category": "RAINFALL",
+        "verification_status": "CONFLICTING",
+        "evidence_support_score": 0.0,
+        "risk_label": null,
+        "risk_score": null,
+        "report_timestamp": "2024-01-15T09:00:00Z",
+        "time_difference_minutes": 0.0,
+        "distance_km": 0.0
+      }
+    ],
+    "corroboration_status": "CONFLICTING",
+    "corroboration_reasons": [
+      "At least one matched report's evidence conflicted with its claimed event."
+    ],
+    "evidence_support_score": 0.0,
+    "overall_confidence": 0.4,
+    "confidence_method": "overall_confidence = mean(source_agreement_confidence, evidence_support_score) = mean(0.8, 0.0) = 0.4. This is a transparent average of two independently-documented component scores, NOT a probability that the underlying weather event is true.",
+    "forecast": {
+      "source": "Phase 4B advanced ML layer",
+      "model_used": "HistGradientBoosting",
+      "horizons_hours": [
+        1,
+        3,
+        6,
+        12,
+        24
+      ],
+      "temperature_forecast_c": {
+        "1": 21.421679610629983,
+        "3": 21.344534285207555,
+        "6": 16.234972303754294,
+        "12": 12.232752829380377,
+        "24": 22.515295133578828
+      },
+      "rainfall_probability": {
+        "1": 0.005631105972629367,
+        "3": 0.007046205808051301,
+        "6": 0.0019737578737350353,
+        "12": 0.00911883200304094,
+        "24": 0.003422525092377674
+      },
+      "is_real_time": false,
+      "disclaimer": "Batch forecast from a saved Phase 4B model, evaluated on historical held-out data (see models/phase4b/*/*.json for metrics). rainfall_probability is model-predicted class probability, not a probability of truth. Not a real-time forecast."
+    },
+    "anomaly": null,
+    "alert": null,
+    "metadata": {}
+  },
+  {
+    "id": "fff0d852-bc52-4e27-a6e8-058d8bfb216f",
+    "generated_at": "2026-09-01T09:28:11.431823+00:00",
+    "timestamp": "2024-06-01T12:00:00Z",
+    "latitude": 23.25,
+    "longitude": 80.0,
+    "country": "India",
+    "state": null,
+    "district": null,
+    "city": null,
+    "weather_variables": {
+      "temperature": 41.589,
+      "humidity": null,
+      "pressure": 978.135,
+      "rainfall": 0.0,
+      "wind_speed": null,
+      "wind_direction": null
+    },
+    "contributing_sources": [
+      "ERA5",
+      "Open-Meteo"
+    ],
+    "source_agreement_confidence": 0.8,
+    "source_agreement_match_status": "MATCHED",
+    "source_agreement_details": {
+      "temperature": {
+        "era5_value": 41.478,
+        "open-meteo_value": 41.7,
+        "absolute_difference": 0.222,
+        "percent_difference": 0.532,
+        "agreement_flag": "SOURCE_AGREEMENT_HIGH"
+      },
+      "pressure": {
+        "era5_value": 998.669,
+        "open-meteo_value": 957.6,
+        "absolute_difference": 41.069,
+        "percent_difference": 4.112,
+        "agreement_flag": "SOURCE_AGREEMENT_HIGH"
+      },
+      "rainfall": {
+        "era5_value": 0.0,
+        "open-meteo_value": 0.0,
+        "absolute_difference": 0.0,
+        "percent_difference": null,
+        "agreement_flag": "SOURCE_AGREEMENT_HIGH"
+      },
+      "wind_speed": {
+        "era5_value": 2.05,
+        "open-meteo_value": 2.51,
+        "absolute_difference": 0.46,
+        "percent_difference": 18.327,
+        "agreement_flag": "SOURCE_DISAGREEMENT"
+      }
+    },
+    "source_agreement_marginal": false,
+    "report_evidence": [
+      {
+        "report_id": "EDGE_HEATWAVE_SUPPORTED",
+        "event_category": "HEATWAVE",
+        "verification_status": "SUPPORTED",
+        "evidence_support_score": 1.0,
+        "risk_label": null,
+        "risk_score": null,
+        "report_timestamp": "2024-06-01T12:00:00Z",
+        "time_difference_minutes": 0.0,
+        "distance_km": 0.0
+      }
+    ],
+    "corroboration_status": "SUPPORTED",
+    "corroboration_reasons": [
+      "All matched reports with usable evidence were SUPPORTED."
+    ],
+    "evidence_support_score": 1.0,
+    "overall_confidence": 0.9,
+    "confidence_method": "overall_confidence = mean(source_agreement_confidence, evidence_support_score) = mean(0.8, 1.0) = 0.9. This is a transparent average of two independently-documented component scores, NOT a probability that the underlying weather event is true.",
+    "forecast": {
+      "source": "Phase 4B advanced ML layer",
+      "model_used": "HistGradientBoosting",
+      "horizons_hours": [
+        1,
+        3,
+        6,
+        12,
+        24
+      ],
+      "temperature_forecast_c": {
+        "1": 41.12520604484564,
+        "3": 36.02431030369386,
+        "6": 33.54896004536506,
+        "12": 32.52539852941267,
+        "24": 38.45259002686
+      },
+      "rainfall_probability": {
+        "1": 0.0070385731017280915,
+        "3": 0.005279737037192274,
+        "6": 0.0037993485739830153,
+        "12": 0.006235845948797198,
+        "24": 0.005836090769139499
+      },
+      "is_real_time": false,
+      "disclaimer": "Batch forecast from a saved Phase 4B model, evaluated on historical held-out data (see models/phase4b/*/*.json for metrics). rainfall_probability is model-predicted class probability, not a probability of truth. Not a real-time forecast."
+    },
+    "anomaly": null,
+    "alert": null,
+    "metadata": {}
+  },
+  {
+    "id": "5da7d5b7-495a-4e3d-a1ef-ec0b07979987",
+    "generated_at": "2026-09-01T09:28:11.437306+00:00",
+    "timestamp": "2024-09-10T21:00:00Z",
+    "latitude": 23.25,
+    "longitude": 80.0,
+    "country": "India",
+    "state": null,
+    "district": null,
+    "city": null,
+    "weather_variables": {
+      "temperature": 24.252,
+      "humidity": null,
+      "pressure": 974.947,
+      "rainfall": null,
+      "wind_speed": null,
+      "wind_direction": null
+    },
+    "contributing_sources": [
+      "ERA5",
+      "Open-Meteo"
+    ],
+    "source_agreement_confidence": 0.6,
+    "source_agreement_match_status": "MATCHED",
+    "source_agreement_details": {
+      "temperature": {
+        "era5_value": 24.404,
+        "open-meteo_value": 24.1,
+        "absolute_difference": 0.304,
+        "percent_difference": 1.246,
+        "agreement_flag": "SOURCE_AGREEMENT_HIGH"
+      },
+      "pressure": {
+        "era5_value": 996.393,
+        "open-meteo_value": 953.5,
+        "absolute_difference": 42.893,
+        "percent_difference": 4.305,
+        "agreement_flag": "SOURCE_AGREEMENT_HIGH"
+      },
+      "rainfall": {
+        "era5_value": 20.8974,
+        "open-meteo_value": 1.8,
+        "absolute_difference": 19.0974,
+        "percent_difference": null,
+        "agreement_flag": "SOURCE_DISAGREEMENT"
+      },
+      "wind_speed": {
+        "era5_value": 5.114,
+        "open-meteo_value": 2.18,
+        "absolute_difference": 2.934,
+        "percent_difference": 57.372,
+        "agreement_flag": "SOURCE_DISAGREEMENT"
+      }
+    },
+    "source_agreement_marginal": false,
+    "report_evidence": [
+      {
+        "report_id": "EDGE_RAIN_SUPPORTED",
+        "event_category": "RAINFALL",
+        "verification_status": "SUPPORTED",
+        "evidence_support_score": 1.0,
+        "risk_label": null,
+        "risk_score": null,
+        "report_timestamp": "2024-09-10T21:00:00Z",
+        "time_difference_minutes": 0.0,
+        "distance_km": 0.0
+      }
+    ],
+    "corroboration_status": "SUPPORTED",
+    "corroboration_reasons": [
+      "All matched reports with usable evidence were SUPPORTED."
+    ],
+    "evidence_support_score": 1.0,
+    "overall_confidence": 0.8,
+    "confidence_method": "overall_confidence = mean(source_agreement_confidence, evidence_support_score) = mean(0.6, 1.0) = 0.8. This is a transparent average of two independently-documented component scores, NOT a probability that the underlying weather event is true.",
+    "forecast": {
+      "source": "Phase 4B advanced ML layer",
+      "model_used": "HistGradientBoosting",
+      "horizons_hours": [
+        1,
+        3,
+        6,
+        12,
+        24
+      ],
+      "temperature_forecast_c": {
+        "1": 24.324471680088262,
+        "3": 25.10683655624867,
+        "6": 24.747950274279926,
+        "12": 26.059202922464934,
+        "24": 24.996903482029282
+      },
+      "rainfall_probability": {
+        "1": 0.9904266579270243,
+        "3": 0.9836593925208613,
+        "6": 0.9894962600442396,
+        "12": 0.9271104190394522,
+        "24": 0.05857104982932697
+      },
+      "is_real_time": false,
+      "disclaimer": "Batch forecast from a saved Phase 4B model, evaluated on historical held-out data (see models/phase4b/*/*.json for metrics). rainfall_probability is model-predicted class probability, not a probability of truth. Not a real-time forecast."
+    },
+    "anomaly": null,
+    "alert": null,
+    "metadata": {}
+  }
+]

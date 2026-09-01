@@ -1,0 +1,4 @@
+pair_index,match_status,confidence_score,marginal_match,fused_temperature,fused_pressure,fused_rainfall,fused_wind_speed
+0,NOT_MATCHED,,,,,,
+1,MATCHED,0.6,False,,1011.303,0.0,
+2,MATCHED,0.6,False,,1011.303,0.0,

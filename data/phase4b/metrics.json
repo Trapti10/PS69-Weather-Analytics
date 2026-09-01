@@ -1,0 +1,25 @@
+{
+  "phase1_baseline_1h_temperature": {
+    "MAE": 0.439,
+    "RMSE": 0.621,
+    "R2": 0.989
+  },
+  "phase4b_1h_temperature_random_forest": {
+    "MAE": 0.43637482414172785,
+    "RMSE": 0.6130483792159264,
+    "R2": 0.9890501569532963
+  },
+  "phase4b_1h_temperature_histgb": {
+    "MAE": 0.36427052146227484,
+    "RMSE": 0.5086891552755525,
+    "R2": 0.9924608331469404
+  },
+  "n_models_saved": 20,
+  "horizons": [
+    1,
+    3,
+    6,
+    12,
+    24
+  ]
+}

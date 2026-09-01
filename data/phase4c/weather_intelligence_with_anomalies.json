@@ -1,0 +1,452 @@
+[
+  {
+    "id": "cc964161-fd16-476c-b75b-33eeedf4a5fa",
+    "generated_at": "2026-09-01T09:28:11.422722+00:00",
+    "timestamp": "2024-01-01T00:00:00Z",
+    "latitude": 23.25,
+    "longitude": 80.0,
+    "country": "India",
+    "state": null,
+    "district": null,
+    "city": null,
+    "weather_variables": {
+      "temperature": 12.977,
+      "humidity": null,
+      "pressure": 993.434,
+      "rainfall": 0.0,
+      "wind_speed": null,
+      "wind_direction": null
+    },
+    "contributing_sources": [
+      "ERA5",
+      "Open-Meteo"
+    ],
+    "source_agreement_confidence": 0.8,
+    "source_agreement_match_status": "MATCHED",
+    "source_agreement_details": {
+      "temperature": {
+        "era5_value": 13.055,
+        "open-meteo_value": 12.9,
+        "absolute_difference": 0.155,
+        "percent_difference": 1.187,
+        "agreement_flag": "SOURCE_AGREEMENT_HIGH"
+      },
+      "pressure": {
+        "era5_value": 1016.668,
+        "open-meteo_value": 970.2,
+        "absolute_difference": 46.468,
+        "percent_difference": 4.571,
+        "agreement_flag": "SOURCE_AGREEMENT_HIGH"
+      },
+      "rainfall": {
+        "era5_value": 0.0,
+        "open-meteo_value": 0.0,
+        "absolute_difference": 0.0,
+        "percent_difference": null,
+        "agreement_flag": "SOURCE_AGREEMENT_HIGH"
+      },
+      "wind_speed": {
+        "era5_value": 1.777,
+        "open-meteo_value": 0.82,
+        "absolute_difference": 0.957,
+        "percent_difference": 53.855,
+        "agreement_flag": "SOURCE_DISAGREEMENT"
+      }
+    },
+    "source_agreement_marginal": false,
+    "report_evidence": [
+      {
+        "report_id": "EDGE_FOG_SUPPORTED_WEAK",
+        "event_category": "FOG",
+        "verification_status": "SUPPORTED",
+        "evidence_support_score": 1.0,
+        "risk_label": null,
+        "risk_score": null,
+        "report_timestamp": "2024-01-01T00:00:00Z",
+        "time_difference_minutes": 0.0,
+        "distance_km": 0.0
+      }
+    ],
+    "corroboration_status": "SUPPORTED",
+    "corroboration_reasons": [
+      "All matched reports with usable evidence were SUPPORTED."
+    ],
+    "evidence_support_score": 1.0,
+    "overall_confidence": 0.9,
+    "confidence_method": "overall_confidence = mean(source_agreement_confidence, evidence_support_score) = mean(0.8, 1.0) = 0.9. This is a transparent average of two independently-documented component scores, NOT a probability that the underlying weather event is true.",
+    "forecast": null,
+    "anomaly": null,
+    "alert": null,
+    "metadata": {}
+  },
+  {
+    "id": "053d96ff-b805-4042-9da8-342c9c065b7c",
+    "generated_at": "2026-09-01T09:28:11.425734+00:00",
+    "timestamp": "2024-01-01T03:00:00Z",
+    "latitude": 23.25,
+    "longitude": 80.0,
+    "country": "India",
+    "state": null,
+    "district": null,
+    "city": null,
+    "weather_variables": {
+      "temperature": null,
+      "humidity": null,
+      "pressure": 995.613,
+      "rainfall": 0.0,
+      "wind_speed": 1.523,
+      "wind_direction": null
+    },
+    "contributing_sources": [
+      "ERA5",
+      "Open-Meteo"
+    ],
+    "source_agreement_confidence": 0.7,
+    "source_agreement_match_status": "MATCHED",
+    "source_agreement_details": {
+      "temperature": {
+        "era5_value": 14.33,
+        "open-meteo_value": 17.4,
+        "absolute_difference": 3.07,
+        "percent_difference": 17.644,
+        "agreement_flag": "SOURCE_DISAGREEMENT"
+      },
+      "pressure": {
+        "era5_value": 1018.326,
+        "open-meteo_value": 972.9,
+        "absolute_difference": 45.426,
+        "percent_difference": 4.461,
+        "agreement_flag": "SOURCE_AGREEMENT_HIGH"
+      },
+      "rainfall": {
+        "era5_value": 0.0,
+        "open-meteo_value": 0.0,
+        "absolute_difference": 0.0,
+        "percent_difference": null,
+        "agreement_flag": "SOURCE_AGREEMENT_HIGH"
+      },
+      "wind_speed": {
+        "era5_value": 1.567,
+        "open-meteo_value": 1.48,
+        "absolute_difference": 0.087,
+        "percent_difference": 5.552,
+        "agreement_flag": "SOURCE_AGREEMENT_MEDIUM"
+      }
+    },
+    "source_agreement_marginal": false,
+    "report_evidence": [
+      {
+        "report_id": "EDGE_FOG_AMBIGUOUS",
+        "event_category": "FOG",
+        "verification_status": "UNVERIFIED",
+        "evidence_support_score": 0.5,
+        "risk_label": null,
+        "risk_score": null,
+        "report_timestamp": "2024-01-01T03:00:00Z",
+        "time_difference_minutes": 0.0,
+        "distance_km": 0.0
+      }
+    ],
+    "corroboration_status": "UNVERIFIED",
+    "corroboration_reasons": [
+      "Matched report evidence exists but is inconclusive (UNVERIFIED)."
+    ],
+    "evidence_support_score": 0.5,
+    "overall_confidence": 0.6,
+    "confidence_method": "overall_confidence = mean(source_agreement_confidence, evidence_support_score) = mean(0.7, 0.5) = 0.6. This is a transparent average of two independently-documented component scores, NOT a probability that the underlying weather event is true.",
+    "forecast": null,
+    "anomaly": null,
+    "alert": null,
+    "metadata": {}
+  },
+  {
+    "id": "907bb1d7-4f5c-4cc4-8299-72ebfa6a0808",
+    "generated_at": "2026-09-01T09:28:11.428775+00:00",
+    "timestamp": "2024-01-15T09:00:00Z",
+    "latitude": 23.25,
+    "longitude": 80.0,
+    "country": "India",
+    "state": null,
+    "district": null,
+    "city": null,
+    "weather_variables": {
+      "temperature": 22.591,
+      "humidity": null,
+      "pressure": 991.933,
+      "rainfall": 0.0,
+      "wind_speed": null,
+      "wind_direction": null
+    },
+    "contributing_sources": [
+      "ERA5",
+      "Open-Meteo"
+    ],
+    "source_agreement_confidence": 0.8,
+    "source_agreement_match_status": "MATCHED",
+    "source_agreement_details": {
+      "temperature": {
+        "era5_value": 22.683,
+        "open-meteo_value": 22.5,
+        "absolute_difference": 0.183,
+        "percent_difference": 0.807,
+        "agreement_flag": "SOURCE_AGREEMENT_HIGH"
+      },
+      "pressure": {
+        "era5_value": 1014.366,
+        "open-meteo_value": 969.5,
+        "absolute_difference": 44.866,
+        "percent_difference": 4.423,
+        "agreement_flag": "SOURCE_AGREEMENT_HIGH"
+      },
+      "rainfall": {
+        "era5_value": 0.0,
+        "open-meteo_value": 0.0,
+        "absolute_difference": 0.0,
+        "percent_difference": null,
+        "agreement_flag": "SOURCE_AGREEMENT_HIGH"
+      },
+      "wind_speed": {
+        "era5_value": 2.461,
+        "open-meteo_value": 3.14,
+        "absolute_difference": 0.679,
+        "percent_difference": 21.624,
+        "agreement_flag": "SOURCE_DISAGREEMENT"
+      }
+    },
+    "source_agreement_marginal": false,
+    "report_evidence": [
+      {
+        "report_id": "EDGE_RAIN_CONFLICTING",
+        "event_category": "RAINFALL",
+        "verification_status": "CONFLICTING",
+        "evidence_support_score": 0.0,
+        "risk_label": null,
+        "risk_score": null,
+        "report_timestamp": "2024-01-15T09:00:00Z",
+        "time_difference_minutes": 0.0,
+        "distance_km": 0.0
+      }
+    ],
+    "corroboration_status": "CONFLICTING",
+    "corroboration_reasons": [
+      "At least one matched report's evidence conflicted with its claimed event."
+    ],
+    "evidence_support_score": 0.0,
+    "overall_confidence": 0.4,
+    "confidence_method": "overall_confidence = mean(source_agreement_confidence, evidence_support_score) = mean(0.8, 0.0) = 0.4. This is a transparent average of two independently-documented component scores, NOT a probability that the underlying weather event is true.",
+    "forecast": null,
+    "anomaly": null,
+    "alert": null,
+    "metadata": {}
+  },
+  {
+    "id": "fff0d852-bc52-4e27-a6e8-058d8bfb216f",
+    "generated_at": "2026-09-01T09:28:11.431823+00:00",
+    "timestamp": "2024-06-01T12:00:00Z",
+    "latitude": 23.25,
+    "longitude": 80.0,
+    "country": "India",
+    "state": null,
+    "district": null,
+    "city": null,
+    "weather_variables": {
+      "temperature": 41.589,
+      "humidity": null,
+      "pressure": 978.135,
+      "rainfall": 0.0,
+      "wind_speed": null,
+      "wind_direction": null
+    },
+    "contributing_sources": [
+      "ERA5",
+      "Open-Meteo"
+    ],
+    "source_agreement_confidence": 0.8,
+    "source_agreement_match_status": "MATCHED",
+    "source_agreement_details": {
+      "temperature": {
+        "era5_value": 41.478,
+        "open-meteo_value": 41.7,
+        "absolute_difference": 0.222,
+        "percent_difference": 0.532,
+        "agreement_flag": "SOURCE_AGREEMENT_HIGH"
+      },
+      "pressure": {
+        "era5_value": 998.669,
+        "open-meteo_value": 957.6,
+        "absolute_difference": 41.069,
+        "percent_difference": 4.112,
+        "agreement_flag": "SOURCE_AGREEMENT_HIGH"
+      },
+      "rainfall": {
+        "era5_value": 0.0,
+        "open-meteo_value": 0.0,
+        "absolute_difference": 0.0,
+        "percent_difference": null,
+        "agreement_flag": "SOURCE_AGREEMENT_HIGH"
+      },
+      "wind_speed": {
+        "era5_value": 2.05,
+        "open-meteo_value": 2.51,
+        "absolute_difference": 0.46,
+        "percent_difference": 18.327,
+        "agreement_flag": "SOURCE_DISAGREEMENT"
+      }
+    },
+    "source_agreement_marginal": false,
+    "report_evidence": [
+      {
+        "report_id": "EDGE_HEATWAVE_SUPPORTED",
+        "event_category": "HEATWAVE",
+        "verification_status": "SUPPORTED",
+        "evidence_support_score": 1.0,
+        "risk_label": null,
+        "risk_score": null,
+        "report_timestamp": "2024-06-01T12:00:00Z",
+        "time_difference_minutes": 0.0,
+        "distance_km": 0.0
+      }
+    ],
+    "corroboration_status": "SUPPORTED",
+    "corroboration_reasons": [
+      "All matched reports with usable evidence were SUPPORTED."
+    ],
+    "evidence_support_score": 1.0,
+    "overall_confidence": 0.9,
+    "confidence_method": "overall_confidence = mean(source_agreement_confidence, evidence_support_score) = mean(0.8, 1.0) = 0.9. This is a transparent average of two independently-documented component scores, NOT a probability that the underlying weather event is true.",
+    "forecast": null,
+    "anomaly": null,
+    "alert": null,
+    "metadata": {}
+  },
+  {
+    "id": "5da7d5b7-495a-4e3d-a1ef-ec0b07979987",
+    "generated_at": "2026-09-01T09:28:11.437306+00:00",
+    "timestamp": "2024-09-10T21:00:00Z",
+    "latitude": 23.25,
+    "longitude": 80.0,
+    "country": "India",
+    "state": null,
+    "district": null,
+    "city": null,
+    "weather_variables": {
+      "temperature": 24.252,
+      "humidity": null,
+      "pressure": 974.947,
+      "rainfall": null,
+      "wind_speed": null,
+      "wind_direction": null
+    },
+    "contributing_sources": [
+      "ERA5",
+      "Open-Meteo"
+    ],
+    "source_agreement_confidence": 0.6,
+    "source_agreement_match_status": "MATCHED",
+    "source_agreement_details": {
+      "temperature": {
+        "era5_value": 24.404,
+        "open-meteo_value": 24.1,
+        "absolute_difference": 0.304,
+        "percent_difference": 1.246,
+        "agreement_flag": "SOURCE_AGREEMENT_HIGH"
+      },
+      "pressure": {
+        "era5_value": 996.393,
+        "open-meteo_value": 953.5,
+        "absolute_difference": 42.893,
+        "percent_difference": 4.305,
+        "agreement_flag": "SOURCE_AGREEMENT_HIGH"
+      },
+      "rainfall": {
+        "era5_value": 20.8974,
+        "open-meteo_value": 1.8,
+        "absolute_difference": 19.0974,
+        "percent_difference": null,
+        "agreement_flag": "SOURCE_DISAGREEMENT"
+      },
+      "wind_speed": {
+        "era5_value": 5.114,
+        "open-meteo_value": 2.18,
+        "absolute_difference": 2.934,
+        "percent_difference": 57.372,
+        "agreement_flag": "SOURCE_DISAGREEMENT"
+      }
+    },
+    "source_agreement_marginal": false,
+    "report_evidence": [
+      {
+        "report_id": "EDGE_RAIN_SUPPORTED",
+        "event_category": "RAINFALL",
+        "verification_status": "SUPPORTED",
+        "evidence_support_score": 1.0,
+        "risk_label": null,
+        "risk_score": null,
+        "report_timestamp": "2024-09-10T21:00:00Z",
+        "time_difference_minutes": 0.0,
+        "distance_km": 0.0
+      }
+    ],
+    "corroboration_status": "SUPPORTED",
+    "corroboration_reasons": [
+      "All matched reports with usable evidence were SUPPORTED."
+    ],
+    "evidence_support_score": 1.0,
+    "overall_confidence": 0.8,
+    "confidence_method": "overall_confidence = mean(source_agreement_confidence, evidence_support_score) = mean(0.6, 1.0) = 0.8. This is a transparent average of two independently-documented component scores, NOT a probability that the underlying weather event is true.",
+    "forecast": null,
+    "anomaly": {
+      "matched_anomaly_count": 5,
+      "anomalies": [
+        {
+          "variable": "wind_speed",
+          "source": "ERA5",
+          "severity": "LOW",
+          "classification": "STATISTICAL_ANOMALY",
+          "anomaly_score": 3.1491414952203693,
+          "method": "rolling_zscore",
+          "explanation": "Observed wind_speed = 4.599. Rolling baseline (mean of the previous 168 valid observations) = 1.871, rolling std = 0.866. z-score = (4.599 - 1.871) / 0.866 = 3.149. Threshold = |z| >= 3.0. Method = rolling_zscore. Result = STATISTICAL_ANOMALY. Severity = LOW."
+        },
+        {
+          "variable": "wind_speed",
+          "source": "ERA5",
+          "severity": "LOW",
+          "classification": "STATISTICAL_ANOMALY",
+          "anomaly_score": 3.6201075916725407,
+          "method": "rolling_zscore",
+          "explanation": "Observed wind_speed = 5.114. Rolling baseline (mean of the previous 168 valid observations) = 1.890, rolling std = 0.891. z-score = (5.114 - 1.890) / 0.891 = 3.620. Threshold = |z| >= 3.0. Method = rolling_zscore. Result = STATISTICAL_ANOMALY. Severity = LOW."
+        },
+        {
+          "variable": "rainfall",
+          "source": "ERA5",
+          "severity": "CRITICAL",
+          "classification": "STATISTICAL_ANOMALY",
+          "anomaly_score": 6.7014455296516084,
+          "method": "rolling_percentile",
+          "explanation": "Observed rainfall = 18.378 mm. Rolling median (previous 720 valid observations) = 0.112 mm, rolling 95th percentile = 2.484 mm. Because rainfall is zero-inflated (most hours have 0 mm), an ordinary z-score would treat small amounts of ordinary rain as extreme; instead the deviation is measured as how far above the rolling 95th percentile the observation is, normalized by the median-to-95th-percentile gap: score = (observed - p95) / max(p95 - p50, epsilon) = (18.378 - 2.484) / 2.372 = 6.701. Threshold = score >= 1.0. Method = rolling_percentile. Result = STATISTICAL_ANOMALY. Severity = CRITICAL."
+        },
+        {
+          "variable": "rainfall",
+          "source": "ERA5",
+          "severity": "CRITICAL",
+          "classification": "STATISTICAL_ANOMALY",
+          "anomaly_score": 7.408891388161808,
+          "method": "rolling_percentile",
+          "explanation": "Observed rainfall = 20.897 mm. Rolling median (previous 720 valid observations) = 0.112 mm, rolling 95th percentile = 2.584 mm. Because rainfall is zero-inflated (most hours have 0 mm), an ordinary z-score would treat small amounts of ordinary rain as extreme; instead the deviation is measured as how far above the rolling 95th percentile the observation is, normalized by the median-to-95th-percentile gap: score = (observed - p95) / max(p95 - p50, epsilon) = (20.897 - 2.584) / 2.472 = 7.409. Threshold = score >= 1.0. Method = rolling_percentile. Result = STATISTICAL_ANOMALY. Severity = CRITICAL."
+        },
+        {
+          "variable": "rainfall",
+          "source": "ERA5",
+          "severity": "CRITICAL",
+          "classification": "STATISTICAL_ANOMALY",
+          "anomaly_score": 6.086895559805257,
+          "method": "rolling_percentile",
+          "explanation": "Observed rainfall = 17.753 mm. Rolling median (previous 720 valid observations) = 0.113 mm, rolling 95th percentile = 2.602 mm. Because rainfall is zero-inflated (most hours have 0 mm), an ordinary z-score would treat small amounts of ordinary rain as extreme; instead the deviation is measured as how far above the rolling 95th percentile the observation is, normalized by the median-to-95th-percentile gap: score = (observed - p95) / max(p95 - p50, epsilon) = (17.753 - 2.602) / 2.489 = 6.087. Threshold = score >= 1.0. Method = rolling_percentile. Result = STATISTICAL_ANOMALY. Severity = CRITICAL."
+        }
+      ],
+      "note": "These are STATISTICAL_ANOMALY findings from Phase 4C's rolling-baseline detectors -- not a disaster/emergency/extreme-event judgment. See each entry's own explanation."
+    },
+    "alert": null,
+    "metadata": {}
+  }
+]

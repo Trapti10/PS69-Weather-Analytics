@@ -737,23 +737,338 @@ python -m pytest -q                            # all 113 tests, every phase, off
 
 Outputs land in `data/phase3c/` (new directory) — no earlier phase's output directory is touched.
 
-### Recommended Next Step: Phase 4 (do NOT start this without explicit user instruction)
+## Phase 4A — Unified Weather Intelligence Layer (COMPLETED)
 
-1. **Calibrate Phase 3C's evidence thresholds against real labeled outcomes**, once any verified
-   ground-truth event dataset exists — current thresholds are stated, explainable defaults, not fitted
-   values.
-2. **Acquire a temporally-overlapping IMD source** (real 2024–2025 station data, or data collected
-   going forward) so `IMD_TEMPORAL_UNAVAILABLE` stops being the default outcome for every report.
-3. **Extend Phase 3A's report fixtures with dates inside the real 2024–2025 evidence window**, so the
-   full Phase 3A→3B→3C pipeline can be demonstrated end-to-end on report-shaped data without relying on
-   Phase 3C's hand-authored edge cases for anything beyond isolated logic checks.
-4. **Embedding-based semantic similarity** (Phase 3B's own still-unaddressed recommendation) to close
-   the paraphrase-detection gap TF-IDF demonstrably cannot close — needs infrastructure that can
-   download real model weights (`sentence-transformers` + a small model from `huggingface.co`), which
-   this sandbox could not reach as of Phase 3B/3C.
-5. **Grow the labeled fixture corpus substantially** before trusting the Phase 3B event classifier's
-   LOOCV numbers as more than a demo baseline — 21 examples across 8 classes is genuinely too small.
-6. The Phase 2C pressure-threshold artifact (see Phase 2C section above) remains unaddressed — not a
-   blocker for anything built so far, but worth fixing before any pressure-based feature is added.
+**Purpose.** A clean, unified representation that brings together Phase 2B/2C fusion, Phase 3B
+intelligence, and Phase 3C corroboration into one object per time/place, so later phases (forecasting,
+anomaly detection, alerting) have a single consistent thing to consume instead of four separate
+pipelines' raw outputs. New package `src/phase4/` (`weather_intelligence.py`, `intelligence_storage.py`)
+— entirely additive; it imports and reuses Phase 2B's `fusion.temporal_alignment`/`spatial_alignment`
+functions and consumes Phase 2B/2C fusion results and Phase 3C verification results exactly as they
+already exist. No Phase 1/2A/2B/2C/3A/3B/3C file was modified.
 
-**Do not implement Phase 4 or the pressure fix until the user explicitly asks for it.**
+**`WeatherIntelligence` fields, per the spec:** `timestamp`/`latitude`/`longitude`/`country`/`state`/
+`district`/`city`; `weather_variables` (temperature/humidity/pressure/rainfall/wind_speed/
+wind_direction — the same fields `WeatherRecord` already defines, never a new invented variable);
+`contributing_sources`; `source_agreement_confidence`/`source_agreement_match_status`/
+`source_agreement_details`/`source_agreement_marginal` (copied unmodified from Phase 2B/2C's
+`fuse_pair()` output, `None` for a single-source record); `report_evidence` (a trimmed list of matching
+Phase 3C `verify_report()` results); `corroboration_status` (a rollup — see below);
+`evidence_support_score` (transparent mean of the matched reports' own scores); `overall_confidence`
+(see below); `forecast`/`anomaly`/`alert` (fields exist, per explicit instruction, but are always `None`
+— Phase 4A does not implement forecasting, anomaly detection, or alerting).
+
+**Corroboration rollup, applied to a SET of reports rather than Phase 3C's single-report logic:** no
+matched report evidence → `INSUFFICIENT_EVIDENCE`; both `SUPPORTED` and `CONFLICTING` present among
+matched reports → `CONFLICTING` (the disagreement is the honest signal, never averaged into
+`UNVERIFIED`); only `CONFLICTING` present → `CONFLICTING`; `SUPPORTED` present with no `CONFLICTING`/
+`UNVERIFIED` → `SUPPORTED`; anything else (e.g. `UNVERIFIED` present) → `UNVERIFIED`.
+
+**`overall_confidence`, documented exactly:** the mean of whichever of `source_agreement_confidence`
+and `evidence_support_score` are not `None`. Both present → their mean. Only one present → that value
+exactly (never padded for the missing one). Neither present → `None`, never fabricated. Every record's
+own `confidence_method` field spells out which case applied. `overall_confidence` is explicitly **not**
+a probability that the underlying weather event is true — it is a transparent average of two
+already-explainable component scores.
+
+**Real demo (`scripts/run_phase4a_demo.py`):** fuses real ERA5+Open-Meteo records (via Phase 2B's own
+`fuse_pair()`, unmodified) at the 5 real 2024–2025 timestamps where Phase 3C's own demo produced a
+non-`INSUFFICIENT_EVIDENCE` verdict, attaches those real Phase 3C results, and saves the result —
+`SUPPORTED: 3, UNVERIFIED: 1, CONFLICTING: 1`, matching Phase 3C's own status counts for those 5
+reports exactly. Outputs: `data/phase4/weather_intelligence.{json,csv}`.
+
+**Known limitation, stated plainly:** the demo only builds real fused records at those 5 real
+timestamps (Phase 3C's own controlled edge-case fixtures — not real citizen/social reports), not
+across the full 17,544-row real series; doing so would be a straightforward extension of the same
+loop, left for a future phase. `tests/test_phase4a_intelligence.py` (27 tests, synthetic fixtures)
+covers every corroboration/confidence code path independently of that limitation.
+
+**Tests.** `tests/test_phase4a_intelligence.py` — 27 tests: object creation, single-source vs. fused
+multi-source variables, provenance, all four corroboration rollup outcomes, confidence calculation and
+its "never fabricated" cases, unmatched fusion, serialization round-trip, and storage round-trip. All
+pass; combined with the pre-existing 113, the full suite is **140 passed, 0 failed**.
+
+### Running Phase 4A
+
+```bash
+python scripts/run_phase4a_demo.py
+python -m pytest -q                            # all 140 tests, every phase, offline
+```
+
+**STOP — Phase 4A is complete. Do not start Phase 4B or Phase 4C without explicit user instruction.**
+
+## Phase 4B — Advanced Machine Learning Layer (COMPLETED)
+
+**Objective.** Build the advanced multi-horizon ML layer on top of Phase 1's baseline ML, without
+replacing it. New package `src/phase4b/` (`feature_engineering.py`, `time_series_ml.py`,
+`model_persistence.py`, `intelligence_integration.py`) — entirely additive. No Phase 1/2A/2B/2C/3A/
+3B/3C/4A file was modified.
+
+**Architecture (per the spec):**
+```
+Historical Weather Data (data/processed/jabalpur_clean.csv, real, 17,544 rows)
+        -> Feature engineering (widened lag/rolling cols, reusing Phase 1's own functions)
+        -> Chronological TRAIN -> VALIDATION -> TEST split (Phase 1's own chronological_split(),
+           called twice: train/val, then val/test)
+        -> Baseline model (RandomForest, same family/hyperparameters Phase 1 used)
+        -> Advanced model (HistGradientBoosting)
+        -> Multi-horizon prediction (1h, 3h, 6h, 12h, 24h)
+        -> Evaluation (Phase 1's own regression_report()/classification_report_dict())
+        -> Model comparison table (data/phase4b/model_comparison.csv)
+        -> Saved production-ready artifacts (models/phase4b/{temperature,rainfall}/*.pkl + .json metadata)
+        -> WeatherIntelligence integration (fills Phase 4A's pre-existing, previously-None `forecast` field)
+```
+
+**Feature engineering (Part A/B).** Phase 1's own inspected baseline (notebook 05): target
+`target_t2m_h1` (temperature 1h ahead), features = cyclical hour/day-of-year + lags {1,2,3,6,12,24}h
+of `t2m_c`/`msl_hpa`/`wind_speed`/`d2m_c` + rolling {3,6,24}h mean/std of `t2m_c`/`msl_hpa`/`tp_mm`,
+chronological 70/15/15 split, RandomForest(n_estimators=200, max_depth=12), evaluated with
+MAE/RMSE/R². Phase 4B reuses those exact functions (`add_cyclical_time_features`, `add_lag_features`,
+`add_rolling_features`, `add_target_temperature` from `src/features/build_features.py`, unmodified)
+and widens the lag/rolling column set to include `relative_humidity_approx` and `fg10` (wind gust) —
+both already present in the real cleaned dataset — then builds the same target at 5 horizons instead
+of 1, and a parallel rain-occurrence target (`target_rain_next{h}h`, generalising Phase 1's own
+`rain_flag.shift(-1)` pattern) at the same 5 horizons, preserving Phase 1's `rain_flag` threshold
+(`tp_mm > 0.1`) unmodified.
+
+**Leakage prevention, stated exactly (Part B):** every feature column uses only observations at or
+before time t (lags with `shift(lag)`, lag ≥ 1; rolling stats with `shift(1).rolling(w)`, so the
+window never includes the current row). Only the target column looks forward, via `shift(-h)`, and it
+is excluded from every model's feature list. Verified in `tests/test_phase4b_ml.py::test_no_leakage_lag_and_rolling`
+by confirming a feature value at row i is identical whether computed on the full series or a series
+truncated right after row i.
+
+**Validation strategy (Part E).** TRAIN → VALIDATION → TEST, chronological, via Phase 1's own
+`chronological_split(train_frac=0.7, val_frac=0.15)` — never a random `train_test_split`. Headline
+metrics below are reported on the TEST split only, matching Phase 1's own reporting convention.
+
+**Models compared (Part C/D/F), real data, all 5 horizons — full table in
+`data/phase4b/model_comparison.csv`/`.json`:**
+
+*Temperature (MAE °C, test split):*
+
+| Horizon | NaivePersistence | RandomForest | HistGradientBoosting |
+|---|---|---|---|
+| 1h  | 0.964 | 0.436 | **0.364** |
+| 3h  | 2.535 | 0.700 | **0.688** |
+| 6h  | 4.397 | 0.975 | **0.891** |
+| 12h | 6.294 | **0.902** | 0.908 |
+| 24h | 0.894 | **0.938** | 1.004 |
+
+*Rainfall occurrence (F1 / ROC-AUC, test split, positive rate ≈ 11–12% at every horizon):*
+
+| Horizon | RandomForest F1 | RandomForest ROC-AUC | HistGB F1 | HistGB ROC-AUC |
+|---|---|---|---|---|
+| 1h  | 0.736 | 0.967 | **0.745** | **0.974** |
+| 3h  | 0.574 | 0.936 | **0.625** | **0.938** |
+| 6h  | 0.481 | **0.920** | **0.524** | 0.918 |
+| 12h | 0.452 | 0.908 | **0.539** | **0.908** |
+| 24h | 0.429 | 0.897 | **0.476** | **0.903** |
+
+**Baseline comparison (Part C, honest, not cherry-picked):** Phase 1's own recorded 1h Random Forest
+result (`reports/findings.md`) is MAE 0.439 / RMSE 0.621 / R² 0.989. Phase 4B's 1h RandomForest, on a
+widened feature set, measured MAE 0.436 / RMSE 0.613 / R² 0.989 — materially the same, not a dramatic
+improvement, because both models are the same algorithm/hyperparameters on nearly the same features.
+Phase 4B's 1h HistGradientBoosting measured MAE 0.364 / RMSE 0.509 / R² 0.992 — a real improvement, but
+the comparison is **not** a strict apples-to-apples ablation (Phase 4B's feature set is wider than
+Phase 1's), so this is reported as an honest directional result, not a rigorous causal claim. Longer
+horizons were not evaluated in Phase 1 at all — there is no Phase 1 number to compare 3h/6h/12h/24h
+against; those results are new, not "improvements."
+
+**Model persistence (Part G).** 20 model files under `models/phase4b/{temperature,rainfall}/` (10
+horizon/target combinations × {RandomForest, HistGradientBoosting}), each `<model>_h<horizon>.pkl`
+paired with a `.json` metadata file recording model type, target, horizon, full feature list, training
+date/data-range, evaluation metrics, preprocessing description, and random seed (42, same seed Phase 1
+used). `tests/test_phase4b_ml.py::test_model_persistence_and_reload` confirms a saved model loads and
+reproduces its original predictions exactly.
+
+**Phase 4A integration (Part H), backward-compatible only.** Phase 4A's `WeatherIntelligence.forecast`
+field existed but was always `None` ("a LATER phase has a place to put results"). Phase 4B's
+`src/phase4b/intelligence_integration.py` fills that field — never redesigning the dataclass, its
+builder, or its storage format — with real per-horizon temperature/rainfall-probability predictions
+from the saved HistGradientBoosting models. `scripts/run_phase4b_demo.py` loads Phase 4A's real 5
+records from `data/phase4/weather_intelligence.json` (untouched on disk) and attaches a real forecast
+to the 3 whose timestamps fall inside the real dataset's leakage-safe (post lag-warm-up) window; the
+other 2 are honestly skipped rather than fabricated, with the reason printed. Output:
+`data/phase4b/weather_intelligence_with_forecast.json`. The `forecast` dict is explicit that it is
+**not** real-time (it is a batch prediction from a saved model) and that `rainfall_probability` is a
+model-predicted class probability, **not** a probability of truth.
+
+**Tests (Part I).** `tests/test_phase4b_ml.py` — 14 tests on small deterministic synthetic fixtures
+(feature generation, lag correctness, rolling correctness, chronological splitting, leakage
+prevention, missing-value handling, temperature/rainfall model training, multi-horizon support, metric
+calculation, model persistence + reload, reproducibility, Phase 4A `forecast`-field compatibility).
+Real data is used only for the actual evaluation (`scripts/run_phase4b_demo.py`), never for these unit
+tests. Combined with the pre-existing 140, the full suite is **154 passed, 0 failed**.
+
+**Outputs.** `data/phase4b/model_comparison.{csv,json}` (the full 30-row comparison table), `data/
+phase4b/forecast_results.json` (best model per target/horizon), `data/phase4b/metrics.json` (headline
+1h baseline-vs-Phase-4B numbers), `data/phase4b/weather_intelligence_with_forecast.json` (3 real
+integrated records). `data/phase4/` and `data/processed/` are untouched.
+
+**Limitations, stated plainly:**
+- Phase 4B's feature set is wider than Phase 1's, so the 1h comparison above is honest but not a
+  strict same-features ablation.
+- Single grid point (Jabalpur, ERA5 only) — the same scope limitation Phase 1 documented.
+- Rainfall F1 degrades with horizon (0.75 at 1h → 0.48 at 24h, HistGB) — stated directly, not hidden;
+  longer-horizon rain occurrence is a genuinely harder problem with this feature set and one location.
+- `HistGradientBoosting` was run with lightly-set hyperparameters (`max_iter=200`, `random_state=42`)
+  — no hyperparameter search was performed for this SIH demonstration.
+- This machine's single CPU core meant the full 10-combination training run was executed as separate
+  per-horizon runs of `scripts/_phase4b_worker.py` (identical logic to `run_phase4b_demo.py`, just
+  invoked once per target/horizon to fit within available execution time); `run_phase4b_demo.py`
+  itself trains everything in one pass when run standalone with enough time/CPU, and reuses the
+  already-saved results if `scripts/_phase4b_worker.py` was run first.
+
+### Running Phase 4B
+
+```bash
+python scripts/run_phase4b_demo.py     # trains everything in one pass if not already trained
+python -m pytest -q                    # all 154 tests, every phase, offline
+```
+
+**STOP — Phase 4B is complete. Do not start Phase 4C or Phase 4D without explicit user instruction.**
+
+## Phase 4C — Weather Anomaly Detection + Explainable Anomaly Analytics (COMPLETED)
+
+**Objective.** Turn raw/normalized weather observations into an explainable anomaly-detection layer
+for temperature, wind_speed, rainfall, and pressure — without ever claiming a statistical anomaly is
+automatically a disaster, emergency, confirmed extreme-weather event, or warning. New package
+`src/phase4c/` (`anomaly_features.py`, `anomaly_scoring.py`, `anomaly_detection.py`,
+`anomaly_storage.py`) plus `scripts/run_phase4c_demo.py` and `tests/test_phase4c_anomaly_detection.py`
+— entirely additive. No Phase 1–4B file was modified.
+
+**Classification discipline (stated exactly, per the spec).** Every finding's `classification` field
+is the literal string `STATISTICAL_ANOMALY` (or `NORMAL`) — never `DISASTER`/`EMERGENCY`/`CYCLONE`/
+`FLOOD`/`HEATWAVE`/`TORNADO`. This project has no existing convention for a more specific statistical
+label, so the generic one is used everywhere, per the spec's explicit instruction.
+
+**Architecture:**
+```
+Normalized WeatherRecord observations (ERA5, Open-Meteo — Phase 2B/2C adapters, reused unmodified)
+        -> records_to_dataframe() — per-SOURCE sort + dedupe (never merges sources)
+        -> per-variable causal rolling detectors:
+             temperature / wind_speed / pressure -> rolling z-score  (anomaly_detection.py)
+             rainfall                             -> rolling percentile (zero-inflation-aware)
+        -> AnomalyRecord (explainable: observed value, baseline, deviation, method, threshold,
+           score, severity, classification, deterministic explanation string)
+        -> data/phase4c/anomalies.json / .csv / anomaly_summary.json
+        -> additive integration: WeatherIntelligence.anomaly field (Phase 4A), observed-anomaly
+           context on forecast records (Phase 4B)
+```
+
+**Source separation (a non-negotiable design choice, not just a convenience).** Every detector
+operates on ONE source's own time series at a time — `run_anomaly_detection()` groups input by
+`source` before calling any detector, and no rolling baseline is ever built from more than one
+source's values. This is also what keeps the Phase 2C pressure caveat from ever leaking in as a
+false anomaly here (see "Pressure" below).
+
+**Causality / leakage prevention.** Every rolling baseline for row *t* uses `.shift(1).rolling(window)`
+— only rows strictly before *t* — the identical convention Phase 4B's `feature_engineering.py`
+already documents and uses for its own ML features. `tests/test_phase4c_anomaly_detection.py::
+test_reproducibility_same_input_same_output` and `::test_insufficient_history_for_first_n_records`
+assert this directly.
+
+**Methods, per variable:**
+- **Temperature / Wind speed** — causal rolling mean/std over a configurable window (default 168
+  hours = 7 days, `AnomalyConfig.zscore_window`/`zscore_min_periods`), `z = (observed - rolling_mean)
+  / rolling_std`, anomaly when `|z| >= z_threshold` (default 3.0 — the standard "three-sigma"
+  outlier convention). A rolling std below `zero_variance_epsilon` (default 1e-6) is treated as
+  undefined and reported as `ZERO_VARIANCE`, never divided by.
+- **Rainfall** — **not** z-score. Rainfall is zero-inflated (most hours are 0 mm), so an ordinary
+  mean/std z-score would flag ordinary light rain as "extreme" simply because the baseline mean sits
+  near 0 with a tiny std. Instead: causal rolling 50th/95th percentile (`rainfall_window` default 720
+  hours = 30 days, `rainfall_min_periods` default 168), `score = (observed - p95) / max(p95 - p50,
+  epsilon)`, anomaly when `observed > p95` and `score >= rainfall_threshold` (default 1.0).
+  `rainfall_epsilon` (default 0.1 mm, matching typical rain-gauge/reanalysis resolution) prevents
+  division by ~0 in dry windows. `tests/test_phase4c_anomaly_detection.py::
+  test_rainfall_percentile_anomaly_on_zero_inflated_series` confirms ordinary light showers are not
+  flagged once the rolling baseline reflects them as normal, while a genuine downpour still is.
+- **Pressure** — same rolling z-score method as temperature/wind, **plus an explicit, documented
+  caveat**: Phase 2C found that ERA5's pressure field is mean-sea-level pressure (`msl`) while
+  Open-Meteo's is `surface_pressure`, systematically ~35–46 hPa lower at Jabalpur's ~390m elevation
+  (see the Phase 2C section above). Because Phase 4C never compares sources to each other — each
+  source's baseline is built purely from its own past pressure values — this definitional mismatch
+  cannot itself produce a false anomaly here. This is asserted directly by
+  `test_pressure_caveat_not_triggered_by_cross_source_definition_mismatch`, and every pressure
+  `AnomalyRecord.explanation` includes the caveat text as a standing reminder for anyone reading the
+  output later.
+
+**Severity.** A step function of "how many multiples of the variable's own base threshold was this
+deviation" — `ratio = score / threshold`; `ratio < 2.0` → LOW, `< 3.0` → MEDIUM, `< 4.0` → HIGH,
+`>= 4.0` → CRITICAL (`AnomalyConfig.severity_ratio_low/medium/high`). This is a transparent,
+configurable convention for ranking anomalies by size — **not** a claim about real-world danger level.
+
+**Edge cases, all handled with an honest status rather than a fabricated score:**
+
+| Status | Meaning |
+|---|---|
+| `EVALUATED` | Enough history existed; a real score was computed. |
+| `INSUFFICIENT_HISTORY` | Fewer than `min_periods` valid prior observations in the rolling window (always true for the first `window` rows of a series). |
+| `ZERO_VARIANCE` | Rolling std ≈ 0 (constant window) — z-score undefined. |
+| `MISSING_VALUE` | The observation itself is `None`/NaN. |
+| `INVALID_VALUE` | Rainfall observed as negative (physically impossible) — excluded from both scoring and the rolling baseline, never silently dropped from the record count. |
+
+Duplicate timestamps are deduplicated (first occurrence kept, count reported); unsorted input is
+sorted by timestamp before any rolling computation; every one of these is covered by its own test.
+
+**Real-data results** (`scripts/run_phase4c_demo.py`, ERA5 + Open-Meteo, Jabalpur, 2024–2025, real
+17,544-row series per source, loaded via the existing unmodified Phase 2B/2C adapters):
+
+| Metric | Value |
+|---|---|
+| Total observations analyzed (both sources, 4 variables) | 140,352 |
+| Total statistical anomalies | 1,309 (rate 0.93%) |
+| By variable | temperature 28, wind_speed 418, pressure 170, rainfall 693 |
+| By source | ERA5 677, Open-Meteo 632 |
+| By severity | LOW 865, MEDIUM 134, HIGH 61, CRITICAL 249 |
+| Insufficient-history count | 1,344 (the first 168–720 rows of each source/variable, as designed) |
+| Missing/invalid/zero-variance count | 0 / 0 / 0 (the real dataset has no gaps or negative rainfall) |
+
+Rainfall anomalies concentrate in the monsoon season (647 of 693, i.e. ~93%) — the expected real-world
+pattern, not an artifact. No single variable dominates the anomaly count implausibly, and the two
+sources' anomaly counts are comparable without being suspiciously identical — both checked manually
+per the spec's "scientific validation" requirement before this section was written.
+
+**Output files** (`data/phase4c/`, a new directory — nothing from earlier phases was overwritten):
+`anomalies.json`/`.csv` (only the actual `STATISTICAL_ANOMALY` findings — persisting all ~140k
+per-hour `NORMAL` evaluations would be a multi-hundred-MB file of near-zero information content; the
+full counts already live in the summary), `anomaly_summary.json` (all counts above, computed from the
+real run, not manufactured), `weather_intelligence_with_anomalies.json` and
+`forecast_with_anomaly_context.json` (see integration below).
+
+**Phase 4A integration (additive).** `attach_anomalies_to_intelligence()` fills Phase 4A's
+pre-existing, previously-`None` `WeatherIntelligence.anomaly` field, reusing the exact same
+`check_temporal_match`/`check_spatial_match` alignment functions Phase 4A's own
+`select_report_evidence()` already uses for report evidence — no new matching logic invented. A
+record's `anomaly` field stays `None` when nothing aligns in time/place; it is never fabricated. In
+the demo, 1 of the 5 existing Phase 4A demo records had a matching anomaly nearby.
+
+**Phase 4B integration (additive, context-only).** `attach_anomaly_context_to_forecast()` adds an
+`observed_anomaly_context` list to a copy of a Phase 4B forecast record — it never edits the
+forecast's own predicted value and never labels a forecasted value as an observed anomaly; forecast
+and observation stay conceptually separate, per the spec. In the demo, 1 of the 3 forecast records had
+observed-anomaly context nearby.
+
+**Tests.** `tests/test_phase4c_anomaly_detection.py` — 21 tests on small, hand-authored, deterministic
+synthetic fixtures, covering: normal values, an obvious temperature/wind/rainfall/pressure anomaly,
+the pressure cross-source-mismatch non-trigger, missing values, insufficient history, zero variance,
+boundary threshold behavior, duplicate-timestamp dedup, unsorted-input sorting, reproducibility,
+source separation, severity scaling, explanation-text generation, a storage round-trip, the Phase
+4A/4B integration functions, and a real-data smoke test (skipped gracefully if the real data file
+isn't present in a given checkout).
+
+**Limitations, stated honestly:**
+- Window sizes (168h / 720h) and thresholds (z=3.0, rainfall score=1.0) are documented, reasonable,
+  standard-convention defaults — not fitted/validated against any labeled ground-truth anomaly set,
+  because no such labels exist in this project. They are fully configurable via `AnomalyConfig`.
+- The rolling-window methods used here (mean/std, quantile) do not account for seasonality within the
+  window itself — a window spanning a rapid seasonal transition (e.g. late winter into pre-monsoon)
+  will have a wider "normal" range than either sub-period alone, which could under-flag genuine
+  anomalies right at a seasonal transition. This is a known limitation of simple rolling-window
+  methods, not a bug; a seasonally-decomposed baseline would be a reasonable Phase 4D candidate.
+- Only ERA5 and Open-Meteo (both already-integrated real sources) were run through the demo; the IMD/
+  citizen-report pipelines from earlier phases were not re-run through Phase 4C, since they don't
+  carry the same dense hourly time series a rolling-window method needs.
+
+**STOP — Phase 4C is complete. Do not start Phase 4D without explicit user instruction.**

@@ -1,0 +1,101 @@
+{
+  "total_observations_analyzed": 140352,
+  "total_anomalies": 1309,
+  "anomaly_rate": 0.009327,
+  "anomalies_by_source": {
+    "ERA5": 677,
+    "Open-Meteo": 632
+  },
+  "anomalies_by_variable": {
+    "temperature": 28,
+    "wind_speed": 418,
+    "pressure": 170,
+    "rainfall": 693
+  },
+  "anomalies_by_severity": {
+    "LOW": 865,
+    "HIGH": 61,
+    "CRITICAL": 249,
+    "MEDIUM": 134
+  },
+  "anomalies_by_year": {
+    "2024": 730,
+    "2025": 579
+  },
+  "anomalies_by_month": {
+    "2024-01": 19,
+    "2024-02": 50,
+    "2024-03": 49,
+    "2024-04": 66,
+    "2024-05": 69,
+    "2024-06": 145,
+    "2024-07": 84,
+    "2024-08": 42,
+    "2024-09": 94,
+    "2024-10": 39,
+    "2024-11": 8,
+    "2024-12": 65,
+    "2025-01": 18,
+    "2025-02": 24,
+    "2025-03": 26,
+    "2025-04": 40,
+    "2025-05": 82,
+    "2025-06": 117,
+    "2025-07": 74,
+    "2025-08": 38,
+    "2025-09": 53,
+    "2025-10": 69,
+    "2025-11": 25,
+    "2025-12": 13
+  },
+  "anomalies_by_season": {
+    "monsoon": 647,
+    "post_monsoon": 141,
+    "winter": 189,
+    "pre_monsoon": 332
+  },
+  "status_counts": {
+    "INSUFFICIENT_HISTORY": 1344,
+    "EVALUATED": 139008
+  },
+  "insufficient_history_count": 1344,
+  "missing_value_count": 0,
+  "invalid_value_count": 0,
+  "zero_variance_count": 0,
+  "prep_summary_by_source": {
+    "ERA5": {
+      "input_records": 17544,
+      "records_without_timestamp": 0,
+      "duplicate_timestamps_dropped": 0,
+      "was_unsorted": false,
+      "sources_present": [
+        "ERA5"
+      ],
+      "invalid_rainfall_count": 0
+    },
+    "Open-Meteo": {
+      "input_records": 17544,
+      "records_without_timestamp": 0,
+      "duplicate_timestamps_dropped": 0,
+      "was_unsorted": false,
+      "sources_present": [
+        "Open-Meteo"
+      ],
+      "invalid_rainfall_count": 0
+    }
+  },
+  "config": {
+    "zscore_window": 168,
+    "zscore_min_periods": 168,
+    "z_threshold": 3.0,
+    "zero_variance_epsilon": 1e-06,
+    "rainfall_window": 720,
+    "rainfall_min_periods": 168,
+    "rainfall_upper_quantile": 0.95,
+    "rainfall_threshold": 1.0,
+    "rainfall_epsilon": 0.1,
+    "severity_ratio_low": 2.0,
+    "severity_ratio_medium": 3.0,
+    "severity_ratio_high": 4.0
+  }
+}
