@@ -1,0 +1,4 @@
+PS69 Dashboard integration note
+
+This directory was added without modifying existing source, models, data, tests, scripts, or requirements.
+It consumes existing generated JSON outputs in ../data/.
