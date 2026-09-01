@@ -1,34 +1,25 @@
 <!doctype html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>PS69 • Weather Intelligence</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
-    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/lucide@0.468.0/dist/umd/lucide.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
   <link rel="stylesheet" href="styles.css" />
 </head>
-
 <body>
   <div class="app-shell">
     <aside class="sidebar" id="sidebar">
-      <div class="brand">
-        <div class="brand-mark"><i data-lucide="cloud-sun"></i></div>
-        <div><b>WEATHER</b><span>INTELLIGENCE</span></div>
-      </div>
+      <div class="brand"><div class="brand-mark"><i data-lucide="cloud-sun"></i></div><div><b>WEATHER</b><span>INTELLIGENCE</span></div></div>
       <div class="nav-label">COMMAND CENTER</div>
       <nav>
         <button class="nav-item active" data-page="overview"><i data-lucide="layout-dashboard"></i>Overview</button>
-        <button class="nav-item" data-page="analytics"><i data-lucide="chart-no-axes-combined"></i>Weather
-          Analytics</button>
-        <button class="nav-item" data-page="anomalies"><i data-lucide="triangle-alert"></i>Anomalies <em
-            id="navAnomalyCount">—</em></button>
+        <button class="nav-item" data-page="analytics"><i data-lucide="chart-no-axes-combined"></i>Weather Analytics</button>
+        <button class="nav-item" data-page="anomalies"><i data-lucide="triangle-alert"></i>Anomalies <em id="navAnomalyCount">—</em></button>
         <button class="nav-item" data-page="intelligence"><i data-lucide="brain-circuit"></i>Intelligence</button>
         <button class="nav-item" data-page="fusion"><i data-lucide="git-merge"></i>Data Fusion</button>
         <button class="nav-item" data-page="evidence"><i data-lucide="badge-check"></i>Corroboration</button>
@@ -36,9 +27,7 @@
         <button class="nav-item" data-page="reports"><i data-lucide="file-text"></i>Reports</button>
       </nav>
       <div class="sidebar-bottom">
-        <div class="system-card"><span class="pulse"></span>
-          <div><b>Pipeline online</b><small>Phase 4C connected</small></div>
-        </div>
+        <div class="system-card"><span class="pulse"></span><div><b>Pipeline online</b><small>Phase 4C connected</small></div></div>
         <div class="project-tag">SIH 2026 • PS69</div>
       </div>
     </aside>
@@ -46,400 +35,51 @@
     <main class="main">
       <header class="topbar">
         <button class="icon-btn mobile-only" id="menuBtn"><i data-lucide="menu"></i></button>
-        <div>
-          <p class="eyebrow">NATIONAL WEATHER MONITORING</p>
-          <h1 id="pageTitle">Weather Command Center</h1>
-        </div>
-        <div class="top-actions">
-          <div class="status"><span></span>Data pipeline healthy</div><button class="icon-btn" title="Refresh data"
-            id="refreshBtn"><i data-lucide="refresh-cw"></i></button>
-          <div class="avatar">PS</div>
-        </div>
+        <div><p class="eyebrow">NATIONAL WEATHER MONITORING</p><h1 id="pageTitle">Weather Command Center</h1></div>
+        <div class="top-actions"><div class="status"><span></span>Data pipeline healthy</div><button class="icon-btn" title="Refresh data" id="refreshBtn"><i data-lucide="refresh-cw"></i></button><div class="avatar">PS</div></div>
       </header>
 
       <div class="content">
         <section class="page active" id="overview">
-          <div class="hero-row">
-            <div>
-              <h2>Good evening, Analyst.</h2>
-              <p>Unified view of weather signals, anomalies, model forecasts and evidence.</p>
-            </div>
-            <div class="filters"><label>Region<select id="regionSelect">
-                  <option>India • Jabalpur focus</option>
-                </select></label><label>Period<select id="periodSelect">
-                  <option>2024–2025</option>
-                </select></label></div>
-          </div>
+          <div class="hero-row"><div><h2>Good evening, Analyst.</h2><p>Unified view of weather signals, anomalies, model forecasts and evidence.</p></div><div class="filters"><label>Region<select id="regionSelect"><option>India • Jabalpur focus</option></select></label><label>Period<select id="periodSelect"><option>2024–2025</option></select></label></div></div>
           <div class="metric-grid">
-            <article class="metric">
-              <div class="metric-top"><span>Observations analysed</span><i data-lucide="database"></i></div><strong
-                id="observations">—</strong><small>Across integrated weather sources</small>
-            </article>
-            <article class="metric alert-metric">
-              <div class="metric-top"><span>Detected anomalies</span><i data-lucide="triangle-alert"></i></div><strong
-                id="anomalies">—</strong><small><b id="critical">—</b> critical • <b id="high">—</b> high</small>
-            </article>
-            <article class="metric">
-              <div class="metric-top"><span>Anomaly rate</span><i data-lucide="activity"></i></div><strong
-                id="anomalyRate">—</strong><small>Rolling statistical detection</small>
-            </article>
-            <article class="metric">
-              <div class="metric-top"><span>Avg evidence support</span><i data-lucide="badge-check"></i></div><strong
-                id="evidenceScore">—</strong><small>Transparent corroboration score</small>
-            </article>
+            <article class="metric"><div class="metric-top"><span>Observations analysed</span><i data-lucide="database"></i></div><strong id="observations">—</strong><small>Across integrated weather sources</small></article>
+            <article class="metric alert-metric"><div class="metric-top"><span>Detected anomalies</span><i data-lucide="triangle-alert"></i></div><strong id="anomalies">—</strong><small><b id="critical">—</b> critical • <b id="high">—</b> high</small></article>
+            <article class="metric"><div class="metric-top"><span>Anomaly rate</span><i data-lucide="activity"></i></div><strong id="anomalyRate">—</strong><small>Rolling statistical detection</small></article>
+            <article class="metric"><div class="metric-top"><span>Avg evidence support</span><i data-lucide="badge-check"></i></div><strong id="evidenceScore">—</strong><small>Transparent corroboration score</small></article>
           </div>
 
           <div class="grid-2">
-            <article class="panel">
-              <div class="panel-head">
-                <div>
-                  <h3>Anomaly activity</h3>
-                  <p>Monthly detection volume</p>
-                </div><span class="chip">Phase 4C</span>
-              </div>
-              <div class="chart-wrap"><canvas id="monthlyChart"></canvas></div>
-            </article>
-            <article class="panel">
-              <div class="panel-head">
-                <div>
-                  <h3>Severity distribution</h3>
-                  <p>Detected anomaly classification</p>
-                </div>
-              </div>
-              <div class="donut-area">
-                <div class="donut-wrap"><canvas id="severityChart"></canvas>
-                  <div class="donut-center"><b id="severityTotal">—</b><span>events</span></div>
-                </div>
-                <div class="legend" id="severityLegend"></div>
-              </div>
-            </article>
+            <article class="panel"><div class="panel-head"><div><h3>Anomaly activity</h3><p>Monthly detection volume</p></div><span class="chip">Phase 4C</span></div><div class="chart-wrap"><canvas id="monthlyChart"></canvas></div></article>
+            <article class="panel"><div class="panel-head"><div><h3>Severity distribution</h3><p>Detected anomaly classification</p></div></div><div class="donut-area"><div class="donut-wrap"><canvas id="severityChart"></canvas><div class="donut-center"><b id="severityTotal">—</b><span>events</span></div></div><div class="legend" id="severityLegend"></div></div></article>
           </div>
 
           <div class="grid-3">
-            <article class="panel">
-              <div class="panel-head">
-                <div>
-                  <h3>Source balance</h3>
-                  <p>Where anomalies originated</p>
-                </div>
-              </div>
-              <div class="source-bars" id="sourceBars"></div>
-            </article>
-            <article class="panel">
-              <div class="panel-head">
-                <div>
-                  <h3>Variables under watch</h3>
-                  <p>Detection contribution</p>
-                </div>
-              </div>
-              <div class="mini-list" id="variableList"></div>
-            </article>
-            <article class="panel">
-              <div class="panel-head">
-                <div>
-                  <h3>Model snapshot</h3>
-                  <p>Best forecast performance</p>
-                </div><button class="text-btn" data-page-jump="analytics">View all</button>
-              </div>
-              <div id="modelSnapshot"></div>
-            </article>
+            <article class="panel"><div class="panel-head"><div><h3>Source balance</h3><p>Where anomalies originated</p></div></div><div class="source-bars" id="sourceBars"></div></article>
+            <article class="panel"><div class="panel-head"><div><h3>Variables under watch</h3><p>Detection contribution</p></div></div><div class="mini-list" id="variableList"></div></article>
+            <article class="panel"><div class="panel-head"><div><h3>Model snapshot</h3><p>Best forecast performance</p></div><button class="text-btn" data-page-jump="analytics">View all</button></div><div id="modelSnapshot"></div></article>
           </div>
 
-          <article class="panel table-panel">
-            <div class="panel-head">
-              <div>
-                <h3>Latest detected anomalies</h3>
-                <p>Most recent records from the Phase 4C output</p>
-              </div><button class="outline-btn" data-page-jump="anomalies">View anomaly explorer <i
-                  data-lucide="arrow-up-right"></i></button>
-            </div>
-            <div class="table-scroll">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Time</th>
-                    <th>Variable</th>
-                    <th>Source</th>
-                    <th>Observed</th>
-                    <th>Baseline</th>
-                    <th>Score</th>
-                    <th>Severity</th>
-                  </tr>
-                </thead>
-                <tbody id="latestTable"></tbody>
-              </table>
-            </div>
-          </article>
+          <article class="panel table-panel"><div class="panel-head"><div><h3>Latest detected anomalies</h3><p>Most recent records from the Phase 4C output</p></div><button class="outline-btn" data-page-jump="anomalies">View anomaly explorer <i data-lucide="arrow-up-right"></i></button></div><div class="table-scroll"><table><thead><tr><th>Time</th><th>Variable</th><th>Source</th><th>Observed</th><th>Baseline</th><th>Score</th><th>Severity</th></tr></thead><tbody id="latestTable"></tbody></table></div></article>
         </section>
 
-        <section class="page" id="analytics">
-          <div class="section-heading">
-            <div>
-              <p class="eyebrow">FORECASTING & TRENDS</p>
-              <h2>Weather Analytics</h2>
-              <p>Model performance and weather intelligence outputs from the existing pipeline.</p>
-            </div>
-          </div>
-          <div class="metric-grid three">
-            <article class="metric">
-              <div class="metric-top"><span>Forecast models saved</span><i data-lucide="cpu"></i></div><strong
-                id="modelCount">—</strong><small>Across multiple horizons</small>
-            </article>
-            <article class="metric">
-              <div class="metric-top"><span>Best temperature R²</span><i data-lucide="trending-up"></i></div><strong
-                id="bestR2">—</strong><small>HistGradientBoosting • 1h</small>
-            </article>
-            <article class="metric">
-              <div class="metric-top"><span>Rainfall ROC-AUC</span><i data-lucide="cloud-rain"></i></div><strong
-                id="rainAuc">—</strong><small>Best at 1h horizon</small>
-            </article>
-          </div>
-          <article class="panel">
-            <div class="panel-head">
-              <div>
-                <h3>Forecast quality by horizon</h3>
-                <p>Temperature R² and rainfall ROC-AUC</p>
-              </div>
-            </div>
-            <div class="chart-wrap tall"><canvas id="forecastChart"></canvas></div>
-          </article>
-          <article class="panel table-panel">
-            <div class="panel-head">
-              <div>
-                <h3>Forecast model matrix</h3>
-                <p>Actual evaluation metrics from Phase 4B</p>
-              </div>
-            </div>
-            <div class="table-scroll">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Variable</th>
-                    <th>Horizon</th>
-                    <th>Best model</th>
-                    <th>MAE</th>
-                    <th>RMSE</th>
-                    <th>R² / ROC-AUC</th>
-                  </tr>
-                </thead>
-                <tbody id="forecastTable"></tbody>
-              </table>
-            </div>
-          </article>
-        </section>
+        <section class="page" id="analytics"><div class="section-heading"><div><p class="eyebrow">FORECASTING & TRENDS</p><h2>Weather Analytics</h2><p>Model performance and weather intelligence outputs from the existing pipeline.</p></div></div><div class="metric-grid three"><article class="metric"><div class="metric-top"><span>Forecast models saved</span><i data-lucide="cpu"></i></div><strong id="modelCount">—</strong><small>Across multiple horizons</small></article><article class="metric"><div class="metric-top"><span>Best temperature R²</span><i data-lucide="trending-up"></i></div><strong id="bestR2">—</strong><small>HistGradientBoosting • 1h</small></article><article class="metric"><div class="metric-top"><span>Rainfall ROC-AUC</span><i data-lucide="cloud-rain"></i></div><strong id="rainAuc">—</strong><small>Best at 1h horizon</small></article></div><article class="panel"><div class="panel-head"><div><h3>Forecast quality by horizon</h3><p>Temperature R² and rainfall ROC-AUC</p></div></div><div class="chart-wrap tall"><canvas id="forecastChart"></canvas></div></article><article class="panel table-panel"><div class="panel-head"><div><h3>Forecast model matrix</h3><p>Actual evaluation metrics from Phase 4B</p></div></div><div class="table-scroll"><table><thead><tr><th>Variable</th><th>Horizon</th><th>Best model</th><th>MAE</th><th>RMSE</th><th>R² / ROC-AUC</th></tr></thead><tbody id="forecastTable"></tbody></table></div></article></section>
 
-        <section class="page" id="anomalies">
-          <div class="section-heading">
-            <div>
-              <p class="eyebrow">EXPLAINABLE DETECTION</p>
-              <h2>Anomaly Explorer</h2>
-              <p>Inspect statistical deviations without changing the underlying detection logic.</p>
-            </div>
-            <div class="filters inline"><label>Variable<select id="anomalyFilter">
-                  <option value="all">All variables</option>
-                </select></label><label>Severity<select id="severityFilter">
-                  <option value="all">All severity</option>
-                  <option>CRITICAL</option>
-                  <option>HIGH</option>
-                  <option>MEDIUM</option>
-                  <option>LOW</option>
-                </select></label></div>
-          </div>
-          <article class="panel table-panel">
-            <div class="panel-head">
-              <div>
-                <h3>Detected events</h3>
-                <p id="anomalyCountText">Loading…</p>
-              </div>
-            </div>
-            <div class="table-scroll">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Timestamp</th>
-                    <th>Location</th>
-                    <th>Variable</th>
-                    <th>Observed</th>
-                    <th>Baseline</th>
-                    <th>Z / score</th>
-                    <th>Severity</th>
-                    <th>Method</th>
-                  </tr>
-                </thead>
-                <tbody id="anomalyTable"></tbody>
-              </table>
-            </div>
-          </article>
-        </section>
+        <section class="page" id="anomalies"><div class="section-heading"><div><p class="eyebrow">EXPLAINABLE DETECTION</p><h2>Anomaly Explorer</h2><p>Inspect statistical deviations without changing the underlying detection logic.</p></div><div class="filters inline"><label>Variable<select id="anomalyFilter"><option value="all">All variables</option></select></label><label>Severity<select id="severityFilter"><option value="all">All severity</option><option>CRITICAL</option><option>HIGH</option><option>MEDIUM</option><option>LOW</option></select></label></div></div><article class="panel table-panel"><div class="panel-head"><div><h3>Detected events</h3><p id="anomalyCountText">Loading…</p></div></div><div class="table-scroll"><table><thead><tr><th>Timestamp</th><th>Location</th><th>Variable</th><th>Observed</th><th>Baseline</th><th>Z / score</th><th>Severity</th><th>Method</th></tr></thead><tbody id="anomalyTable"></tbody></table></div></article></section>
 
-        <section class="page" id="intelligence">
-          <div class="section-heading">
-            <div>
-              <p class="eyebrow">UNIFIED WEATHER INTELLIGENCE</p>
-              <h2>Intelligence</h2>
-              <p>Confidence, source agreement and corroborated weather context.</p>
-            </div>
-          </div>
-          <div class="grid-2">
-            <article class="panel">
-              <div class="panel-head">
-                <div>
-                  <h3>Intelligence records</h3>
-                  <p>Phase 4A + 4B + 4C context</p>
-                </div>
-              </div>
-              <div id="intelligenceStats" class="insight-grid"></div>
-            </article>
-            <article class="panel">
-              <div class="panel-head">
-                <div>
-                  <h3>Confidence bands</h3>
-                  <p>Documented, not probabilistic truth</p>
-                </div>
-              </div>
-              <div class="confidence-card">
-                <div class="confidence-ring" id="confidenceRing"><span>—</span></div>
-                <div><b>Overall confidence</b>
-                  <p>Computed from documented source agreement and evidence support. It is not a probability that an
-                    event is true.</p>
-                </div>
-              </div>
-            </article>
-          </div>
-          <article class="panel">
-            <div class="panel-head">
-              <div>
-                <h3>Recent intelligence signals</h3>
-              </div>
-            </div>
-            <div class="signal-list" id="signalList"></div>
-          </article>
-        </section>
+        <section class="page" id="intelligence"><div class="section-heading"><div><p class="eyebrow">UNIFIED WEATHER INTELLIGENCE</p><h2>Intelligence</h2><p>Confidence, source agreement and corroborated weather context.</p></div></div><div class="grid-2"><article class="panel"><div class="panel-head"><div><h3>Intelligence records</h3><p>Phase 4A + 4B + 4C context</p></div></div><div id="intelligenceStats" class="insight-grid"></div></article><article class="panel"><div class="panel-head"><div><h3>Confidence bands</h3><p>Documented, not probabilistic truth</p></div></div><div class="confidence-card"><div class="confidence-ring" id="confidenceRing"><span>—</span></div><div><b>Overall confidence</b><p>Computed from documented source agreement and evidence support. It is not a probability that an event is true.</p></div></div></article></div><article class="panel"><div class="panel-head"><div><h3>Recent intelligence signals</h3></div></div><div class="signal-list" id="signalList"></div></article></section>
 
-        <section class="page" id="fusion">
-          <div class="section-heading">
-            <div>
-              <p class="eyebrow">MULTI-SOURCE INTEGRATION</p>
-              <h2>Data Fusion</h2>
-              <p>ERA5 and Open-Meteo are aligned before downstream intelligence and anomaly analysis.</p>
-            </div>
-          </div>
-          <div class="grid-2">
-            <article class="panel source-panel">
-              <div class="source-icon"><i data-lucide="layers-2"></i></div>
-              <h3>ERA5</h3>
-              <p>Reanalysis source contributing 677 detected anomalies.</p>
-              <div class="big-number">677</div><small>anomalies in Phase 4C</small>
-            </article>
-            <article class="panel source-panel">
-              <div class="source-icon"><i data-lucide="satellite"></i></div>
-              <h3>Open-Meteo</h3>
-              <p>Forecast/weather source contributing 632 detected anomalies.</p>
-              <div class="big-number">632</div><small>anomalies in Phase 4C</small>
-            </article>
-          </div>
-          <article class="panel">
-            <div class="panel-head">
-              <div>
-                <h3>Fusion principles</h3>
-                <p>Implemented upstream — dashboard is read-only</p>
-              </div>
-            </div>
-            <div class="principles">
-              <div><b>01</b><span>Temporal alignment</span><small>Records are compared on aligned timestamps.</small>
-              </div>
-              <div><b>02</b><span>Spatial alignment</span><small>Source observations are mapped to a common location
-                  context.</small></div>
-              <div><b>03</b><span>Source comparison</span><small>Agreement/disagreement is retained rather than
-                  hidden.</small></div>
-              <div><b>04</b><span>Traceability</span><small>Downstream intelligence retains contributing source
-                  information.</small></div>
-            </div>
-          </article>
-        </section>
+        <section class="page" id="fusion"><div class="section-heading"><div><p class="eyebrow">MULTI-SOURCE INTEGRATION</p><h2>Data Fusion</h2><p>ERA5 and Open-Meteo are aligned before downstream intelligence and anomaly analysis.</p></div></div><div class="grid-2"><article class="panel source-panel"><div class="source-icon"><i data-lucide="layers-2"></i></div><h3>ERA5</h3><p>Reanalysis source contributing 677 detected anomalies.</p><div class="big-number">677</div><small>anomalies in Phase 4C</small></article><article class="panel source-panel"><div class="source-icon"><i data-lucide="satellite"></i></div><h3>Open-Meteo</h3><p>Forecast/weather source contributing 632 detected anomalies.</p><div class="big-number">632</div><small>anomalies in Phase 4C</small></article></div><article class="panel"><div class="panel-head"><div><h3>Fusion principles</h3><p>Implemented upstream — dashboard is read-only</p></div></div><div class="principles"><div><b>01</b><span>Temporal alignment</span><small>Records are compared on aligned timestamps.</small></div><div><b>02</b><span>Spatial alignment</span><small>Source observations are mapped to a common location context.</small></div><div><b>03</b><span>Source comparison</span><small>Agreement/disagreement is retained rather than hidden.</small></div><div><b>04</b><span>Traceability</span><small>Downstream intelligence retains contributing source information.</small></div></div></article></section>
 
-        <section class="page" id="evidence">
-          <div class="section-heading">
-            <div>
-              <p class="eyebrow">EVIDENCE-BASED VERIFICATION</p>
-              <h2>Corroboration</h2>
-              <p>Report evidence and verification status from Phase 3C.</p>
-            </div>
-          </div>
-          <div class="metric-grid">
-            <article class="metric">
-              <div class="metric-top"><span>Total reports</span><i data-lucide="file-search"></i></div><strong
-                id="totalReports">—</strong><small>Reports assessed</small>
-            </article>
-            <article class="metric">
-              <div class="metric-top"><span>Supported</span><i data-lucide="badge-check"></i></div><strong
-                id="supportedReports">—</strong><small>Consistent with available evidence</small>
-            </article>
-            <article class="metric">
-              <div class="metric-top"><span>Insufficient evidence</span><i data-lucide="circle-help"></i></div><strong
-                id="insufficientReports">—</strong><small>Not enough evidence to verify</small>
-            </article>
-            <article class="metric">
-              <div class="metric-top"><span>Avg support score</span><i data-lucide="gauge"></i></div><strong
-                id="avgSupport">—</strong><small>Transparent documented score</small>
-            </article>
-          </div>
-          <article class="panel">
-            <div class="panel-head">
-              <div>
-                <h3>Verification status</h3>
-                <p>Phase 3C summary</p>
-              </div>
-            </div>
-            <div class="verification-bars" id="verificationBars"></div>
-          </article>
-        </section>
+        <section class="page" id="evidence"><div class="section-heading"><div><p class="eyebrow">EVIDENCE-BASED VERIFICATION</p><h2>Corroboration</h2><p>Report evidence and verification status from Phase 3C.</p></div></div><div class="metric-grid"><article class="metric"><div class="metric-top"><span>Total reports</span><i data-lucide="file-search"></i></div><strong id="totalReports">—</strong><small>Reports assessed</small></article><article class="metric"><div class="metric-top"><span>Supported</span><i data-lucide="badge-check"></i></div><strong id="supportedReports">—</strong><small>Consistent with available evidence</small></article><article class="metric"><div class="metric-top"><span>Insufficient evidence</span><i data-lucide="circle-help"></i></div><strong id="insufficientReports">—</strong><small>Not enough evidence to verify</small></article><article class="metric"><div class="metric-top"><span>Avg support score</span><i data-lucide="gauge"></i></div><strong id="avgSupport">—</strong><small>Transparent documented score</small></article></div><article class="panel"><div class="panel-head"><div><h3>Verification status</h3><p>Phase 3C summary</p></div></div><div class="verification-bars" id="verificationBars"></div></article></section>
 
-        <section class="page" id="map">
-          <div class="section-heading">
-            <div>
-              <p class="eyebrow">SPATIAL OVERVIEW</p>
-              <h2>Live Map</h2>
-              <p>Spatial context for detected events. The current dataset is centered on the project geography.</p>
-            </div>
-          </div>
-          <article class="panel map-card">
-            <div class="map-grid"></div>
-            <div class="map-pin pin-1"><span></span><b>Jabalpur focus</b><small>23.25°N • 80.00°E</small></div>
-            <div class="map-label label-1">Central India</div>
-            <div class="map-legend"><span><i class="dot critical"></i>Critical</span><span><i
-                  class="dot high"></i>High</span><span><i class="dot medium"></i>Medium</span><span><i
-                  class="dot low"></i>Low</span></div>
-            <div class="map-note"><i data-lucide="info"></i><span>Map layer is intentionally read-only. Connect your
-                future geospatial/API layer here without changing the Phase 4C processing pipeline.</span></div>
-          </article>
-        </section>
+        <section class="page" id="map"><div class="section-heading"><div><p class="eyebrow">SPATIAL OVERVIEW</p><h2>Live Map</h2><p>Spatial context for detected events. The current dataset is centered on the project geography.</p></div></div><article class="panel map-card"><div class="map-grid"></div><div class="map-pin pin-1"><span></span><b>Jabalpur focus</b><small>23.25°N • 80.00°E</small></div><div class="map-label label-1">Central India</div><div class="map-legend"><span><i class="dot critical"></i>Critical</span><span><i class="dot high"></i>High</span><span><i class="dot medium"></i>Medium</span><span><i class="dot low"></i>Low</span></div><div class="map-note"><i data-lucide="info"></i><span>Map layer is intentionally read-only. Connect your future geospatial/API layer here without changing the Phase 4C processing pipeline.</span></div></article></section>
 
-        <section class="page" id="reports">
-          <div class="section-heading">
-            <div>
-              <p class="eyebrow">OUTPUTS</p>
-              <h2>Reports & Artifacts</h2>
-              <p>Quick access to existing analytical outputs in this repository.</p>
-            </div>
-          </div>
-          <div class="report-grid"><a class="report-card" href="../reports/findings.md" target="_blank"><i
-                data-lucide="file-bar-chart-2"></i><b>Findings</b><span>Analytical findings and
-                conclusions</span><em>Open →</em></a><a class="report-card"
-              href="../reports/fig_timeseries_overview.png" target="_blank"><i
-                data-lucide="line-chart"></i><b>Time-series overview</b><span>Existing analytical
-                visualization</span><em>Open →</em></a><a class="report-card"
-              href="../reports/fig_feature_importance_temp.png" target="_blank"><i
-                data-lucide="bar-chart-3"></i><b>Feature importance</b><span>Temperature model analysis</span><em>Open
-                →</em></a><a class="report-card" href="../reports/fig_correlation_matrix.png" target="_blank"><i
-                data-lucide="grid-2x2"></i><b>Correlation matrix</b><span>Weather variable relationships</span><em>Open
-                →</em></a></div>
-        </section>
+        <section class="page" id="reports"><div class="section-heading"><div><p class="eyebrow">OUTPUTS</p><h2>Reports & Artifacts</h2><p>Quick access to existing analytical outputs in this repository.</p></div></div><div class="report-grid"><a class="report-card" href="../reports/findings.md" target="_blank"><i data-lucide="file-bar-chart-2"></i><b>Findings</b><span>Analytical findings and conclusions</span><em>Open →</em></a><a class="report-card" href="../reports/fig_timeseries_overview.png" target="_blank"><i data-lucide="line-chart"></i><b>Time-series overview</b><span>Existing analytical visualization</span><em>Open →</em></a><a class="report-card" href="../reports/fig_feature_importance_temp.png" target="_blank"><i data-lucide="bar-chart-3"></i><b>Feature importance</b><span>Temperature model analysis</span><em>Open →</em></a><a class="report-card" href="../reports/fig_correlation_matrix.png" target="_blank"><i data-lucide="grid-2x2"></i><b>Correlation matrix</b><span>Weather variable relationships</span><em>Open →</em></a></div></section>
       </div>
     </main>
   </div>
   <div class="toast" id="toast"><i data-lucide="check-circle-2"></i><span>Data refreshed</span></div>
   <script src="app.js"></script>
 </body>
-
 </html>
