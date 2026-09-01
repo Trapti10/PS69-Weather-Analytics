@@ -1,0 +1,16 @@
+{
+  "total_reports": 33,
+  "verification_status_counts": {
+    "INSUFFICIENT_EVIDENCE": 28,
+    "SUPPORTED": 3,
+    "CONFLICTING": 1,
+    "UNVERIFIED": 1
+  },
+  "average_evidence_support_score": 0.7,
+  "reports_with_a_score": 5,
+  "evidence_source_usage_counts": {
+    "ERA5": 5,
+    "Open-Meteo": 5
+  },
+  "honest_note": "evidence_support_score is a transparent mean of documented per-variable threshold verdicts, NOT a probability of truth. SUPPORTED means 'consistent with available weather evidence', never 'confirmed true'. ERA5 and Open-Meteo are model/reanalysis products, not ground truth. IMD evidence in this project is fixture-based (dated ~2026) and will not overlap the report's real 2024-2025 evidence window -- see IMD_TEMPORAL_UNAVAILABLE reasons in individual results."
+}

@@ -1,0 +1,2396 @@
+[
+  {
+    "report_id": "fda1d1ed-d0c7-410c-8853-5796e6dae6fc",
+    "event_category": "FLOODING",
+    "predicted_event_category": "FLOODING",
+    "event_classification_confidence": 0.2715,
+    "risk_label": "MEDIUM_RISK",
+    "risk_score": 0.4,
+    "report_timestamp": "2026-07-14T10:32:00Z",
+    "latitude": 23.1815,
+    "longitude": 79.9864,
+    "verification_status": "INSUFFICIENT_EVIDENCE",
+    "evidence_sources": [],
+    "source_evidence": {
+      "ERA5": {
+        "data_label": "REAL",
+        "matched": false,
+        "unavailable_reason": "NO_TEMPORAL_MATCH",
+        "matched_record_timestamp": null,
+        "values": {}
+      },
+      "Open-Meteo": {
+        "data_label": "REAL",
+        "matched": false,
+        "unavailable_reason": "NO_TEMPORAL_MATCH",
+        "matched_record_timestamp": null,
+        "values": {}
+      },
+      "IMD": {
+        "data_label": "FIXTURE",
+        "matched": false,
+        "unavailable_reason": "IMD_TEMPORAL_UNAVAILABLE",
+        "matched_record_timestamp": null,
+        "values": {}
+      }
+    },
+    "temporal_alignment": {
+      "ERA5": {
+        "report_timestamp": "2026-07-14T10:32:00Z",
+        "best_match_record_index": null,
+        "time_difference_minutes": null,
+        "temporal_match": false,
+        "flag": "TEMPORAL_MISMATCH",
+        "candidate_record_count": 0
+      },
+      "Open-Meteo": {
+        "report_timestamp": "2026-07-14T10:32:00Z",
+        "best_match_record_index": null,
+        "time_difference_minutes": null,
+        "temporal_match": false,
+        "flag": "TEMPORAL_MISMATCH",
+        "candidate_record_count": 0
+      },
+      "IMD": {
+        "report_timestamp": "2026-07-14T10:32:00Z",
+        "best_match_record_index": null,
+        "time_difference_minutes": null,
+        "temporal_match": false,
+        "flag": "TEMPORAL_MISMATCH",
+        "candidate_record_count": 0
+      }
+    },
+    "spatial_alignment": {
+      "ERA5": {
+        "flag": "SPATIAL_UNKNOWN"
+      },
+      "Open-Meteo": {
+        "flag": "SPATIAL_UNKNOWN"
+      },
+      "IMD": {
+        "flag": "SPATIAL_UNKNOWN"
+      }
+    },
+    "evidence_support_score": null,
+    "verification_reasons": [
+      "No configured evidence source had a temporally/spatially matched record with the required variable available."
+    ],
+    "evidence_mapping_notes": "Flooding is corroborated only indirectly, via rainfall -- this project has no river-gauge or drainage data. A rainfall-supported verdict here means 'consistent with a rain event', NOT confirmation that flooding specifically occurred."
+  },
+  {
+    "report_id": "859f9e32-1fc0-4e7b-807a-cc3027a286ec",
+    "event_category": "FLOODING",
+    "predicted_event_category": "FLOODING",
+    "event_classification_confidence": 0.2715,
+    "risk_label": "MEDIUM_RISK",
+    "risk_score": 0.4,
+    "report_timestamp": "2026-07-14T10:34:00Z",
+    "latitude": 23.1816,
+    "longitude": 79.9865,
+    "verification_status": "INSUFFICIENT_EVIDENCE",
+    "evidence_sources": [],
+    "source_evidence": {
+      "ERA5": {
+        "data_label": "REAL",
+        "matched": false,
+        "unavailable_reason": "NO_TEMPORAL_MATCH",
+        "matched_record_timestamp": null,
+        "values": {}
+      },
+      "Open-Meteo": {
+        "data_label": "REAL",
+        "matched": false,
+        "unavailable_reason": "NO_TEMPORAL_MATCH",
+        "matched_record_timestamp": null,
+        "values": {}
+      },
+      "IMD": {
+        "data_label": "FIXTURE",
+        "matched": false,
+        "unavailable_reason": "IMD_TEMPORAL_UNAVAILABLE",
+        "matched_record_timestamp": null,
+        "values": {}
+      }
+    },
+    "temporal_alignment": {
+      "ERA5": {
+        "report_timestamp": "2026-07-14T10:34:00Z",
+        "best_match_record_index": null,
+        "time_difference_minutes": null,
+        "temporal_match": false,
+        "flag": "TEMPORAL_MISMATCH",
+        "candidate_record_count": 0
+      },
+      "Open-Meteo": {
+        "report_timestamp": "2026-07-14T10:34:00Z",
+        "best_match_record_index": null,
+        "time_difference_minutes": null,
+        "temporal_match": false,
+        "flag": "TEMPORAL_MISMATCH",
+        "candidate_record_count": 0
+      },
+      "IMD": {
+        "report_timestamp": "2026-07-14T10:34:00Z",
+        "best_match_record_index": null,
+        "time_difference_minutes": null,
+        "temporal_match": false,
+        "flag": "TEMPORAL_MISMATCH",
+        "candidate_record_count": 0
+      }
+    },
+    "spatial_alignment": {
+      "ERA5": {
+        "flag": "SPATIAL_UNKNOWN"
+      },
+      "Open-Meteo": {
+        "flag": "SPATIAL_UNKNOWN"
+      },
+      "IMD": {
+        "flag": "SPATIAL_UNKNOWN"
+      }
+    },
+    "evidence_support_score": null,
+    "verification_reasons": [
+      "No configured evidence source had a temporally/spatially matched record with the required variable available."
+    ],
+    "evidence_mapping_notes": "Flooding is corroborated only indirectly, via rainfall -- this project has no river-gauge or drainage data. A rainfall-supported verdict here means 'consistent with a rain event', NOT confirmation that flooding specifically occurred."
+  },
+  {
+    "report_id": "2500d2b8-41b9-404e-8f46-0bc676c1fa2e",
+    "event_category": "FOG",
+    "predicted_event_category": "FOG",
+    "event_classification_confidence": 0.2767,
+    "risk_label": "MEDIUM_RISK",
+    "risk_score": 0.4,
+    "report_timestamp": "2026-07-15T05:10:00Z",
+    "latitude": 28.5562,
+    "longitude": 77.1,
+    "verification_status": "INSUFFICIENT_EVIDENCE",
+    "evidence_sources": [],
+    "source_evidence": {
+      "ERA5": {
+        "data_label": "REAL",
+        "matched": false,
+        "unavailable_reason": "NO_TEMPORAL_MATCH",
+        "matched_record_timestamp": null,
+        "values": {}
+      },
+      "Open-Meteo": {
+        "data_label": "REAL",
+        "matched": false,
+        "unavailable_reason": "NO_TEMPORAL_MATCH",
+        "matched_record_timestamp": null,
+        "values": {}
+      },
+      "IMD": {
+        "data_label": "FIXTURE",
+        "matched": false,
+        "unavailable_reason": "IMD_TEMPORAL_UNAVAILABLE",
+        "matched_record_timestamp": null,
+        "values": {}
+      }
+    },
+    "temporal_alignment": {
+      "ERA5": {
+        "report_timestamp": "2026-07-15T05:10:00Z",
+        "best_match_record_index": null,
+        "time_difference_minutes": null,
+        "temporal_match": false,
+        "flag": "TEMPORAL_MISMATCH",
+        "candidate_record_count": 0
+      },
+      "Open-Meteo": {
+        "report_timestamp": "2026-07-15T05:10:00Z",
+        "best_match_record_index": null,
+        "time_difference_minutes": null,
+        "temporal_match": false,
+        "flag": "TEMPORAL_MISMATCH",
+        "candidate_record_count": 0
+      },
+      "IMD": {
+        "report_timestamp": "2026-07-15T05:10:00Z",
+        "best_match_record_index": null,
+        "time_difference_minutes": null,
+        "temporal_match": false,
+        "flag": "TEMPORAL_MISMATCH",
+        "candidate_record_count": 0
+      }
+    },
+    "spatial_alignment": {
+      "ERA5": {
+        "flag": "SPATIAL_UNKNOWN"
+      },
+      "Open-Meteo": {
+        "flag": "SPATIAL_UNKNOWN"
+      },
+      "IMD": {
+        "flag": "SPATIAL_UNKNOWN"
+      }
+    },
+    "evidence_support_score": null,
+    "verification_reasons": [
+      "No configured evidence source had a temporally/spatially matched record with the required variable available."
+    ],
+    "evidence_mapping_notes": "Fog has NO required variable in this mapping: humidity alone is a weak, indirect proxy (high humidity is necessary but not sufficient for fog), and this project's WeatherRecord schema has no visibility field, which would be the actually-diagnostic variable. Any FOG verdict is therefore capped at AMBIGUOUS/supporting-at-best and must never be reported as strong evidence."
+  },
+  {
+    "report_id": "34f36a05-8161-472e-a25a-dc8125e67edb",
+    "event_category": "THUNDERSTORM",
+    "predicted_event_category": "THUNDERSTORM",
+    "event_classification_confidence": 0.2483,
+    "risk_label": "MEDIUM_RISK",
+    "risk_score": 0.4,
+    "report_timestamp": "2026-07-16T18:45:00Z",
+    "latitude": 23.2599,
+    "longitude": 77.4126,
+    "verification_status": "INSUFFICIENT_EVIDENCE",
+    "evidence_sources": [],
+    "source_evidence": {
+      "ERA5": {
+        "data_label": "REAL",
+        "matched": false,
+        "unavailable_reason": "NO_TEMPORAL_MATCH",
+        "matched_record_timestamp": null,
+        "values": {}
+      },
+      "Open-Meteo": {
+        "data_label": "REAL",
+        "matched": false,
+        "unavailable_reason": "NO_TEMPORAL_MATCH",
+        "matched_record_timestamp": null,
+        "values": {}
+      },
+      "IMD": {
+        "data_label": "FIXTURE",
+        "matched": false,
+        "unavailable_reason": "IMD_TEMPORAL_UNAVAILABLE",
+        "matched_record_timestamp": null,
+        "values": {}
+      }
+    },
+    "temporal_alignment": {
+      "ERA5": {
+        "report_timestamp": "2026-07-16T18:45:00Z",
+        "best_match_record_index": null,
+        "time_difference_minutes": null,
+        "temporal_match": false,
+        "flag": "TEMPORAL_MISMATCH",
+        "candidate_record_count": 0
+      },
+      "Open-Meteo": {
+        "report_timestamp": "2026-07-16T18:45:00Z",
+        "best_match_record_index": null,
+        "time_difference_minutes": null,
+        "temporal_match": false,
+        "flag": "TEMPORAL_MISMATCH",
+        "candidate_record_count": 0
+      },
+      "IMD": {
+        "report_timestamp": "2026-07-16T18:45:00Z",
+        "best_match_record_index": null,
+        "time_difference_minutes": null,
+        "temporal_match": false,
+        "flag": "TEMPORAL_MISMATCH",
+        "candidate_record_count": 0
+      }
+    },
+    "spatial_alignment": {
+      "ERA5": {
+        "flag": "SPATIAL_UNKNOWN"
+      },
+      "Open-Meteo": {
+        "flag": "SPATIAL_UNKNOWN"
+      },
+      "IMD": {
+        "flag": "SPATIAL_UNKNOWN"
+      }
+    },
+    "evidence_support_score": null,
+    "verification_reasons": [
+      "No configured evidence source had a temporally/spatially matched record with the required variable available."
+    ],
+    "evidence_mapping_notes": "Precipitation is required evidence. Wind speed/gust are supporting only (a thunderstorm can occur with modest sustained wind but a sharp gust); their absence does not by itself block a verdict."
+  },
+  {
+    "report_id": "bf186e06-4642-46b2-acae-bd50cf7bb0fd",
+    "event_category": "FLOODING",
+    "predicted_event_category": "FLOODING",
+    "event_classification_confidence": 0.2236,
+    "risk_label": "MEDIUM_RISK",
+    "risk_score": 0.4,
+    "report_timestamp": "2026-07-14T10:40:00Z",
+    "latitude": 23.1817,
+    "longitude": 79.9863,
+    "verification_status": "INSUFFICIENT_EVIDENCE",
+    "evidence_sources": [],
+    "source_evidence": {
+      "ERA5": {
+        "data_label": "REAL",
+        "matched": false,
+        "unavailable_reason": "NO_TEMPORAL_MATCH",
+        "matched_record_timestamp": null,
+        "values": {}
+      },
+      "Open-Meteo": {
+        "data_label": "REAL",
+        "matched": false,
+        "unavailable_reason": "NO_TEMPORAL_MATCH",
+        "matched_record_timestamp": null,
+        "values": {}
+      },
+      "IMD": {
+        "data_label": "FIXTURE",
+        "matched": false,
+        "unavailable_reason": "IMD_TEMPORAL_UNAVAILABLE",
+        "matched_record_timestamp": null,
+        "values": {}
+      }
+    },
+    "temporal_alignment": {
+      "ERA5": {
+        "report_timestamp": "2026-07-14T10:40:00Z",
+        "best_match_record_index": null,
+        "time_difference_minutes": null,
+        "temporal_match": false,
+        "flag": "TEMPORAL_MISMATCH",
+        "candidate_record_count": 0
+      },
+      "Open-Meteo": {
+        "report_timestamp": "2026-07-14T10:40:00Z",
+        "best_match_record_index": null,
+        "time_difference_minutes": null,
+        "temporal_match": false,
+        "flag": "TEMPORAL_MISMATCH",
+        "candidate_record_count": 0
+      },
+      "IMD": {
+        "report_timestamp": "2026-07-14T10:40:00Z",
+        "best_match_record_index": null,
+        "time_difference_minutes": null,
+        "temporal_match": false,
+        "flag": "TEMPORAL_MISMATCH",
+        "candidate_record_count": 0
+      }
+    },
+    "spatial_alignment": {
+      "ERA5": {
+        "flag": "SPATIAL_UNKNOWN"
+      },
+      "Open-Meteo": {
+        "flag": "SPATIAL_UNKNOWN"
+      },
+      "IMD": {
+        "flag": "SPATIAL_UNKNOWN"
+      }
+    },
+    "evidence_support_score": null,
+    "verification_reasons": [
+      "No configured evidence source had a temporally/spatially matched record with the required variable available."
+    ],
+    "evidence_mapping_notes": "Flooding is corroborated only indirectly, via rainfall -- this project has no river-gauge or drainage data. A rainfall-supported verdict here means 'consistent with a rain event', NOT confirmation that flooding specifically occurred."
+  },
+  {
+    "report_id": "d69f5b8d-58f7-4ceb-bcd4-d86fbba88f9a",
+    "event_category": "DUST_STORM",
+    "predicted_event_category": "DUST_STORM",
+    "event_classification_confidence": 0.233,
+    "risk_label": "HIGH_RISK",
+    "risk_score": 1.0,
+    "report_timestamp": null,
+    "latitude": 26.9124,
+    "longitude": 75.7873,
+    "verification_status": "INSUFFICIENT_EVIDENCE",
+    "evidence_sources": [],
+    "source_evidence": {},
+    "temporal_alignment": {},
+    "spatial_alignment": {},
+    "evidence_support_score": null,
+    "verification_reasons": [
+      "Report has no timestamp -- cannot be temporally corroborated."
+    ],
+    "evidence_mapping_notes": null
+  },
+  {
+    "report_id": "95e39309-b28e-4217-860a-e7a24d126821",
+    "event_category": "STRONG_WIND",
+    "predicted_event_category": "STRONG_WIND",
+    "event_classification_confidence": 0.1709,
+    "risk_label": "HIGH_RISK",
+    "risk_score": 1.0,
+    "report_timestamp": "2026-07-17T09:00:00Z",
+    "latitude": 128.5,
+    "longitude": 80.2707,
+    "verification_status": "INSUFFICIENT_EVIDENCE",
+    "evidence_sources": [],
+    "source_evidence": {
+      "ERA5": {
+        "data_label": "REAL",
+        "matched": false,
+        "unavailable_reason": "NO_TEMPORAL_MATCH",
+        "matched_record_timestamp": null,
+        "values": {}
+      },
+      "Open-Meteo": {
+        "data_label": "REAL",
+        "matched": false,
+        "unavailable_reason": "NO_TEMPORAL_MATCH",
+        "matched_record_timestamp": null,
+        "values": {}
+      },
+      "IMD": {
+        "data_label": "FIXTURE",
+        "matched": false,
+        "unavailable_reason": "IMD_TEMPORAL_UNAVAILABLE",
+        "matched_record_timestamp": null,
+        "values": {}
+      }
+    },
+    "temporal_alignment": {
+      "ERA5": {
+        "report_timestamp": "2026-07-17T09:00:00Z",
+        "best_match_record_index": null,
+        "time_difference_minutes": null,
+        "temporal_match": false,
+        "flag": "TEMPORAL_MISMATCH",
+        "candidate_record_count": 0
+      },
+      "Open-Meteo": {
+        "report_timestamp": "2026-07-17T09:00:00Z",
+        "best_match_record_index": null,
+        "time_difference_minutes": null,
+        "temporal_match": false,
+        "flag": "TEMPORAL_MISMATCH",
+        "candidate_record_count": 0
+      },
+      "IMD": {
+        "report_timestamp": "2026-07-17T09:00:00Z",
+        "best_match_record_index": null,
+        "time_difference_minutes": null,
+        "temporal_match": false,
+        "flag": "TEMPORAL_MISMATCH",
+        "candidate_record_count": 0
+      }
+    },
+    "spatial_alignment": {
+      "ERA5": {
+        "flag": "SPATIAL_UNKNOWN"
+      },
+      "Open-Meteo": {
+        "flag": "SPATIAL_UNKNOWN"
+      },
+      "IMD": {
+        "flag": "SPATIAL_UNKNOWN"
+      }
+    },
+    "evidence_support_score": null,
+    "verification_reasons": [
+      "No configured evidence source had a temporally/spatially matched record with the required variable available."
+    ],
+    "evidence_mapping_notes": "Sustained wind speed is required; gust (raw_payload-only) is supporting."
+  },
+  {
+    "report_id": "3d5546e9-8733-4a77-a2f8-60bbecb8688a",
+    "event_category": "FLOODING",
+    "predicted_event_category": "FLOODING",
+    "event_classification_confidence": 0.1921,
+    "risk_label": "MEDIUM_RISK",
+    "risk_score": 0.4,
+    "report_timestamp": "2026-07-20T14:00:00Z",
+    "latitude": 18.5204,
+    "longitude": 73.8567,
+    "verification_status": "INSUFFICIENT_EVIDENCE",
+    "evidence_sources": [],
+    "source_evidence": {
+      "ERA5": {
+        "data_label": "REAL",
+        "matched": false,
+        "unavailable_reason": "NO_TEMPORAL_MATCH",
+        "matched_record_timestamp": null,
+        "values": {}
+      },
+      "Open-Meteo": {
+        "data_label": "REAL",
+        "matched": false,
+        "unavailable_reason": "NO_TEMPORAL_MATCH",
+        "matched_record_timestamp": null,
+        "values": {}
+      },
+      "IMD": {
+        "data_label": "FIXTURE",
+        "matched": false,
+        "unavailable_reason": "IMD_TEMPORAL_UNAVAILABLE",
+        "matched_record_timestamp": null,
+        "values": {}
+      }
+    },
+    "temporal_alignment": {
+      "ERA5": {
+        "report_timestamp": "2026-07-20T14:00:00Z",
+        "best_match_record_index": null,
+        "time_difference_minutes": null,
+        "temporal_match": false,
+        "flag": "TEMPORAL_MISMATCH",
+        "candidate_record_count": 0
+      },
+      "Open-Meteo": {
+        "report_timestamp": "2026-07-20T14:00:00Z",
+        "best_match_record_index": null,
+        "time_difference_minutes": null,
+        "temporal_match": false,
+        "flag": "TEMPORAL_MISMATCH",
+        "candidate_record_count": 0
+      },
+      "IMD": {
+        "report_timestamp": "2026-07-20T14:00:00Z",
+        "best_match_record_index": null,
+        "time_difference_minutes": null,
+        "temporal_match": false,
+        "flag": "TEMPORAL_MISMATCH",
+        "candidate_record_count": 0
+      }
+    },
+    "spatial_alignment": {
+      "ERA5": {
+        "flag": "SPATIAL_UNKNOWN"
+      },
+      "Open-Meteo": {
+        "flag": "SPATIAL_UNKNOWN"
+      },
+      "IMD": {
+        "flag": "SPATIAL_UNKNOWN"
+      }
+    },
+    "evidence_support_score": null,
+    "verification_reasons": [
+      "No configured evidence source had a temporally/spatially matched record with the required variable available."
+    ],
+    "evidence_mapping_notes": "Flooding is corroborated only indirectly, via rainfall -- this project has no river-gauge or drainage data. A rainfall-supported verdict here means 'consistent with a rain event', NOT confirmation that flooding specifically occurred."
+  },
+  {
+    "report_id": "aae3642c-207a-4f8b-b62b-81c93631a7e8",
+    "event_category": "THUNDERSTORM",
+    "predicted_event_category": "THUNDERSTORM",
+    "event_classification_confidence": 0.2652,
+    "risk_label": "MEDIUM_RISK",
+    "risk_score": 0.4,
+    "report_timestamp": "2026-07-21T19:15:00Z",
+    "latitude": 17.385,
+    "longitude": 78.4867,
+    "verification_status": "INSUFFICIENT_EVIDENCE",
+    "evidence_sources": [],
+    "source_evidence": {
+      "ERA5": {
+        "data_label": "REAL",
+        "matched": false,
+        "unavailable_reason": "NO_TEMPORAL_MATCH",
+        "matched_record_timestamp": null,
+        "values": {}
+      },
+      "Open-Meteo": {
+        "data_label": "REAL",
+        "matched": false,
+        "unavailable_reason": "NO_TEMPORAL_MATCH",
+        "matched_record_timestamp": null,
+        "values": {}
+      },
+      "IMD": {
+        "data_label": "FIXTURE",
+        "matched": false,
+        "unavailable_reason": "IMD_TEMPORAL_UNAVAILABLE",
+        "matched_record_timestamp": null,
+        "values": {}
+      }
+    },
+    "temporal_alignment": {
+      "ERA5": {
+        "report_timestamp": "2026-07-21T19:15:00Z",
+        "best_match_record_index": null,
+        "time_difference_minutes": null,
+        "temporal_match": false,
+        "flag": "TEMPORAL_MISMATCH",
+        "candidate_record_count": 0
+      },
+      "Open-Meteo": {
+        "report_timestamp": "2026-07-21T19:15:00Z",
+        "best_match_record_index": null,
+        "time_difference_minutes": null,
+        "temporal_match": false,
+        "flag": "TEMPORAL_MISMATCH",
+        "candidate_record_count": 0
+      },
+      "IMD": {
+        "report_timestamp": "2026-07-21T19:15:00Z",
+        "best_match_record_index": null,
+        "time_difference_minutes": null,
+        "temporal_match": false,
+        "flag": "TEMPORAL_MISMATCH",
+        "candidate_record_count": 0
+      }
+    },
+    "spatial_alignment": {
+      "ERA5": {
+        "flag": "SPATIAL_UNKNOWN"
+      },
+      "Open-Meteo": {
+        "flag": "SPATIAL_UNKNOWN"
+      },
+      "IMD": {
+        "flag": "SPATIAL_UNKNOWN"
+      }
+    },
+    "evidence_support_score": null,
+    "verification_reasons": [
+      "No configured evidence source had a temporally/spatially matched record with the required variable available."
+    ],
+    "evidence_mapping_notes": "Precipitation is required evidence. Wind speed/gust are supporting only (a thunderstorm can occur with modest sustained wind but a sharp gust); their absence does not by itself block a verdict."
+  },
+  {
+    "report_id": "32b70b74-2d06-4498-9e40-99b4d8bfdc20",
+    "event_category": "HEATWAVE",
+    "predicted_event_category": "HEATWAVE",
+    "event_classification_confidence": 0.332,
+    "risk_label": "LOW_RISK",
+    "risk_score": 0.25,
+    "report_timestamp": "2026-05-25T12:30:00Z",
+    "latitude": 23.0225,
+    "longitude": 72.5714,
+    "verification_status": "INSUFFICIENT_EVIDENCE",
+    "evidence_sources": [],
+    "source_evidence": {
+      "ERA5": {
+        "data_label": "REAL",
+        "matched": false,
+        "unavailable_reason": "NO_TEMPORAL_MATCH",
+        "matched_record_timestamp": null,
+        "values": {}
+      },
+      "Open-Meteo": {
+        "data_label": "REAL",
+        "matched": false,
+        "unavailable_reason": "NO_TEMPORAL_MATCH",
+        "matched_record_timestamp": null,
+        "values": {}
+      },
+      "IMD": {
+        "data_label": "FIXTURE",
+        "matched": false,
+        "unavailable_reason": "IMD_TEMPORAL_UNAVAILABLE",
+        "matched_record_timestamp": null,
+        "values": {}
+      }
+    },
+    "temporal_alignment": {
+      "ERA5": {
+        "report_timestamp": "2026-05-25T12:30:00Z",
+        "best_match_record_index": null,
+        "time_difference_minutes": null,
+        "temporal_match": false,
+        "flag": "TEMPORAL_MISMATCH",
+        "candidate_record_count": 0
+      },
+      "Open-Meteo": {
+        "report_timestamp": "2026-05-25T12:30:00Z",
+        "best_match_record_index": null,
+        "time_difference_minutes": null,
+        "temporal_match": false,
+        "flag": "TEMPORAL_MISMATCH",
+        "candidate_record_count": 0
+      },
+      "IMD": {
+        "report_timestamp": "2026-05-25T12:30:00Z",
+        "best_match_record_index": null,
+        "time_difference_minutes": null,
+        "temporal_match": false,
+        "flag": "TEMPORAL_MISMATCH",
+        "candidate_record_count": 0
+      }
+    },
+    "spatial_alignment": {
+      "ERA5": {
+        "flag": "SPATIAL_UNKNOWN"
+      },
+      "Open-Meteo": {
+        "flag": "SPATIAL_UNKNOWN"
+      },
+      "IMD": {
+        "flag": "SPATIAL_UNKNOWN"
+      }
+    },
+    "evidence_support_score": null,
+    "verification_reasons": [
+      "No configured evidence source had a temporally/spatially matched record with the required variable available."
+    ],
+    "evidence_mapping_notes": "Direct temperature measurement is the only variable used."
+  },
+  {
+    "report_id": "6eba46cc-5339-4336-b340-3ffaffedfc4f",
+    "event_category": "FOG",
+    "predicted_event_category": "FOG",
+    "event_classification_confidence": 0.2688,
+    "risk_label": "MEDIUM_RISK",
+    "risk_score": 0.4,
+    "report_timestamp": "2026-12-28T06:45:00Z",
+    "latitude": 26.8467,
+    "longitude": 80.9462,
+    "verification_status": "INSUFFICIENT_EVIDENCE",
+    "evidence_sources": [],
+    "source_evidence": {
+      "ERA5": {
+        "data_label": "REAL",
+        "matched": false,
+        "unavailable_reason": "NO_TEMPORAL_MATCH",
+        "matched_record_timestamp": null,
+        "values": {}
+      },
+      "Open-Meteo": {
+        "data_label": "REAL",
+        "matched": false,
+        "unavailable_reason": "NO_TEMPORAL_MATCH",
+        "matched_record_timestamp": null,
+        "values": {}
+      },
+      "IMD": {
+        "data_label": "FIXTURE",
+        "matched": false,
+        "unavailable_reason": "IMD_TEMPORAL_UNAVAILABLE",
+        "matched_record_timestamp": null,
+        "values": {}
+      }
+    },
+    "temporal_alignment": {
+      "ERA5": {
+        "report_timestamp": "2026-12-28T06:45:00Z",
+        "best_match_record_index": null,
+        "time_difference_minutes": null,
+        "temporal_match": false,
+        "flag": "TEMPORAL_MISMATCH",
+        "candidate_record_count": 0
+      },
+      "Open-Meteo": {
+        "report_timestamp": "2026-12-28T06:45:00Z",
+        "best_match_record_index": null,
+        "time_difference_minutes": null,
+        "temporal_match": false,
+        "flag": "TEMPORAL_MISMATCH",
+        "candidate_record_count": 0
+      },
+      "IMD": {
+        "report_timestamp": "2026-12-28T06:45:00Z",
+        "best_match_record_index": null,
+        "time_difference_minutes": null,
+        "temporal_match": false,
+        "flag": "TEMPORAL_MISMATCH",
+        "candidate_record_count": 0
+      }
+    },
+    "spatial_alignment": {
+      "ERA5": {
+        "flag": "SPATIAL_UNKNOWN"
+      },
+      "Open-Meteo": {
+        "flag": "SPATIAL_UNKNOWN"
+      },
+      "IMD": {
+        "flag": "SPATIAL_UNKNOWN"
+      }
+    },
+    "evidence_support_score": null,
+    "verification_reasons": [
+      "No configured evidence source had a temporally/spatially matched record with the required variable available."
+    ],
+    "evidence_mapping_notes": "Fog has NO required variable in this mapping: humidity alone is a weak, indirect proxy (high humidity is necessary but not sufficient for fog), and this project's WeatherRecord schema has no visibility field, which would be the actually-diagnostic variable. Any FOG verdict is therefore capped at AMBIGUOUS/supporting-at-best and must never be reported as strong evidence."
+  },
+  {
+    "report_id": "f5fb733a-1378-40ed-a595-09a6d15600bc",
+    "event_category": "STRONG_WIND",
+    "predicted_event_category": "STRONG_WIND",
+    "event_classification_confidence": 0.4121,
+    "risk_label": "LOW_RISK",
+    "risk_score": 0.25,
+    "report_timestamp": "2026-07-22T17:00:00Z",
+    "latitude": 13.0827,
+    "longitude": 80.2707,
+    "verification_status": "INSUFFICIENT_EVIDENCE",
+    "evidence_sources": [],
+    "source_evidence": {
+      "ERA5": {
+        "data_label": "REAL",
+        "matched": false,
+        "unavailable_reason": "NO_TEMPORAL_MATCH",
+        "matched_record_timestamp": null,
+        "values": {}
+      },
+      "Open-Meteo": {
+        "data_label": "REAL",
+        "matched": false,
+        "unavailable_reason": "NO_TEMPORAL_MATCH",
+        "matched_record_timestamp": null,
+        "values": {}
+      },
+      "IMD": {
+        "data_label": "FIXTURE",
+        "matched": false,
+        "unavailable_reason": "IMD_TEMPORAL_UNAVAILABLE",
+        "matched_record_timestamp": null,
+        "values": {}
+      }
+    },
+    "temporal_alignment": {
+      "ERA5": {
+        "report_timestamp": "2026-07-22T17:00:00Z",
+        "best_match_record_index": null,
+        "time_difference_minutes": null,
+        "temporal_match": false,
+        "flag": "TEMPORAL_MISMATCH",
+        "candidate_record_count": 0
+      },
+      "Open-Meteo": {
+        "report_timestamp": "2026-07-22T17:00:00Z",
+        "best_match_record_index": null,
+        "time_difference_minutes": null,
+        "temporal_match": false,
+        "flag": "TEMPORAL_MISMATCH",
+        "candidate_record_count": 0
+      },
+      "IMD": {
+        "report_timestamp": "2026-07-22T17:00:00Z",
+        "best_match_record_index": null,
+        "time_difference_minutes": null,
+        "temporal_match": false,
+        "flag": "TEMPORAL_MISMATCH",
+        "candidate_record_count": 0
+      }
+    },
+    "spatial_alignment": {
+      "ERA5": {
+        "flag": "SPATIAL_UNKNOWN"
+      },
+      "Open-Meteo": {
+        "flag": "SPATIAL_UNKNOWN"
+      },
+      "IMD": {
+        "flag": "SPATIAL_UNKNOWN"
+      }
+    },
+    "evidence_support_score": null,
+    "verification_reasons": [
+      "No configured evidence source had a temporally/spatially matched record with the required variable available."
+    ],
+    "evidence_mapping_notes": "Sustained wind speed is required; gust (raw_payload-only) is supporting."
+  },
+  {
+    "report_id": "3c32c7af-1bf3-4cc0-9e12-9750a8ca1ce3",
+    "event_category": "FLOODING",
+    "predicted_event_category": "FLOODING",
+    "event_classification_confidence": 0.1938,
+    "risk_label": "MEDIUM_RISK",
+    "risk_score": 0.4,
+    "report_timestamp": "2026-07-20T14:05:00Z",
+    "latitude": 18.5206,
+    "longitude": 73.8569,
+    "verification_status": "INSUFFICIENT_EVIDENCE",
+    "evidence_sources": [],
+    "source_evidence": {
+      "ERA5": {
+        "data_label": "REAL",
+        "matched": false,
+        "unavailable_reason": "NO_TEMPORAL_MATCH",
+        "matched_record_timestamp": null,
+        "values": {}
+      },
+      "Open-Meteo": {
+        "data_label": "REAL",
+        "matched": false,
+        "unavailable_reason": "NO_TEMPORAL_MATCH",
+        "matched_record_timestamp": null,
+        "values": {}
+      },
+      "IMD": {
+        "data_label": "FIXTURE",
+        "matched": false,
+        "unavailable_reason": "IMD_TEMPORAL_UNAVAILABLE",
+        "matched_record_timestamp": null,
+        "values": {}
+      }
+    },
+    "temporal_alignment": {
+      "ERA5": {
+        "report_timestamp": "2026-07-20T14:05:00Z",
+        "best_match_record_index": null,
+        "time_difference_minutes": null,
+        "temporal_match": false,
+        "flag": "TEMPORAL_MISMATCH",
+        "candidate_record_count": 0
+      },
+      "Open-Meteo": {
+        "report_timestamp": "2026-07-20T14:05:00Z",
+        "best_match_record_index": null,
+        "time_difference_minutes": null,
+        "temporal_match": false,
+        "flag": "TEMPORAL_MISMATCH",
+        "candidate_record_count": 0
+      },
+      "IMD": {
+        "report_timestamp": "2026-07-20T14:05:00Z",
+        "best_match_record_index": null,
+        "time_difference_minutes": null,
+        "temporal_match": false,
+        "flag": "TEMPORAL_MISMATCH",
+        "candidate_record_count": 0
+      }
+    },
+    "spatial_alignment": {
+      "ERA5": {
+        "flag": "SPATIAL_UNKNOWN"
+      },
+      "Open-Meteo": {
+        "flag": "SPATIAL_UNKNOWN"
+      },
+      "IMD": {
+        "flag": "SPATIAL_UNKNOWN"
+      }
+    },
+    "evidence_support_score": null,
+    "verification_reasons": [
+      "No configured evidence source had a temporally/spatially matched record with the required variable available."
+    ],
+    "evidence_mapping_notes": "Flooding is corroborated only indirectly, via rainfall -- this project has no river-gauge or drainage data. A rainfall-supported verdict here means 'consistent with a rain event', NOT confirmation that flooding specifically occurred."
+  },
+  {
+    "report_id": "681cc9fe-4539-4a2c-9bf7-0838e733cd03",
+    "event_category": "RAINFALL",
+    "predicted_event_category": "RAINFALL",
+    "event_classification_confidence": 0.2979,
+    "risk_label": "MEDIUM_RISK",
+    "risk_score": 0.4,
+    "report_timestamp": "2026-07-23T09:00:00Z",
+    "latitude": 18.5204,
+    "longitude": 73.8567,
+    "verification_status": "INSUFFICIENT_EVIDENCE",
+    "evidence_sources": [],
+    "source_evidence": {
+      "ERA5": {
+        "data_label": "REAL",
+        "matched": false,
+        "unavailable_reason": "NO_TEMPORAL_MATCH",
+        "matched_record_timestamp": null,
+        "values": {}
+      },
+      "Open-Meteo": {
+        "data_label": "REAL",
+        "matched": false,
+        "unavailable_reason": "NO_TEMPORAL_MATCH",
+        "matched_record_timestamp": null,
+        "values": {}
+      },
+      "IMD": {
+        "data_label": "FIXTURE",
+        "matched": false,
+        "unavailable_reason": "IMD_TEMPORAL_UNAVAILABLE",
+        "matched_record_timestamp": null,
+        "values": {}
+      }
+    },
+    "temporal_alignment": {
+      "ERA5": {
+        "report_timestamp": "2026-07-23T09:00:00Z",
+        "best_match_record_index": null,
+        "time_difference_minutes": null,
+        "temporal_match": false,
+        "flag": "TEMPORAL_MISMATCH",
+        "candidate_record_count": 0
+      },
+      "Open-Meteo": {
+        "report_timestamp": "2026-07-23T09:00:00Z",
+        "best_match_record_index": null,
+        "time_difference_minutes": null,
+        "temporal_match": false,
+        "flag": "TEMPORAL_MISMATCH",
+        "candidate_record_count": 0
+      },
+      "IMD": {
+        "report_timestamp": "2026-07-23T09:00:00Z",
+        "best_match_record_index": null,
+        "time_difference_minutes": null,
+        "temporal_match": false,
+        "flag": "TEMPORAL_MISMATCH",
+        "candidate_record_count": 0
+      }
+    },
+    "spatial_alignment": {
+      "ERA5": {
+        "flag": "SPATIAL_UNKNOWN"
+      },
+      "Open-Meteo": {
+        "flag": "SPATIAL_UNKNOWN"
+      },
+      "IMD": {
+        "flag": "SPATIAL_UNKNOWN"
+      }
+    },
+    "evidence_support_score": null,
+    "verification_reasons": [
+      "No configured evidence source had a temporally/spatially matched record with the required variable available."
+    ],
+    "evidence_mapping_notes": "Direct precipitation measurement is the only variable used."
+  },
+  {
+    "report_id": "68b114d3-31b2-4ed9-8bd4-aa049b50aa84",
+    "event_category": "OTHER",
+    "predicted_event_category": "OTHER",
+    "event_classification_confidence": 0.4073,
+    "risk_label": "LOW_RISK",
+    "risk_score": 0.25,
+    "report_timestamp": "2026-08-01T11:00:00Z",
+    "latitude": 12.9716,
+    "longitude": 77.5946,
+    "verification_status": "INSUFFICIENT_EVIDENCE",
+    "evidence_sources": [],
+    "source_evidence": {},
+    "temporal_alignment": {},
+    "spatial_alignment": {},
+    "evidence_support_score": null,
+    "verification_reasons": [
+      "Event category 'OTHER' has no required or supporting variable defined."
+    ],
+    "evidence_mapping_notes": "No defined evidence mapping for the catch-all 'OTHER' category."
+  },
+  {
+    "report_id": "00dd3079-89b0-4d1c-9f79-7eae39e1add0",
+    "event_category": "FLOODING",
+    "predicted_event_category": "FLOODING",
+    "event_classification_confidence": 0.2671,
+    "risk_label": "LOW_RISK",
+    "risk_score": 0.15,
+    "report_timestamp": "2026-07-14T10:35:00Z",
+    "latitude": 23.1816,
+    "longitude": 79.9865,
+    "verification_status": "INSUFFICIENT_EVIDENCE",
+    "evidence_sources": [],
+    "source_evidence": {
+      "ERA5": {
+        "data_label": "REAL",
+        "matched": false,
+        "unavailable_reason": "NO_TEMPORAL_MATCH",
+        "matched_record_timestamp": null,
+        "values": {}
+      },
+      "Open-Meteo": {
+        "data_label": "REAL",
+        "matched": false,
+        "unavailable_reason": "NO_TEMPORAL_MATCH",
+        "matched_record_timestamp": null,
+        "values": {}
+      },
+      "IMD": {
+        "data_label": "FIXTURE",
+        "matched": false,
+        "unavailable_reason": "IMD_TEMPORAL_UNAVAILABLE",
+        "matched_record_timestamp": null,
+        "values": {}
+      }
+    },
+    "temporal_alignment": {
+      "ERA5": {
+        "report_timestamp": "2026-07-14T10:35:00Z",
+        "best_match_record_index": null,
+        "time_difference_minutes": null,
+        "temporal_match": false,
+        "flag": "TEMPORAL_MISMATCH",
+        "candidate_record_count": 0
+      },
+      "Open-Meteo": {
+        "report_timestamp": "2026-07-14T10:35:00Z",
+        "best_match_record_index": null,
+        "time_difference_minutes": null,
+        "temporal_match": false,
+        "flag": "TEMPORAL_MISMATCH",
+        "candidate_record_count": 0
+      },
+      "IMD": {
+        "report_timestamp": "2026-07-14T10:35:00Z",
+        "best_match_record_index": null,
+        "time_difference_minutes": null,
+        "temporal_match": false,
+        "flag": "TEMPORAL_MISMATCH",
+        "candidate_record_count": 0
+      }
+    },
+    "spatial_alignment": {
+      "ERA5": {
+        "flag": "SPATIAL_UNKNOWN"
+      },
+      "Open-Meteo": {
+        "flag": "SPATIAL_UNKNOWN"
+      },
+      "IMD": {
+        "flag": "SPATIAL_UNKNOWN"
+      }
+    },
+    "evidence_support_score": null,
+    "verification_reasons": [
+      "No configured evidence source had a temporally/spatially matched record with the required variable available."
+    ],
+    "evidence_mapping_notes": "Flooding is corroborated only indirectly, via rainfall -- this project has no river-gauge or drainage data. A rainfall-supported verdict here means 'consistent with a rain event', NOT confirmation that flooding specifically occurred."
+  },
+  {
+    "report_id": "a0b7cc87-a0d4-436f-865d-0753e0ad4d4a",
+    "event_category": "FLOODING",
+    "predicted_event_category": "FLOODING",
+    "event_classification_confidence": 0.2671,
+    "risk_label": "LOW_RISK",
+    "risk_score": 0.15,
+    "report_timestamp": "2026-07-14T10:36:00Z",
+    "latitude": 23.1816,
+    "longitude": 79.9865,
+    "verification_status": "INSUFFICIENT_EVIDENCE",
+    "evidence_sources": [],
+    "source_evidence": {
+      "ERA5": {
+        "data_label": "REAL",
+        "matched": false,
+        "unavailable_reason": "NO_TEMPORAL_MATCH",
+        "matched_record_timestamp": null,
+        "values": {}
+      },
+      "Open-Meteo": {
+        "data_label": "REAL",
+        "matched": false,
+        "unavailable_reason": "NO_TEMPORAL_MATCH",
+        "matched_record_timestamp": null,
+        "values": {}
+      },
+      "IMD": {
+        "data_label": "FIXTURE",
+        "matched": false,
+        "unavailable_reason": "IMD_TEMPORAL_UNAVAILABLE",
+        "matched_record_timestamp": null,
+        "values": {}
+      }
+    },
+    "temporal_alignment": {
+      "ERA5": {
+        "report_timestamp": "2026-07-14T10:36:00Z",
+        "best_match_record_index": null,
+        "time_difference_minutes": null,
+        "temporal_match": false,
+        "flag": "TEMPORAL_MISMATCH",
+        "candidate_record_count": 0
+      },
+      "Open-Meteo": {
+        "report_timestamp": "2026-07-14T10:36:00Z",
+        "best_match_record_index": null,
+        "time_difference_minutes": null,
+        "temporal_match": false,
+        "flag": "TEMPORAL_MISMATCH",
+        "candidate_record_count": 0
+      },
+      "IMD": {
+        "report_timestamp": "2026-07-14T10:36:00Z",
+        "best_match_record_index": null,
+        "time_difference_minutes": null,
+        "temporal_match": false,
+        "flag": "TEMPORAL_MISMATCH",
+        "candidate_record_count": 0
+      }
+    },
+    "spatial_alignment": {
+      "ERA5": {
+        "flag": "SPATIAL_UNKNOWN"
+      },
+      "Open-Meteo": {
+        "flag": "SPATIAL_UNKNOWN"
+      },
+      "IMD": {
+        "flag": "SPATIAL_UNKNOWN"
+      }
+    },
+    "evidence_support_score": null,
+    "verification_reasons": [
+      "No configured evidence source had a temporally/spatially matched record with the required variable available."
+    ],
+    "evidence_mapping_notes": "Flooding is corroborated only indirectly, via rainfall -- this project has no river-gauge or drainage data. A rainfall-supported verdict here means 'consistent with a rain event', NOT confirmation that flooding specifically occurred."
+  },
+  {
+    "report_id": "dcb70a42-9d60-46cb-aeab-e37eb3eb3e27",
+    "event_category": "HEATWAVE",
+    "predicted_event_category": "HEATWAVE",
+    "event_classification_confidence": 0.3304,
+    "risk_label": "LOW_RISK",
+    "risk_score": 0.0,
+    "report_timestamp": "2026-05-20T13:00:00Z",
+    "latitude": 21.1458,
+    "longitude": 79.0882,
+    "verification_status": "INSUFFICIENT_EVIDENCE",
+    "evidence_sources": [],
+    "source_evidence": {
+      "ERA5": {
+        "data_label": "REAL",
+        "matched": false,
+        "unavailable_reason": "NO_TEMPORAL_MATCH",
+        "matched_record_timestamp": null,
+        "values": {}
+      },
+      "Open-Meteo": {
+        "data_label": "REAL",
+        "matched": false,
+        "unavailable_reason": "NO_TEMPORAL_MATCH",
+        "matched_record_timestamp": null,
+        "values": {}
+      },
+      "IMD": {
+        "data_label": "FIXTURE",
+        "matched": false,
+        "unavailable_reason": "IMD_TEMPORAL_UNAVAILABLE",
+        "matched_record_timestamp": null,
+        "values": {}
+      }
+    },
+    "temporal_alignment": {
+      "ERA5": {
+        "report_timestamp": "2026-05-20T13:00:00Z",
+        "best_match_record_index": null,
+        "time_difference_minutes": null,
+        "temporal_match": false,
+        "flag": "TEMPORAL_MISMATCH",
+        "candidate_record_count": 0
+      },
+      "Open-Meteo": {
+        "report_timestamp": "2026-05-20T13:00:00Z",
+        "best_match_record_index": null,
+        "time_difference_minutes": null,
+        "temporal_match": false,
+        "flag": "TEMPORAL_MISMATCH",
+        "candidate_record_count": 0
+      },
+      "IMD": {
+        "report_timestamp": "2026-05-20T13:00:00Z",
+        "best_match_record_index": null,
+        "time_difference_minutes": null,
+        "temporal_match": false,
+        "flag": "TEMPORAL_MISMATCH",
+        "candidate_record_count": 0
+      }
+    },
+    "spatial_alignment": {
+      "ERA5": {
+        "flag": "SPATIAL_UNKNOWN"
+      },
+      "Open-Meteo": {
+        "flag": "SPATIAL_UNKNOWN"
+      },
+      "IMD": {
+        "flag": "SPATIAL_UNKNOWN"
+      }
+    },
+    "evidence_support_score": null,
+    "verification_reasons": [
+      "No configured evidence source had a temporally/spatially matched record with the required variable available."
+    ],
+    "evidence_mapping_notes": "Direct temperature measurement is the only variable used."
+  },
+  {
+    "report_id": "d766749d-9b53-4791-bd1e-85eb3d61f22e",
+    "event_category": "STRONG_WIND",
+    "predicted_event_category": "STRONG_WIND",
+    "event_classification_confidence": 0.2507,
+    "risk_label": "HIGH_RISK",
+    "risk_score": 1.0,
+    "report_timestamp": "2026-07-18T08:15:00Z",
+    "latitude": 25.5941,
+    "longitude": -200.0,
+    "verification_status": "INSUFFICIENT_EVIDENCE",
+    "evidence_sources": [],
+    "source_evidence": {
+      "ERA5": {
+        "data_label": "REAL",
+        "matched": false,
+        "unavailable_reason": "NO_TEMPORAL_MATCH",
+        "matched_record_timestamp": null,
+        "values": {}
+      },
+      "Open-Meteo": {
+        "data_label": "REAL",
+        "matched": false,
+        "unavailable_reason": "NO_TEMPORAL_MATCH",
+        "matched_record_timestamp": null,
+        "values": {}
+      },
+      "IMD": {
+        "data_label": "FIXTURE",
+        "matched": false,
+        "unavailable_reason": "IMD_TEMPORAL_UNAVAILABLE",
+        "matched_record_timestamp": null,
+        "values": {}
+      }
+    },
+    "temporal_alignment": {
+      "ERA5": {
+        "report_timestamp": "2026-07-18T08:15:00Z",
+        "best_match_record_index": null,
+        "time_difference_minutes": null,
+        "temporal_match": false,
+        "flag": "TEMPORAL_MISMATCH",
+        "candidate_record_count": 0
+      },
+      "Open-Meteo": {
+        "report_timestamp": "2026-07-18T08:15:00Z",
+        "best_match_record_index": null,
+        "time_difference_minutes": null,
+        "temporal_match": false,
+        "flag": "TEMPORAL_MISMATCH",
+        "candidate_record_count": 0
+      },
+      "IMD": {
+        "report_timestamp": "2026-07-18T08:15:00Z",
+        "best_match_record_index": null,
+        "time_difference_minutes": null,
+        "temporal_match": false,
+        "flag": "TEMPORAL_MISMATCH",
+        "candidate_record_count": 0
+      }
+    },
+    "spatial_alignment": {
+      "ERA5": {
+        "flag": "SPATIAL_UNKNOWN"
+      },
+      "Open-Meteo": {
+        "flag": "SPATIAL_UNKNOWN"
+      },
+      "IMD": {
+        "flag": "SPATIAL_UNKNOWN"
+      }
+    },
+    "evidence_support_score": null,
+    "verification_reasons": [
+      "No configured evidence source had a temporally/spatially matched record with the required variable available."
+    ],
+    "evidence_mapping_notes": "Sustained wind speed is required; gust (raw_payload-only) is supporting."
+  },
+  {
+    "report_id": "06e44cd8-b7a6-40ee-9fa6-3086b3d70f9e",
+    "event_category": "OTHER",
+    "predicted_event_category": null,
+    "event_classification_confidence": null,
+    "risk_label": "MEDIUM_RISK",
+    "risk_score": 0.35,
+    "report_timestamp": "2026-07-19T16:00:00Z",
+    "latitude": 26.8467,
+    "longitude": 80.9462,
+    "verification_status": "INSUFFICIENT_EVIDENCE",
+    "evidence_sources": [],
+    "source_evidence": {},
+    "temporal_alignment": {},
+    "spatial_alignment": {},
+    "evidence_support_score": null,
+    "verification_reasons": [
+      "Event category 'OTHER' has no required or supporting variable defined."
+    ],
+    "evidence_mapping_notes": "No defined evidence mapping for the catch-all 'OTHER' category."
+  },
+  {
+    "report_id": "278267b8-bb64-47f2-b515-e459c5d7d8e6",
+    "event_category": "FOG",
+    "predicted_event_category": "FOG",
+    "event_classification_confidence": 0.2752,
+    "risk_label": "LOW_RISK",
+    "risk_score": 0.15,
+    "report_timestamp": "2026-12-25T06:20:00Z",
+    "latitude": 22.654,
+    "longitude": 88.4467,
+    "verification_status": "INSUFFICIENT_EVIDENCE",
+    "evidence_sources": [],
+    "source_evidence": {
+      "ERA5": {
+        "data_label": "REAL",
+        "matched": false,
+        "unavailable_reason": "NO_TEMPORAL_MATCH",
+        "matched_record_timestamp": null,
+        "values": {}
+      },
+      "Open-Meteo": {
+        "data_label": "REAL",
+        "matched": false,
+        "unavailable_reason": "NO_TEMPORAL_MATCH",
+        "matched_record_timestamp": null,
+        "values": {}
+      },
+      "IMD": {
+        "data_label": "FIXTURE",
+        "matched": false,
+        "unavailable_reason": "IMD_TEMPORAL_UNAVAILABLE",
+        "matched_record_timestamp": null,
+        "values": {}
+      }
+    },
+    "temporal_alignment": {
+      "ERA5": {
+        "report_timestamp": "2026-12-25T06:20:00Z",
+        "best_match_record_index": null,
+        "time_difference_minutes": null,
+        "temporal_match": false,
+        "flag": "TEMPORAL_MISMATCH",
+        "candidate_record_count": 0
+      },
+      "Open-Meteo": {
+        "report_timestamp": "2026-12-25T06:20:00Z",
+        "best_match_record_index": null,
+        "time_difference_minutes": null,
+        "temporal_match": false,
+        "flag": "TEMPORAL_MISMATCH",
+        "candidate_record_count": 0
+      },
+      "IMD": {
+        "report_timestamp": "2026-12-25T06:20:00Z",
+        "best_match_record_index": null,
+        "time_difference_minutes": null,
+        "temporal_match": false,
+        "flag": "TEMPORAL_MISMATCH",
+        "candidate_record_count": 0
+      }
+    },
+    "spatial_alignment": {
+      "ERA5": {
+        "flag": "SPATIAL_UNKNOWN"
+      },
+      "Open-Meteo": {
+        "flag": "SPATIAL_UNKNOWN"
+      },
+      "IMD": {
+        "flag": "SPATIAL_UNKNOWN"
+      }
+    },
+    "evidence_support_score": null,
+    "verification_reasons": [
+      "No configured evidence source had a temporally/spatially matched record with the required variable available."
+    ],
+    "evidence_mapping_notes": "Fog has NO required variable in this mapping: humidity alone is a weak, indirect proxy (high humidity is necessary but not sufficient for fog), and this project's WeatherRecord schema has no visibility field, which would be the actually-diagnostic variable. Any FOG verdict is therefore capped at AMBIGUOUS/supporting-at-best and must never be reported as strong evidence."
+  },
+  {
+    "report_id": "b06bc2f8-e675-40a3-9004-ce1f6343fdf5",
+    "event_category": "DUST_STORM",
+    "predicted_event_category": "DUST_STORM",
+    "event_classification_confidence": 0.4096,
+    "risk_label": "LOW_RISK",
+    "risk_score": 0.0,
+    "report_timestamp": "2026-06-10T17:30:00Z",
+    "latitude": 26.2389,
+    "longitude": 73.0243,
+    "verification_status": "INSUFFICIENT_EVIDENCE",
+    "evidence_sources": [],
+    "source_evidence": {
+      "ERA5": {
+        "data_label": "REAL",
+        "matched": false,
+        "unavailable_reason": "NO_TEMPORAL_MATCH",
+        "matched_record_timestamp": null,
+        "values": {}
+      },
+      "Open-Meteo": {
+        "data_label": "REAL",
+        "matched": false,
+        "unavailable_reason": "NO_TEMPORAL_MATCH",
+        "matched_record_timestamp": null,
+        "values": {}
+      },
+      "IMD": {
+        "data_label": "FIXTURE",
+        "matched": false,
+        "unavailable_reason": "IMD_TEMPORAL_UNAVAILABLE",
+        "matched_record_timestamp": null,
+        "values": {}
+      }
+    },
+    "temporal_alignment": {
+      "ERA5": {
+        "report_timestamp": "2026-06-10T17:30:00Z",
+        "best_match_record_index": null,
+        "time_difference_minutes": null,
+        "temporal_match": false,
+        "flag": "TEMPORAL_MISMATCH",
+        "candidate_record_count": 0
+      },
+      "Open-Meteo": {
+        "report_timestamp": "2026-06-10T17:30:00Z",
+        "best_match_record_index": null,
+        "time_difference_minutes": null,
+        "temporal_match": false,
+        "flag": "TEMPORAL_MISMATCH",
+        "candidate_record_count": 0
+      },
+      "IMD": {
+        "report_timestamp": "2026-06-10T17:30:00Z",
+        "best_match_record_index": null,
+        "time_difference_minutes": null,
+        "temporal_match": false,
+        "flag": "TEMPORAL_MISMATCH",
+        "candidate_record_count": 0
+      }
+    },
+    "spatial_alignment": {
+      "ERA5": {
+        "flag": "SPATIAL_UNKNOWN"
+      },
+      "Open-Meteo": {
+        "flag": "SPATIAL_UNKNOWN"
+      },
+      "IMD": {
+        "flag": "SPATIAL_UNKNOWN"
+      }
+    },
+    "evidence_support_score": null,
+    "verification_reasons": [
+      "No configured evidence source had a temporally/spatially matched record with the required variable available."
+    ],
+    "evidence_mapping_notes": "Dust storms are corroborated only via wind speed/gust -- this project has no visibility or aerosol/particulate data, so a supported verdict means 'consistent with strong wind', not confirmation of airborne dust specifically."
+  },
+  {
+    "report_id": "19b8e7cb-9db5-4d3d-854c-04cee40e5015",
+    "event_category": "THUNDERSTORM",
+    "predicted_event_category": "THUNDERSTORM",
+    "event_classification_confidence": 0.2652,
+    "risk_label": "LOW_RISK",
+    "risk_score": 0.15,
+    "report_timestamp": "2026-07-21T19:20:00Z",
+    "latitude": 17.3852,
+    "longitude": 78.4868,
+    "verification_status": "INSUFFICIENT_EVIDENCE",
+    "evidence_sources": [],
+    "source_evidence": {
+      "ERA5": {
+        "data_label": "REAL",
+        "matched": false,
+        "unavailable_reason": "NO_TEMPORAL_MATCH",
+        "matched_record_timestamp": null,
+        "values": {}
+      },
+      "Open-Meteo": {
+        "data_label": "REAL",
+        "matched": false,
+        "unavailable_reason": "NO_TEMPORAL_MATCH",
+        "matched_record_timestamp": null,
+        "values": {}
+      },
+      "IMD": {
+        "data_label": "FIXTURE",
+        "matched": false,
+        "unavailable_reason": "IMD_TEMPORAL_UNAVAILABLE",
+        "matched_record_timestamp": null,
+        "values": {}
+      }
+    },
+    "temporal_alignment": {
+      "ERA5": {
+        "report_timestamp": "2026-07-21T19:20:00Z",
+        "best_match_record_index": null,
+        "time_difference_minutes": null,
+        "temporal_match": false,
+        "flag": "TEMPORAL_MISMATCH",
+        "candidate_record_count": 0
+      },
+      "Open-Meteo": {
+        "report_timestamp": "2026-07-21T19:20:00Z",
+        "best_match_record_index": null,
+        "time_difference_minutes": null,
+        "temporal_match": false,
+        "flag": "TEMPORAL_MISMATCH",
+        "candidate_record_count": 0
+      },
+      "IMD": {
+        "report_timestamp": "2026-07-21T19:20:00Z",
+        "best_match_record_index": null,
+        "time_difference_minutes": null,
+        "temporal_match": false,
+        "flag": "TEMPORAL_MISMATCH",
+        "candidate_record_count": 0
+      }
+    },
+    "spatial_alignment": {
+      "ERA5": {
+        "flag": "SPATIAL_UNKNOWN"
+      },
+      "Open-Meteo": {
+        "flag": "SPATIAL_UNKNOWN"
+      },
+      "IMD": {
+        "flag": "SPATIAL_UNKNOWN"
+      }
+    },
+    "evidence_support_score": null,
+    "verification_reasons": [
+      "No configured evidence source had a temporally/spatially matched record with the required variable available."
+    ],
+    "evidence_mapping_notes": "Precipitation is required evidence. Wind speed/gust are supporting only (a thunderstorm can occur with modest sustained wind but a sharp gust); their absence does not by itself block a verdict."
+  },
+  {
+    "report_id": "9c9da62c-3c30-4257-b798-8e228526e5eb",
+    "event_category": "RAINFALL",
+    "predicted_event_category": "RAINFALL",
+    "event_classification_confidence": 0.304,
+    "risk_label": "LOW_RISK",
+    "risk_score": 0.0,
+    "report_timestamp": "2026-08-05T08:00:00Z",
+    "latitude": 26.1445,
+    "longitude": 91.7362,
+    "verification_status": "INSUFFICIENT_EVIDENCE",
+    "evidence_sources": [],
+    "source_evidence": {
+      "ERA5": {
+        "data_label": "REAL",
+        "matched": false,
+        "unavailable_reason": "NO_TEMPORAL_MATCH",
+        "matched_record_timestamp": null,
+        "values": {}
+      },
+      "Open-Meteo": {
+        "data_label": "REAL",
+        "matched": false,
+        "unavailable_reason": "NO_TEMPORAL_MATCH",
+        "matched_record_timestamp": null,
+        "values": {}
+      },
+      "IMD": {
+        "data_label": "FIXTURE",
+        "matched": false,
+        "unavailable_reason": "IMD_TEMPORAL_UNAVAILABLE",
+        "matched_record_timestamp": null,
+        "values": {}
+      }
+    },
+    "temporal_alignment": {
+      "ERA5": {
+        "report_timestamp": "2026-08-05T08:00:00Z",
+        "best_match_record_index": null,
+        "time_difference_minutes": null,
+        "temporal_match": false,
+        "flag": "TEMPORAL_MISMATCH",
+        "candidate_record_count": 0
+      },
+      "Open-Meteo": {
+        "report_timestamp": "2026-08-05T08:00:00Z",
+        "best_match_record_index": null,
+        "time_difference_minutes": null,
+        "temporal_match": false,
+        "flag": "TEMPORAL_MISMATCH",
+        "candidate_record_count": 0
+      },
+      "IMD": {
+        "report_timestamp": "2026-08-05T08:00:00Z",
+        "best_match_record_index": null,
+        "time_difference_minutes": null,
+        "temporal_match": false,
+        "flag": "TEMPORAL_MISMATCH",
+        "candidate_record_count": 0
+      }
+    },
+    "spatial_alignment": {
+      "ERA5": {
+        "flag": "SPATIAL_UNKNOWN"
+      },
+      "Open-Meteo": {
+        "flag": "SPATIAL_UNKNOWN"
+      },
+      "IMD": {
+        "flag": "SPATIAL_UNKNOWN"
+      }
+    },
+    "evidence_support_score": null,
+    "verification_reasons": [
+      "No configured evidence source had a temporally/spatially matched record with the required variable available."
+    ],
+    "evidence_mapping_notes": "Direct precipitation measurement is the only variable used."
+  },
+  {
+    "report_id": "c161aaba-832e-4918-8b12-1dddf0262cd8",
+    "event_category": "THUNDERSTORM",
+    "predicted_event_category": "THUNDERSTORM",
+    "event_classification_confidence": 0.2605,
+    "risk_label": "LOW_RISK",
+    "risk_score": 0.15,
+    "report_timestamp": "2026-07-21T19:18:00Z",
+    "latitude": 17.3855,
+    "longitude": 78.4866,
+    "verification_status": "INSUFFICIENT_EVIDENCE",
+    "evidence_sources": [],
+    "source_evidence": {
+      "ERA5": {
+        "data_label": "REAL",
+        "matched": false,
+        "unavailable_reason": "NO_TEMPORAL_MATCH",
+        "matched_record_timestamp": null,
+        "values": {}
+      },
+      "Open-Meteo": {
+        "data_label": "REAL",
+        "matched": false,
+        "unavailable_reason": "NO_TEMPORAL_MATCH",
+        "matched_record_timestamp": null,
+        "values": {}
+      },
+      "IMD": {
+        "data_label": "FIXTURE",
+        "matched": false,
+        "unavailable_reason": "IMD_TEMPORAL_UNAVAILABLE",
+        "matched_record_timestamp": null,
+        "values": {}
+      }
+    },
+    "temporal_alignment": {
+      "ERA5": {
+        "report_timestamp": "2026-07-21T19:18:00Z",
+        "best_match_record_index": null,
+        "time_difference_minutes": null,
+        "temporal_match": false,
+        "flag": "TEMPORAL_MISMATCH",
+        "candidate_record_count": 0
+      },
+      "Open-Meteo": {
+        "report_timestamp": "2026-07-21T19:18:00Z",
+        "best_match_record_index": null,
+        "time_difference_minutes": null,
+        "temporal_match": false,
+        "flag": "TEMPORAL_MISMATCH",
+        "candidate_record_count": 0
+      },
+      "IMD": {
+        "report_timestamp": "2026-07-21T19:18:00Z",
+        "best_match_record_index": null,
+        "time_difference_minutes": null,
+        "temporal_match": false,
+        "flag": "TEMPORAL_MISMATCH",
+        "candidate_record_count": 0
+      }
+    },
+    "spatial_alignment": {
+      "ERA5": {
+        "flag": "SPATIAL_UNKNOWN"
+      },
+      "Open-Meteo": {
+        "flag": "SPATIAL_UNKNOWN"
+      },
+      "IMD": {
+        "flag": "SPATIAL_UNKNOWN"
+      }
+    },
+    "evidence_support_score": null,
+    "verification_reasons": [
+      "No configured evidence source had a temporally/spatially matched record with the required variable available."
+    ],
+    "evidence_mapping_notes": "Precipitation is required evidence. Wind speed/gust are supporting only (a thunderstorm can occur with modest sustained wind but a sharp gust); their absence does not by itself block a verdict."
+  },
+  {
+    "report_id": "EDGE_RAIN_SUPPORTED",
+    "event_category": "RAINFALL",
+    "predicted_event_category": null,
+    "event_classification_confidence": null,
+    "risk_label": null,
+    "risk_score": null,
+    "report_timestamp": "2024-09-10T21:00:00Z",
+    "latitude": 23.25,
+    "longitude": 80.0,
+    "verification_status": "SUPPORTED",
+    "evidence_sources": [
+      "ERA5",
+      "Open-Meteo"
+    ],
+    "source_evidence": {
+      "ERA5": {
+        "data_label": "REAL",
+        "matched": true,
+        "unavailable_reason": null,
+        "matched_record_timestamp": "2024-09-10T21:00:00Z",
+        "values": {
+          "rainfall": 20.8974
+        }
+      },
+      "Open-Meteo": {
+        "data_label": "REAL",
+        "matched": true,
+        "unavailable_reason": null,
+        "matched_record_timestamp": "2024-09-10T21:00:00Z",
+        "values": {
+          "rainfall": 1.8
+        }
+      },
+      "IMD": {
+        "data_label": "FIXTURE",
+        "matched": false,
+        "unavailable_reason": "IMD_TEMPORAL_UNAVAILABLE",
+        "matched_record_timestamp": null,
+        "values": {}
+      }
+    },
+    "temporal_alignment": {
+      "ERA5": {
+        "report_timestamp": "2024-09-10T21:00:00Z",
+        "best_match_record_index": 6093,
+        "time_difference_minutes": 0.0,
+        "temporal_match": true,
+        "flag": "TEMPORAL_MATCH",
+        "candidate_record_count": 3
+      },
+      "Open-Meteo": {
+        "report_timestamp": "2024-09-10T21:00:00Z",
+        "best_match_record_index": 6093,
+        "time_difference_minutes": 0.0,
+        "temporal_match": true,
+        "flag": "TEMPORAL_MATCH",
+        "candidate_record_count": 3
+      },
+      "IMD": {
+        "report_timestamp": "2024-09-10T21:00:00Z",
+        "best_match_record_index": null,
+        "time_difference_minutes": null,
+        "temporal_match": false,
+        "flag": "TEMPORAL_MISMATCH",
+        "candidate_record_count": 0
+      }
+    },
+    "spatial_alignment": {
+      "ERA5": {
+        "report_latitude": 23.25,
+        "report_longitude": 80.0,
+        "record_latitude": 23.25,
+        "record_longitude": 80.0,
+        "distance_km": 0.0,
+        "spatial_match": true,
+        "flag": "SPATIAL_MATCH"
+      },
+      "Open-Meteo": {
+        "report_latitude": 23.25,
+        "report_longitude": 80.0,
+        "record_latitude": 23.233742,
+        "record_longitude": 80.0,
+        "distance_km": 1.808,
+        "spatial_match": true,
+        "flag": "SPATIAL_MATCH"
+      },
+      "IMD": {
+        "flag": "SPATIAL_UNKNOWN"
+      }
+    },
+    "evidence_support_score": 1.0,
+    "verification_reasons": [
+      "ERA5 (REAL): rainfall=20.8974 -> SUPPORTING_EVIDENCE",
+      "Open-Meteo (REAL): rainfall=1.8 -> SUPPORTING_EVIDENCE",
+      "SUPPORTED BY AVAILABLE WEATHER EVIDENCE, not proof the report is true."
+    ],
+    "evidence_mapping_notes": "Direct precipitation measurement is the only variable used."
+  },
+  {
+    "report_id": "EDGE_RAIN_CONFLICTING",
+    "event_category": "RAINFALL",
+    "predicted_event_category": null,
+    "event_classification_confidence": null,
+    "risk_label": null,
+    "risk_score": null,
+    "report_timestamp": "2024-01-15T09:00:00Z",
+    "latitude": 23.25,
+    "longitude": 80.0,
+    "verification_status": "CONFLICTING",
+    "evidence_sources": [
+      "ERA5",
+      "Open-Meteo"
+    ],
+    "source_evidence": {
+      "ERA5": {
+        "data_label": "REAL",
+        "matched": true,
+        "unavailable_reason": null,
+        "matched_record_timestamp": "2024-01-15T09:00:00Z",
+        "values": {
+          "rainfall": 0.0
+        }
+      },
+      "Open-Meteo": {
+        "data_label": "REAL",
+        "matched": true,
+        "unavailable_reason": null,
+        "matched_record_timestamp": "2024-01-15T09:00:00Z",
+        "values": {
+          "rainfall": 0.0
+        }
+      },
+      "IMD": {
+        "data_label": "FIXTURE",
+        "matched": false,
+        "unavailable_reason": "IMD_TEMPORAL_UNAVAILABLE",
+        "matched_record_timestamp": null,
+        "values": {}
+      }
+    },
+    "temporal_alignment": {
+      "ERA5": {
+        "report_timestamp": "2024-01-15T09:00:00Z",
+        "best_match_record_index": 345,
+        "time_difference_minutes": 0.0,
+        "temporal_match": true,
+        "flag": "TEMPORAL_MATCH",
+        "candidate_record_count": 3
+      },
+      "Open-Meteo": {
+        "report_timestamp": "2024-01-15T09:00:00Z",
+        "best_match_record_index": 345,
+        "time_difference_minutes": 0.0,
+        "temporal_match": true,
+        "flag": "TEMPORAL_MATCH",
+        "candidate_record_count": 3
+      },
+      "IMD": {
+        "report_timestamp": "2024-01-15T09:00:00Z",
+        "best_match_record_index": null,
+        "time_difference_minutes": null,
+        "temporal_match": false,
+        "flag": "TEMPORAL_MISMATCH",
+        "candidate_record_count": 0
+      }
+    },
+    "spatial_alignment": {
+      "ERA5": {
+        "report_latitude": 23.25,
+        "report_longitude": 80.0,
+        "record_latitude": 23.25,
+        "record_longitude": 80.0,
+        "distance_km": 0.0,
+        "spatial_match": true,
+        "flag": "SPATIAL_MATCH"
+      },
+      "Open-Meteo": {
+        "report_latitude": 23.25,
+        "report_longitude": 80.0,
+        "record_latitude": 23.233742,
+        "record_longitude": 80.0,
+        "distance_km": 1.808,
+        "spatial_match": true,
+        "flag": "SPATIAL_MATCH"
+      },
+      "IMD": {
+        "flag": "SPATIAL_UNKNOWN"
+      }
+    },
+    "evidence_support_score": 0.0,
+    "verification_reasons": [
+      "ERA5 (REAL): rainfall=0.0 -> CONFLICTING_EVIDENCE",
+      "Open-Meteo (REAL): rainfall=0.0 -> CONFLICTING_EVIDENCE",
+      "CONFLICTING WITH AVAILABLE WEATHER EVIDENCE, not proof the report is false."
+    ],
+    "evidence_mapping_notes": "Direct precipitation measurement is the only variable used."
+  },
+  {
+    "report_id": "EDGE_HEATWAVE_SUPPORTED",
+    "event_category": "HEATWAVE",
+    "predicted_event_category": null,
+    "event_classification_confidence": null,
+    "risk_label": null,
+    "risk_score": null,
+    "report_timestamp": "2024-06-01T12:00:00Z",
+    "latitude": 23.25,
+    "longitude": 80.0,
+    "verification_status": "SUPPORTED",
+    "evidence_sources": [
+      "ERA5",
+      "Open-Meteo"
+    ],
+    "source_evidence": {
+      "ERA5": {
+        "data_label": "REAL",
+        "matched": true,
+        "unavailable_reason": null,
+        "matched_record_timestamp": "2024-06-01T12:00:00Z",
+        "values": {
+          "temperature": 41.478
+        }
+      },
+      "Open-Meteo": {
+        "data_label": "REAL",
+        "matched": true,
+        "unavailable_reason": null,
+        "matched_record_timestamp": "2024-06-01T12:00:00Z",
+        "values": {
+          "temperature": 41.7
+        }
+      },
+      "IMD": {
+        "data_label": "FIXTURE",
+        "matched": false,
+        "unavailable_reason": "IMD_TEMPORAL_UNAVAILABLE",
+        "matched_record_timestamp": null,
+        "values": {}
+      }
+    },
+    "temporal_alignment": {
+      "ERA5": {
+        "report_timestamp": "2024-06-01T12:00:00Z",
+        "best_match_record_index": 3660,
+        "time_difference_minutes": 0.0,
+        "temporal_match": true,
+        "flag": "TEMPORAL_MATCH",
+        "candidate_record_count": 3
+      },
+      "Open-Meteo": {
+        "report_timestamp": "2024-06-01T12:00:00Z",
+        "best_match_record_index": 3660,
+        "time_difference_minutes": 0.0,
+        "temporal_match": true,
+        "flag": "TEMPORAL_MATCH",
+        "candidate_record_count": 3
+      },
+      "IMD": {
+        "report_timestamp": "2024-06-01T12:00:00Z",
+        "best_match_record_index": null,
+        "time_difference_minutes": null,
+        "temporal_match": false,
+        "flag": "TEMPORAL_MISMATCH",
+        "candidate_record_count": 0
+      }
+    },
+    "spatial_alignment": {
+      "ERA5": {
+        "report_latitude": 23.25,
+        "report_longitude": 80.0,
+        "record_latitude": 23.25,
+        "record_longitude": 80.0,
+        "distance_km": 0.0,
+        "spatial_match": true,
+        "flag": "SPATIAL_MATCH"
+      },
+      "Open-Meteo": {
+        "report_latitude": 23.25,
+        "report_longitude": 80.0,
+        "record_latitude": 23.233742,
+        "record_longitude": 80.0,
+        "distance_km": 1.808,
+        "spatial_match": true,
+        "flag": "SPATIAL_MATCH"
+      },
+      "IMD": {
+        "flag": "SPATIAL_UNKNOWN"
+      }
+    },
+    "evidence_support_score": 1.0,
+    "verification_reasons": [
+      "ERA5 (REAL): temperature=41.478 -> SUPPORTING_EVIDENCE",
+      "Open-Meteo (REAL): temperature=41.7 -> SUPPORTING_EVIDENCE",
+      "SUPPORTED BY AVAILABLE WEATHER EVIDENCE, not proof the report is true."
+    ],
+    "evidence_mapping_notes": "Direct temperature measurement is the only variable used."
+  },
+  {
+    "report_id": "EDGE_STRONGWIND_SUPPORTED",
+    "event_category": "STRONG_WIND",
+    "predicted_event_category": null,
+    "event_classification_confidence": null,
+    "risk_label": null,
+    "risk_score": null,
+    "report_timestamp": null,
+    "latitude": 23.25,
+    "longitude": 80.0,
+    "verification_status": "INSUFFICIENT_EVIDENCE",
+    "evidence_sources": [],
+    "source_evidence": {},
+    "temporal_alignment": {},
+    "spatial_alignment": {},
+    "evidence_support_score": null,
+    "verification_reasons": [
+      "Report has no timestamp -- cannot be temporally corroborated."
+    ],
+    "evidence_mapping_notes": null
+  },
+  {
+    "report_id": "EDGE_MISSING_LOCATION",
+    "event_category": "STRONG_WIND",
+    "predicted_event_category": null,
+    "event_classification_confidence": null,
+    "risk_label": null,
+    "risk_score": null,
+    "report_timestamp": "2024-06-01T12:00:00Z",
+    "latitude": null,
+    "longitude": null,
+    "verification_status": "INSUFFICIENT_EVIDENCE",
+    "evidence_sources": [],
+    "source_evidence": {},
+    "temporal_alignment": {},
+    "spatial_alignment": {},
+    "evidence_support_score": null,
+    "verification_reasons": [
+      "Report has no location -- cannot be spatially corroborated."
+    ],
+    "evidence_mapping_notes": null
+  },
+  {
+    "report_id": "EDGE_FOG_AMBIGUOUS",
+    "event_category": "FOG",
+    "predicted_event_category": null,
+    "event_classification_confidence": null,
+    "risk_label": null,
+    "risk_score": null,
+    "report_timestamp": "2024-01-01T03:00:00Z",
+    "latitude": 23.25,
+    "longitude": 80.0,
+    "verification_status": "UNVERIFIED",
+    "evidence_sources": [
+      "ERA5",
+      "Open-Meteo"
+    ],
+    "source_evidence": {
+      "ERA5": {
+        "data_label": "REAL",
+        "matched": true,
+        "unavailable_reason": null,
+        "matched_record_timestamp": "2024-01-01T03:00:00Z",
+        "values": {
+          "humidity": null
+        }
+      },
+      "Open-Meteo": {
+        "data_label": "REAL",
+        "matched": true,
+        "unavailable_reason": null,
+        "matched_record_timestamp": "2024-01-01T03:00:00Z",
+        "values": {
+          "humidity": 80.0
+        }
+      },
+      "IMD": {
+        "data_label": "FIXTURE",
+        "matched": false,
+        "unavailable_reason": "IMD_TEMPORAL_UNAVAILABLE",
+        "matched_record_timestamp": null,
+        "values": {}
+      }
+    },
+    "temporal_alignment": {
+      "ERA5": {
+        "report_timestamp": "2024-01-01T03:00:00Z",
+        "best_match_record_index": 3,
+        "time_difference_minutes": 0.0,
+        "temporal_match": true,
+        "flag": "TEMPORAL_MATCH",
+        "candidate_record_count": 3
+      },
+      "Open-Meteo": {
+        "report_timestamp": "2024-01-01T03:00:00Z",
+        "best_match_record_index": 3,
+        "time_difference_minutes": 0.0,
+        "temporal_match": true,
+        "flag": "TEMPORAL_MATCH",
+        "candidate_record_count": 3
+      },
+      "IMD": {
+        "report_timestamp": "2024-01-01T03:00:00Z",
+        "best_match_record_index": null,
+        "time_difference_minutes": null,
+        "temporal_match": false,
+        "flag": "TEMPORAL_MISMATCH",
+        "candidate_record_count": 0
+      }
+    },
+    "spatial_alignment": {
+      "ERA5": {
+        "report_latitude": 23.25,
+        "report_longitude": 80.0,
+        "record_latitude": 23.25,
+        "record_longitude": 80.0,
+        "distance_km": 0.0,
+        "spatial_match": true,
+        "flag": "SPATIAL_MATCH"
+      },
+      "Open-Meteo": {
+        "report_latitude": 23.25,
+        "report_longitude": 80.0,
+        "record_latitude": 23.233742,
+        "record_longitude": 80.0,
+        "distance_km": 1.808,
+        "spatial_match": true,
+        "flag": "SPATIAL_MATCH"
+      },
+      "IMD": {
+        "flag": "SPATIAL_UNKNOWN"
+      }
+    },
+    "evidence_support_score": 0.5,
+    "verification_reasons": [
+      "Open-Meteo (REAL): humidity=80.0 -> AMBIGUOUS_EVIDENCE",
+      "Evidence is inconclusive: all matched sources fall in an ambiguous range.",
+      "This event category's evidence relies on a weak, indirect proxy variable (no directly diagnostic variable exists in this project's schema) -- treat this verdict with extra caution."
+    ],
+    "evidence_mapping_notes": "Fog has NO required variable in this mapping: humidity alone is a weak, indirect proxy (high humidity is necessary but not sufficient for fog), and this project's WeatherRecord schema has no visibility field, which would be the actually-diagnostic variable. Any FOG verdict is therefore capped at AMBIGUOUS/supporting-at-best and must never be reported as strong evidence."
+  },
+  {
+    "report_id": "EDGE_FOG_SUPPORTED_WEAK",
+    "event_category": "FOG",
+    "predicted_event_category": null,
+    "event_classification_confidence": null,
+    "risk_label": null,
+    "risk_score": null,
+    "report_timestamp": "2024-01-01T00:00:00Z",
+    "latitude": 23.25,
+    "longitude": 80.0,
+    "verification_status": "SUPPORTED",
+    "evidence_sources": [
+      "ERA5",
+      "Open-Meteo"
+    ],
+    "source_evidence": {
+      "ERA5": {
+        "data_label": "REAL",
+        "matched": true,
+        "unavailable_reason": null,
+        "matched_record_timestamp": "2024-01-01T00:00:00Z",
+        "values": {
+          "humidity": null
+        }
+      },
+      "Open-Meteo": {
+        "data_label": "REAL",
+        "matched": true,
+        "unavailable_reason": null,
+        "matched_record_timestamp": "2024-01-01T00:00:00Z",
+        "values": {
+          "humidity": 96.0
+        }
+      },
+      "IMD": {
+        "data_label": "FIXTURE",
+        "matched": false,
+        "unavailable_reason": "IMD_TEMPORAL_UNAVAILABLE",
+        "matched_record_timestamp": null,
+        "values": {}
+      }
+    },
+    "temporal_alignment": {
+      "ERA5": {
+        "report_timestamp": "2024-01-01T00:00:00Z",
+        "best_match_record_index": 0,
+        "time_difference_minutes": 0.0,
+        "temporal_match": true,
+        "flag": "TEMPORAL_MATCH",
+        "candidate_record_count": 2
+      },
+      "Open-Meteo": {
+        "report_timestamp": "2024-01-01T00:00:00Z",
+        "best_match_record_index": 0,
+        "time_difference_minutes": 0.0,
+        "temporal_match": true,
+        "flag": "TEMPORAL_MATCH",
+        "candidate_record_count": 2
+      },
+      "IMD": {
+        "report_timestamp": "2024-01-01T00:00:00Z",
+        "best_match_record_index": null,
+        "time_difference_minutes": null,
+        "temporal_match": false,
+        "flag": "TEMPORAL_MISMATCH",
+        "candidate_record_count": 0
+      }
+    },
+    "spatial_alignment": {
+      "ERA5": {
+        "report_latitude": 23.25,
+        "report_longitude": 80.0,
+        "record_latitude": 23.25,
+        "record_longitude": 80.0,
+        "distance_km": 0.0,
+        "spatial_match": true,
+        "flag": "SPATIAL_MATCH"
+      },
+      "Open-Meteo": {
+        "report_latitude": 23.25,
+        "report_longitude": 80.0,
+        "record_latitude": 23.233742,
+        "record_longitude": 80.0,
+        "distance_km": 1.808,
+        "spatial_match": true,
+        "flag": "SPATIAL_MATCH"
+      },
+      "IMD": {
+        "flag": "SPATIAL_UNKNOWN"
+      }
+    },
+    "evidence_support_score": 1.0,
+    "verification_reasons": [
+      "Open-Meteo (REAL): humidity=96.0 -> SUPPORTING_EVIDENCE",
+      "SUPPORTED BY AVAILABLE WEATHER EVIDENCE, not proof the report is true.",
+      "This event category's evidence relies on a weak, indirect proxy variable (no directly diagnostic variable exists in this project's schema) -- treat this verdict with extra caution."
+    ],
+    "evidence_mapping_notes": "Fog has NO required variable in this mapping: humidity alone is a weak, indirect proxy (high humidity is necessary but not sufficient for fog), and this project's WeatherRecord schema has no visibility field, which would be the actually-diagnostic variable. Any FOG verdict is therefore capped at AMBIGUOUS/supporting-at-best and must never be reported as strong evidence."
+  },
+  {
+    "report_id": "EDGE_OUTSIDE_EVIDENCE_WINDOW",
+    "event_category": "RAINFALL",
+    "predicted_event_category": null,
+    "event_classification_confidence": null,
+    "risk_label": null,
+    "risk_score": null,
+    "report_timestamp": "2026-07-14T10:32:00Z",
+    "latitude": 23.1815,
+    "longitude": 79.9864,
+    "verification_status": "INSUFFICIENT_EVIDENCE",
+    "evidence_sources": [],
+    "source_evidence": {
+      "ERA5": {
+        "data_label": "REAL",
+        "matched": false,
+        "unavailable_reason": "NO_TEMPORAL_MATCH",
+        "matched_record_timestamp": null,
+        "values": {}
+      },
+      "Open-Meteo": {
+        "data_label": "REAL",
+        "matched": false,
+        "unavailable_reason": "NO_TEMPORAL_MATCH",
+        "matched_record_timestamp": null,
+        "values": {}
+      },
+      "IMD": {
+        "data_label": "FIXTURE",
+        "matched": false,
+        "unavailable_reason": "IMD_TEMPORAL_UNAVAILABLE",
+        "matched_record_timestamp": null,
+        "values": {}
+      }
+    },
+    "temporal_alignment": {
+      "ERA5": {
+        "report_timestamp": "2026-07-14T10:32:00Z",
+        "best_match_record_index": null,
+        "time_difference_minutes": null,
+        "temporal_match": false,
+        "flag": "TEMPORAL_MISMATCH",
+        "candidate_record_count": 0
+      },
+      "Open-Meteo": {
+        "report_timestamp": "2026-07-14T10:32:00Z",
+        "best_match_record_index": null,
+        "time_difference_minutes": null,
+        "temporal_match": false,
+        "flag": "TEMPORAL_MISMATCH",
+        "candidate_record_count": 0
+      },
+      "IMD": {
+        "report_timestamp": "2026-07-14T10:32:00Z",
+        "best_match_record_index": null,
+        "time_difference_minutes": null,
+        "temporal_match": false,
+        "flag": "TEMPORAL_MISMATCH",
+        "candidate_record_count": 0
+      }
+    },
+    "spatial_alignment": {
+      "ERA5": {
+        "flag": "SPATIAL_UNKNOWN"
+      },
+      "Open-Meteo": {
+        "flag": "SPATIAL_UNKNOWN"
+      },
+      "IMD": {
+        "flag": "SPATIAL_UNKNOWN"
+      }
+    },
+    "evidence_support_score": null,
+    "verification_reasons": [
+      "No configured evidence source had a temporally/spatially matched record with the required variable available."
+    ],
+    "evidence_mapping_notes": "Direct precipitation measurement is the only variable used."
+  }
+]

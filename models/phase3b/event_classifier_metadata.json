@@ -1,0 +1,137 @@
+{
+  "method": "tfidf_logreg_v1",
+  "trained_at": "2026-08-31T07:46:16.957442+00:00",
+  "n_training_examples": 21,
+  "class_counts": {
+    "DUST_STORM": 1,
+    "FLOODING": 7,
+    "FOG": 3,
+    "HEATWAVE": 2,
+    "OTHER": 1,
+    "RAINFALL": 2,
+    "STRONG_WIND": 1,
+    "THUNDERSTORM": 4
+  },
+  "classes": [
+    "DUST_STORM",
+    "FLOODING",
+    "FOG",
+    "HEATWAVE",
+    "OTHER",
+    "RAINFALL",
+    "STRONG_WIND",
+    "THUNDERSTORM"
+  ],
+  "loocv_evaluation": {
+    "method": "tfidf_logreg_v1",
+    "n_examples": 21,
+    "class_counts": {
+      "DUST_STORM": 1,
+      "FLOODING": 7,
+      "FOG": 3,
+      "HEATWAVE": 2,
+      "OTHER": 1,
+      "RAINFALL": 2,
+      "STRONG_WIND": 1,
+      "THUNDERSTORM": 4
+    },
+    "accuracy": 0.6667,
+    "precision_macro": 0.4219,
+    "recall_macro": 0.4643,
+    "f1_macro": 0.4405,
+    "confusion_matrix": [
+      [
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        5,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        3,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      [
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        4
+      ]
+    ],
+    "confusion_matrix_labels": [
+      "DUST_STORM",
+      "FLOODING",
+      "FOG",
+      "HEATWAVE",
+      "OTHER",
+      "RAINFALL",
+      "STRONG_WIND",
+      "THUNDERSTORM"
+    ],
+    "warning": "DEMO/BASELINE ONLY -- 21 total labeled examples across 8 classes (min class count: 1). This is too small for production-grade evaluation; leave-one-out cross-validation was used because a single fixed train/test split would be dominated by which few examples happened to land in 'test'. Not representative of real-world accuracy."
+  },
+  "honest_disclaimer": "DEMO/BASELINE model trained on a small synthetic fixture set (21 examples across 8 classes, several with only 1-2 examples). NOT production-grade. See README's Phase 3B section and event_classifier.py's module docstring for full disclosure. This model is trained on labels that Phase 3A's own keyword heuristic assigned, not independently verified ground truth."
+}

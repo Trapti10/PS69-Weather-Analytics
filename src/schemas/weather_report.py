@@ -112,5 +112,24 @@ class WeatherReport:
     metadata: Dict[str, Any] = field(default_factory=dict)
     raw_payload: Optional[Dict[str, Any]] = None
 
+    # --- Phase 3B: semantic similarity (added, backward-compatible -- see
+    # PS69_HANDOFF_DOCUMENT.md and README "Phase 3B" section for full method) ---
+    semantic_similarity_score: Optional[float] = None   # cosine similarity to matched_report_id, 0-1
+    semantic_duplicate_status: Optional[str] = None      # EXACT_DUPLICATE | SEMANTIC_DUPLICATE | POSSIBLE_RELATED_EVENT | UNRELATED | None (not compared)
+    matched_report_id: Optional[str] = None              # report_id of the closest match, if any
+    similarity_method: Optional[str] = None              # e.g. "tfidf_cosine_v1"
+
+    # --- Phase 3B: event classification (ML, replaces/augments the Phase 3A keyword heuristic) ---
+    predicted_event_category: Optional[str] = None
+    event_classification_confidence: Optional[float] = None
+    classification_method: Optional[str] = None          # e.g. "tfidf_logreg_v1" or "keyword_heuristic_fallback"
+
+    # --- Phase 3B: risk/suspicion intelligence (explainable, NOT a fake/real verdict) ---
+    risk_score: Optional[float] = None
+    risk_label: Optional[str] = None                      # LOW_RISK | MEDIUM_RISK | HIGH_RISK | UNVERIFIED
+    risk_reasons: list = field(default_factory=list)
+
+    intelligence_processed_at: Optional[str] = None       # ISO 8601 UTC, when Phase 3B processed this report
+
     def to_dict(self) -> Dict[str, Any]:
         return asdict(self)

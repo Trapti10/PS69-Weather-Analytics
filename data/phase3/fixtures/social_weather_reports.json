@@ -12,7 +12,10 @@
     "longitude": 79.9864,
     "image_url": "https://example-demo.invalid/images/demo1.jpg",
     "video_url": null,
-    "hashtags": ["JabalpurRains", "MPWeather"]
+    "hashtags": [
+      "JabalpurRains",
+      "MPWeather"
+    ]
   },
   {
     "_synthetic_note": "SYNTHETIC/DEMO DATA -- exact repost, included deliberately to test deterministic duplicate detection.",
@@ -27,7 +30,9 @@
     "longitude": 79.9865,
     "image_url": null,
     "video_url": null,
-    "hashtags": ["JabalpurRains"]
+    "hashtags": [
+      "JabalpurRains"
+    ]
   },
   {
     "_synthetic_note": "SYNTHETIC/DEMO DATA -- different city/event, included to confirm the schema is not hardcoded to Jabalpur.",
@@ -39,10 +44,12 @@
     "city": "Delhi",
     "state": "Delhi",
     "latitude": 28.5562,
-    "longitude": 77.1000,
+    "longitude": 77.1,
     "image_url": "https://example-demo.invalid/images/demo3.jpg",
     "video_url": null,
-    "hashtags": ["DelhiFog"]
+    "hashtags": [
+      "DelhiFog"
+    ]
   },
   {
     "_synthetic_note": "SYNTHETIC/DEMO DATA -- thunderstorm report, Bhopal.",
@@ -57,7 +64,9 @@
     "longitude": 77.4126,
     "image_url": null,
     "video_url": "https://example-demo.invalid/videos/demo4.mp4",
-    "hashtags": ["BhopalStorm"]
+    "hashtags": [
+      "BhopalStorm"
+    ]
   },
   {
     "_synthetic_note": "SYNTHETIC/DEMO DATA -- near-duplicate of demo_post_001 in wording only (different phrasing, same real-world event/time/place). Deliberately included to demonstrate a KNOWN LIMITATION: deterministic exact-text dedup will NOT catch this as a duplicate of demo_post_001, since normalized text differs. This is documented, not hidden.",
@@ -72,7 +81,9 @@
     "longitude": 79.9863,
     "image_url": null,
     "video_url": null,
-    "hashtags": ["Jabalpur"]
+    "hashtags": [
+      "Jabalpur"
+    ]
   },
   {
     "_synthetic_note": "SYNTHETIC/DEMO DATA -- malformed record (missing posted_at/timestamp entirely), included deliberately to test validation, not to be silently discarded.",
@@ -87,7 +98,9 @@
     "longitude": 75.7873,
     "image_url": null,
     "video_url": null,
-    "hashtags": ["DustStorm"]
+    "hashtags": [
+      "DustStorm"
+    ]
   },
   {
     "_synthetic_note": "SYNTHETIC/DEMO DATA -- invalid latitude (impossible value, >90), included deliberately to test range validation.",
@@ -102,6 +115,144 @@
     "longitude": 80.2707,
     "image_url": null,
     "video_url": null,
-    "hashtags": ["StrongWind"]
+    "hashtags": [
+      "StrongWind"
+    ]
+  },
+  {
+    "_synthetic_note": "SYNTHETIC/DEMO DATA -- additional rainfall example (Phase 3B fixture extension, for classifier training coverage).",
+    "platform": "X-like-demo-feed",
+    "post_id": "demo_post_008",
+    "author_handle": "demo_user_61",
+    "posted_at": "2026-07-20T14:00:00Z",
+    "text": "Steady rain since morning in Pune, streets are wet but no flooding so far.",
+    "city": "Pune",
+    "state": "Maharashtra",
+    "latitude": 18.5204,
+    "longitude": 73.8567,
+    "image_url": null,
+    "video_url": null,
+    "hashtags": [
+      "PuneRain"
+    ]
+  },
+  {
+    "_synthetic_note": "SYNTHETIC/DEMO DATA -- additional thunderstorm example (Phase 3B fixture extension).",
+    "platform": "X-like-demo-feed",
+    "post_id": "demo_post_009",
+    "author_handle": "demo_user_72",
+    "posted_at": "2026-07-21T19:15:00Z",
+    "text": "Loud thunder and continuous lightning strikes over Hyderabad tonight, quite scary.",
+    "city": "Hyderabad",
+    "state": "Telangana",
+    "latitude": 17.385,
+    "longitude": 78.4867,
+    "image_url": null,
+    "video_url": null,
+    "hashtags": [
+      "HyderabadStorm"
+    ]
+  },
+  {
+    "_synthetic_note": "SYNTHETIC/DEMO DATA -- additional heatwave example (Phase 3B fixture extension).",
+    "platform": "X-like-demo-feed",
+    "post_id": "demo_post_010",
+    "author_handle": "demo_user_84",
+    "posted_at": "2026-05-25T12:30:00Z",
+    "text": "Unbearable heatwave in Ahmedabad today, roads are empty in the afternoon due to the extreme heat.",
+    "city": "Ahmedabad",
+    "state": "Gujarat",
+    "latitude": 23.0225,
+    "longitude": 72.5714,
+    "image_url": null,
+    "video_url": null,
+    "hashtags": [
+      "AhmedabadHeat"
+    ]
+  },
+  {
+    "_synthetic_note": "SYNTHETIC/DEMO DATA -- additional fog example (Phase 3B fixture extension).",
+    "platform": "X-like-demo-feed",
+    "post_id": "demo_post_011",
+    "author_handle": "demo_user_95",
+    "posted_at": "2026-12-28T06:45:00Z",
+    "text": "Thick fog over Lucknow this morning, cars driving with headlights on, visibility under 50 metres.",
+    "city": "Lucknow",
+    "state": "Uttar Pradesh",
+    "latitude": 26.8467,
+    "longitude": 80.9462,
+    "image_url": null,
+    "video_url": null,
+    "hashtags": [
+      "LucknowFog"
+    ]
+  },
+  {
+    "_synthetic_note": "SYNTHETIC/DEMO DATA -- additional strong-wind example (Phase 3B fixture extension).",
+    "platform": "X-like-demo-feed",
+    "post_id": "demo_post_012",
+    "author_handle": "demo_user_16",
+    "posted_at": "2026-07-22T17:00:00Z",
+    "text": "Very strong gusty winds in Chennai this evening, hoardings and banners flying off.",
+    "city": "Chennai",
+    "state": "Tamil Nadu",
+    "latitude": 13.0827,
+    "longitude": 80.2707,
+    "image_url": null,
+    "video_url": null,
+    "hashtags": [
+      "ChennaiWind"
+    ]
+  },
+  {
+    "_synthetic_note": "SYNTHETIC/DEMO DATA -- SEMANTIC DUPLICATE test case #2 (different city from demo_post_001/005, different wording, same real-world event/time/place). Deliberately included so Phase 3B's semantic-similarity layer has more than one duplicate pair to prove it generalizes, not just curve-fit to the MG Road example.",
+    "platform": "X-like-demo-feed",
+    "post_id": "demo_post_013",
+    "author_handle": "demo_user_28",
+    "posted_at": "2026-07-20T14:05:00Z",
+    "text": "It's been raining continuously in Pune all morning, the roads are soaked but thankfully not flooded yet.",
+    "city": "Pune",
+    "state": "Maharashtra",
+    "latitude": 18.5206,
+    "longitude": 73.8569,
+    "image_url": null,
+    "video_url": null,
+    "hashtags": [
+      "PuneRain"
+    ]
+  },
+  {
+    "_synthetic_note": "SYNTHETIC/DEMO DATA -- SIMILAR-BUT-DIFFERENT-EVENT test case (same event TYPE and city as demo_post_008/013, but a genuinely different time and different underlying event -- three days later. Included to prove the semantic layer does NOT over-merge every same-topic report, only ones that plausibly describe the SAME occurrence).",
+    "platform": "X-like-demo-feed",
+    "post_id": "demo_post_014",
+    "author_handle": "demo_user_39",
+    "posted_at": "2026-07-23T09:00:00Z",
+    "text": "Rain has returned to Pune again today after a two-day gap, another wet morning here.",
+    "city": "Pune",
+    "state": "Maharashtra",
+    "latitude": 18.5204,
+    "longitude": 73.8567,
+    "image_url": null,
+    "video_url": null,
+    "hashtags": [
+      "PuneRain"
+    ]
+  },
+  {
+    "_synthetic_note": "SYNTHETIC/DEMO DATA -- CLEARLY UNRELATED test case (different city, different event type, different time from every other fixture entry -- included so the semantic layer has an unambiguous UNRELATED example to validate against, not just borderline cases).",
+    "platform": "X-like-demo-feed",
+    "post_id": "demo_post_015",
+    "author_handle": "demo_user_50",
+    "posted_at": "2026-08-01T11:00:00Z",
+    "text": "Clear blue skies and pleasant weather in Bengaluru this morning, perfect day for a walk.",
+    "city": "Bengaluru",
+    "state": "Karnataka",
+    "latitude": 12.9716,
+    "longitude": 77.5946,
+    "image_url": null,
+    "video_url": null,
+    "hashtags": [
+      "BengaluruWeather"
+    ]
   }
 ]
