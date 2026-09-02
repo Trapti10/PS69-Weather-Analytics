@@ -36,17 +36,25 @@
       <header class="topbar">
         <button class="icon-btn mobile-only" id="menuBtn"><i data-lucide="menu"></i></button>
         <div><p class="eyebrow">NATIONAL WEATHER MONITORING</p><h1 id="pageTitle">Weather Command Center</h1></div>
-        <div class="top-actions"><div class="status"><span></span>Data pipeline healthy</div><button class="icon-btn" title="Refresh data" id="refreshBtn"><i data-lucide="refresh-cw"></i></button><div class="avatar">PS</div></div>
+        <div class="top-actions"><div class="top-context"><span><i data-lucide="calendar-days"></i>01 Sep 2026</span><span><i data-lucide="map-pin"></i>Jabalpur focus</span></div><div class="status"><span></span>Pipeline healthy</div><button class="icon-btn" title="Refresh data" id="refreshBtn"><i data-lucide="refresh-cw"></i></button><div class="avatar">PS</div></div>
       </header>
 
       <div class="content">
         <section class="page active" id="overview">
           <div class="hero-row"><div><h2>Good evening, Analyst.</h2><p>Unified view of weather signals, anomalies, model forecasts and evidence.</p></div><div class="filters"><label>Region<select id="regionSelect"><option>India • Jabalpur focus</option></select></label><label>Period<select id="periodSelect"><option>2024–2025</option></select></label></div></div>
-          <div class="metric-grid">
-            <article class="metric"><div class="metric-top"><span>Observations analysed</span><i data-lucide="database"></i></div><strong id="observations">—</strong><small>Across integrated weather sources</small></article>
-            <article class="metric alert-metric"><div class="metric-top"><span>Detected anomalies</span><i data-lucide="triangle-alert"></i></div><strong id="anomalies">—</strong><small><b id="critical">—</b> critical • <b id="high">—</b> high</small></article>
-            <article class="metric"><div class="metric-top"><span>Anomaly rate</span><i data-lucide="activity"></i></div><strong id="anomalyRate">—</strong><small>Rolling statistical detection</small></article>
-            <article class="metric"><div class="metric-top"><span>Avg evidence support</span><i data-lucide="badge-check"></i></div><strong id="evidenceScore">—</strong><small>Transparent corroboration score</small></article>
+          <div class="metric-grid overview-metrics">
+            <article class="metric metric-purple"><div class="metric-top"><span>Total anomalies</span><i data-lucide="orbit"></i></div><strong id="anomalies">—</strong><small><span class="trend up">↑</span> Phase 4C detected events</small></article>
+            <article class="metric metric-red"><div class="metric-top"><span>Critical anomalies</span><i data-lucide="triangle-alert"></i></div><strong id="critical">—</strong><small>Immediate attention required</small></article>
+            <article class="metric metric-orange"><div class="metric-top"><span>High severity</span><i data-lucide="flame"></i></div><strong id="high">—</strong><small>Priority weather events</small></article>
+            <article class="metric metric-blue"><div class="metric-top"><span>Data sources</span><i data-lucide="radio-tower"></i></div><strong id="sourceCount">—</strong><small>Integrated anomaly sources</small></article>
+            <article class="metric metric-cyan"><div class="metric-top"><span>Observations analysed</span><i data-lucide="database"></i></div><strong id="observations">—</strong><small>Across integrated weather data</small></article>
+            <article class="metric metric-green"><div class="metric-top"><span>Evidence support</span><i data-lucide="badge-check"></i></div><strong id="evidenceScore">—</strong><small>Transparent corroboration score</small></article>
+          </div>
+
+          <div class="overview-strip">
+            <div><span class="strip-icon blue"><i data-lucide="activity"></i></span><div><b id="anomalyRate">—</b><small>Anomaly rate across analysed observations</small></div></div>
+            <div><span class="strip-icon green"><i data-lucide="shield-check"></i></span><div><b>Read-only intelligence layer</b><small>Dashboard consumes existing Phase 4A–4C outputs</small></div></div>
+            <div><span class="strip-icon orange"><i data-lucide="database-zap"></i></span><div><b>Pipeline connected</b><small>No changes to upstream detection or fusion logic</small></div></div>
           </div>
 
           <div class="grid-2">
