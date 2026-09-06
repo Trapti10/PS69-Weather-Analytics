@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgis/postgis:15-3.3
+    container_name: ps69_postgres
+    environment:
+      POSTGRES_DB: ps69_weather
+      POSTGRES_USER: ps69_admin
+      POSTGRES_PASSWORD: ps69_password_dev
+    ports:
+      - "5432:5432"
+    volumes:
+      - ps69_data:/var/lib/postgresql/data
+      - ./phase5/db/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql
+    networks:
+      - ps69_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ps69_admin -d ps69_weather"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: ps69_pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@ps69.local
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    networks:
+      - ps69_network
+    depends_on:
+      - postgres
+
+  fastapi:
+    build:
+      context: .
+      dockerfile: ./phase5/Dockerfile
+    container_name: ps69_fastapi
+    environment:
+      DATABASE_URL: postgresql+psycopg://ps69_admin:ps69_password_dev@postgres:5432/ps69_weather
+      JWT_SECRET: dev_secret_key_change_in_production
+    ports:
+      - "8000:8000"
+    networks:
+      - ps69_network
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./phase5:/app/phase5
+      - ./src:/app/src
+    command: uvicorn phase5.api.main:app --host 0.0.0.0 --port 8000 --reload
+
+volumes:
+  ps69_data:
+
+networks:
+  ps69_network:
+    driver: bridge
