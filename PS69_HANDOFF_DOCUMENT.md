@@ -650,6 +650,61 @@ phases doesn't carry the same dense hourly series a rolling-window method needs)
 
 ---
 
+---
+
+## Phase 5: PostgreSQL/PostGIS Backend (FastAPI)
+
+**Note:** this section was written retroactively when Phase 6 began — Phase 5 had been implemented and pushed to the repo, but this handoff document was not updated at the time, so it jumped straight from Phase 4C to "end of document" until now. Phase 5's own `phase5/API.md` and `phase5/SETUP.md` are the detailed reference; this is a summary for continuity.
+
+**What it is:** a FastAPI + PostgreSQL/PostGIS backend (`phase5/`) sitting on top of the Phase 1-4C intelligence pipeline. Six tables: `users`, `weather_reports`, `weather_events`, `admin_review_actions`, `alerts`, `audit_log`. JWT auth (register/login/refresh), RBAC (CITIZEN/ANALYST/ADMIN), synchronous citizen report submission (`POST /reports`) that runs the existing Phase 3A validation/normalization/dedup and Phase 3C `verification_engine` inline within the request, spatial+temporal event correlation via PostGIS `ST_DWithin`, and role-aware event querying (`GET /events`, `GET /events/{id}`).
+
+**Evidence Status vs Final Verification Status separation already existed in Phase 5's schema** (`weather_events.evidence_status` system-assigned, `weather_events.final_verification_status` admin-assigned, defaulting to `NEEDS_REVIEW`) — Phase 6 (below) is what actually exposes the admin side of that through an API; Phase 5 only laid the DB groundwork.
+
+**Tests:** `phase5/tests/test_phase5_unit.py` + `test_phase5_integration.py` — 39 passed, 0 failed, against a real PostgreSQL 16 + PostGIS 3.4 instance.
+
+**Known conventions locked in by Phase 5 that later phases must follow:** test DB is `ps69_weather_test` reachable via `postgresql+psycopg://ps69_admin:ps69_password_dev@localhost:5432/...`; public `/auth/register` only ever creates CITIZEN accounts — ANALYST/ADMIN users must be provisioned directly in the DB (see any test's `_make_user`/analyst-provisioning pattern); `phase5/api/db.py`'s `CREATE EXTENSION` on connect must roll back explicitly on failure or the pooled connection is left in an aborted-transaction state for every later query on it.
+
+---
+
+## Phase 6: Admin Verification Workflow
+
+**Goal:** backend-only admin review layer on top of Phase 5's `weather_events` table. No React UI — that's Phase 7.
+
+**Zero schema changes.** Phase 5's schema already had every field/table Phase 6 needed: `weather_events.final_verification_status/reviewed_by/reviewed_at/review_notes`, `admin_review_actions`, `audit_log`, and even the Pydantic schemas `AdminReviewRequest`/`AdminReviewActionResponse`/`AdminQueueItemResponse` were already sitting in `phase5/api/schemas.py` unused by any route, and `require_admin` in `phase5/api/auth/rbac.py` was defined but never actually wired to an endpoint. Phase 6 is the first real consumer of all of that scaffolding.
+
+**Files created:** `phase5/api/routes/admin.py` (3 endpoints: `GET /admin/verification-queue`, `GET /admin/events/{event_id}/evidence`, `POST /admin/events/{event_id}/verify`), `phase5/tests/test_phase6_admin_verification.py` (24 tests).
+
+**Files modified (additive only):**
+- `phase5/api/schemas.py` — appended new Pydantic models (`AdminQueueEntry`, `AdminQueueResponse`, `EvidenceReportItem`, `EvidenceEventSummary`, `EvidenceDetailResponse`, `AdminVerifyResponse`) after the existing `ADMIN SCHEMAS` section. Nothing existing in this file was changed, reused `AdminReviewRequest` as-is for the verify endpoint's request body (its `action`/`notes` field names, not the brief's example `status`/`reason` names — matching the project's own established convention rather than the brief's illustrative example, since the brief itself says to prefer the project's existing response format).
+- `phase5/api/main.py` — added `admin` to the router import tuple and one `app.include_router(admin.router, prefix="/admin", ...)` line. No other line changed.
+- `phase5/API.md` — appended a "Phase 6: Admin Verification Workflow" section.
+
+**Design decisions worth knowing about:**
+- The verification queue defaults to `status=NEEDS_REVIEW` (that's what makes it a "queue"); pass `status=ALL` to browse every status, or `status=VERIFIED`/`REJECTED` to look at history. `evidence_status` is a fully independent filter axis on the same endpoint.
+- The evidence-detail endpoint returns the event's raw Phase 3C `evidence_detail` JSONB as `external_evidence` (ERA5/IMD/Open-Meteo agreement) *and* the member `WeatherReport` rows (their own classification/confidence fields), kept as two clearly separate blocks rather than inventing a fabricated per-report "supporting/conflicting" flag that doesn't exist anywhere in the Phase 3A/3C schema.
+- `notes` is required for `REJECTED` and `NEEDS_REVIEW`, optional for `VERIFIED` (per the brief's own validation list in section 7).
+- `reviewed_by` is always taken from the JWT (`require_admin`'s resolved `current_user["user_id"]`), never from the request body.
+- Event update + `AdminReviewAction` insert + `AuditLog` insert happen inside one try/except with a single `db.commit()` / `db.rollback()` pair.
+
+**Known limitation, stated honestly:** "transaction rollback behavior works where practical" (test 20 in the brief) is tested at the boundary that's actually reachable in this environment — a request that fails validation (missing required `notes`) is confirmed to leave the event, `admin_review_actions`, and `audit_log` completely untouched. Genuinely injecting a mid-transaction database fault (e.g., the connection dropping between the `AdminReviewAction` insert and the `AuditLog` insert) was not attempted, since it isn't reliably triggerable here; this is documented as the tested boundary rather than claimed as full fault-injection coverage.
+
+**Test results:**
+```
+pytest phase5/tests/ -v
+39 passed (existing Phase 5, untouched)
++ 24 passed (new Phase 6)
+= 63 passed, 0 failed
+
+pytest tests/ -q          (Phase 1-4C regression)
+175 passed, 0 failed
+
+Grand total: 238 passed, 0 failed
+```
+
+**Do not implement Phase 7 (React frontend) until the user explicitly asks for it.**
+
+---
+
 *End of handoff document. When resuming this project in a new session, treat the actual files in
 the uploaded zip as authoritative over anything summarized here — this document may lag behind
 the true state if further work happened after it was written.*

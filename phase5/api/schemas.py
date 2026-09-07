@@ -228,6 +228,104 @@ class AlertResponse(BaseModel):
 
 
 # ============================================================================
+# PHASE 6: ADMIN VERIFICATION WORKFLOW SCHEMAS
+# Additive only — nothing above this section is modified.
+# Reuses AdminReviewRequest / AdminReviewActionResponse / AdminQueueItemResponse
+# already defined above under "ADMIN SCHEMAS" instead of duplicating them.
+# ============================================================================
+
+class AdminQueueEntry(BaseModel):
+    """One row in the admin verification queue."""
+    event_id: UUID
+    event_type: str
+    location_name: str
+    severity: str
+    start_time: datetime
+    evidence_status: str
+    evidence_support_score: Optional[float] = None
+    final_verification_status: str
+    report_count: int
+    created_at: datetime
+    updated_at: datetime
+
+    class Config:
+        from_attributes = True
+
+
+class AdminQueueResponse(BaseModel):
+    """Paginated admin verification queue."""
+    items: List[AdminQueueEntry]
+    total: int
+    limit: int
+    offset: int
+
+
+class EvidenceReportItem(BaseModel):
+    """A single member report shown in the evidence detail view."""
+    report_id: UUID
+    source_type: Optional[str] = None
+    source_name: Optional[str] = None
+    author_id_or_hash: Optional[str] = None
+    report_timestamp: Optional[datetime] = None
+    city: Optional[str] = None
+    state: Optional[str] = None
+    text: Optional[str] = None
+    event_type: Optional[str] = None
+    verification_status: Optional[str] = None
+    source_reliability: Optional[float] = None
+    predicted_event_category: Optional[str] = None
+    event_classification_confidence: Optional[float] = None
+    risk_score: Optional[float] = None
+    risk_label: Optional[str] = None
+    semantic_similarity_score: Optional[float] = None
+    is_duplicate: bool = False
+    is_suspicious: bool = False
+
+    class Config:
+        from_attributes = True
+
+
+class EvidenceEventSummary(BaseModel):
+    """Event-level summary shown at the top of the evidence detail view."""
+    event_id: UUID
+    event_type: str
+    location_name: str
+    severity: str
+    start_time: datetime
+    end_time: Optional[datetime] = None
+    evidence_status: str
+    evidence_support_score: Optional[float] = None
+    final_verification_status: str
+    report_count: int
+    unique_sources: int
+
+    class Config:
+        from_attributes = True
+
+
+class EvidenceDetailResponse(BaseModel):
+    """
+    Full evidence package for an event: the event summary, the Phase 3C
+    external-source evidence (ERA5/IMD/Open-Meteo agreement, passed through
+    from WeatherEvent.evidence_detail as-is), and the member reports.
+    """
+    event: EvidenceEventSummary
+    external_evidence: Optional[Dict[str, Any]] = None
+    reports: List[EvidenceReportItem]
+
+
+class AdminVerifyResponse(BaseModel):
+    """Response returned after an admin submits a final verification decision."""
+    success: bool = True
+    event_id: UUID
+    previous_status: str
+    final_verification_status: str
+    reviewed_by: UUID
+    reviewed_at: datetime
+    notes: Optional[str] = None
+
+
+# ============================================================================
 # ERROR SCHEMAS
 # ============================================================================
 

@@ -117,10 +117,11 @@ def readiness_check():
 
 # Try to include routers, handle import errors gracefully
 try:
-    from phase5.api.routes import auth, reports, events
+    from phase5.api.routes import auth, reports, events, admin
     app.include_router(auth.router, prefix="/auth", tags=["Authentication"])
     app.include_router(reports.router, prefix="/reports", tags=["Reports"])
     app.include_router(events.router, prefix="/events", tags=["Events"])
+    app.include_router(admin.router, prefix="/admin", tags=["Admin - Phase 6 Verification Workflow"])
     logger.info("Routes imported successfully")
 except ImportError as e:
     logger.warning(f"Error importing routes: {e}")

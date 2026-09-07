@@ -445,3 +445,104 @@ curl -X GET "http://localhost:8000/events/$EVENT_ID" \
 - Based on correlation with ERA5/Open-Meteo meteorological data
 - Never collapsed into binary true/false
 - Always preserves all four states: SUPPORTED / CONFLICTING / UNVERIFIED / INSUFFICIENT_EVIDENCE
+
+---
+
+# Phase 6: Admin Verification Workflow
+
+Backend-only admin review layer on top of Phase 5. No React UI (Phase 7).
+
+## Core concept: two separate status fields
+
+| Field | Set by | Values | Meaning |
+|---|---|---|---|
+| `evidence_status` | System (Phase 3C) | `SUPPORTED` / `CONFLICTING` / `UNVERIFIED` / `INSUFFICIENT_EVIDENCE` | What the automated cross-source comparison found |
+| `final_verification_status` | Admin (Phase 6) | `VERIFIED` / `NEEDS_REVIEW` / `REJECTED` | What a human reviewer decided |
+
+These never derive from one another. `CONFLICTING` evidence is not auto-rejected; an admin decides. Nothing in Phase 6 ever writes to `evidence_status`, and no evidence record is ever deleted.
+
+All three endpoints below require `Authorization: Bearer <token>` for a user with `role=ADMIN`. Missing/invalid token → `401`. Valid token but wrong role → `403`.
+
+## GET /admin/verification-queue
+
+Paginated list of events for admin review.
+
+**Query params:** `status` (default `NEEDS_REVIEW`; pass `ALL` for every status), `evidence_status`, `event_type`, `city`, `severity`, `start_date`, `end_date` (ISO 8601), `limit` (default 20, max 200), `offset`.
+
+**Response (200):**
+```json
+{
+  "items": [
+    {
+      "event_id": "uuid",
+      "event_type": "RAINFALL",
+      "location_name": "Jabalpur, Madhya Pradesh",
+      "severity": "HIGH",
+      "start_time": "2026-09-05T08:00:00Z",
+      "evidence_status": "CONFLICTING",
+      "evidence_support_score": 0.42,
+      "final_verification_status": "NEEDS_REVIEW",
+      "report_count": 2,
+      "created_at": "...",
+      "updated_at": "..."
+    }
+  ],
+  "total": 1,
+  "limit": 20,
+  "offset": 0
+}
+```
+
+## GET /admin/events/{event_id}/evidence
+
+Full evidence package for one event: event summary, the raw Phase 3C `evidence_detail` (ERA5/IMD/Open-Meteo agreement, passed through unmodified as `external_evidence`), and every member `WeatherReport` (single query, no N+1). 404 if the event doesn't exist.
+
+## POST /admin/events/{event_id}/verify
+
+Submit a final verification decision.
+
+**Request:**
+```json
+{
+  "action": "VERIFIED",
+  "notes": "Corroborated by IMD and multiple citizen reports."
+}
+```
+`action` must be `VERIFIED` / `NEEDS_REVIEW` / `REJECTED` (anything else → `422`, enforced by the Pydantic schema before the handler runs). `notes` is **required** for `REJECTED` and `NEEDS_REVIEW` (→ `422` if missing/blank); optional for `VERIFIED`. `reviewed_by` always comes from the authenticated admin's JWT — it is never accepted from the request body.
+
+**Response (200):**
+```json
+{
+  "success": true,
+  "event_id": "uuid",
+  "previous_status": "NEEDS_REVIEW",
+  "final_verification_status": "VERIFIED",
+  "reviewed_by": "uuid",
+  "reviewed_at": "2026-09-06T10:42:00Z",
+  "notes": "Corroborated by IMD and multiple citizen reports."
+}
+```
+
+**Errors:** `404` event not found · `422` invalid action / missing required notes · `500` on an unexpected DB error, in which case nothing is written (see transaction notes below).
+
+### Transaction safety
+The event update, the `AdminReviewAction` insert, and the `AuditLog` insert happen in a single SQLAlchemy transaction with one `db.commit()`; any exception triggers `db.rollback()` before the `500` is raised, so the event is never left updated without its audit trail. This is verified by `test_20_no_partial_writes_on_validation_failure`, which checks that a `422` (missing reason) leaves the event's status, and both audit tables, completely untouched — genuine mid-transaction fault injection (e.g. a dropped DB connection between the two inserts) is not simulated, since that isn't reliably triggerable in this environment; this is the tested boundary, not a claim of full fault-injection coverage.
+
+## Database
+
+**No new tables, no migration.** Phase 5's schema already had everything Phase 6 needs:
+- `weather_events.final_verification_status` / `reviewed_by` / `reviewed_at` / `review_notes`
+- `admin_review_actions` (immutable per-decision audit row)
+- `audit_log` (generic WHO/WHAT/WHEN/WHY trail)
+
+Phase 6 only **appends** new Pydantic response/request schemas to the end of `phase5/api/schemas.py` (nothing existing is changed) and adds `phase5/api/routes/admin.py`, registered in `main.py` alongside the existing routers.
+
+## RBAC
+
+Uses the existing `require_admin` dependency from `phase5/api/auth/rbac.py` (already defined in Phase 5, previously untested by any route — Phase 6 is its first real consumer). CITIZEN and ANALYST get `403` on all three endpoints; unauthenticated requests get `401`.
+
+## Testing
+
+`phase5/tests/test_phase6_admin_verification.py` — 24 tests: 8 auth/RBAC, 9 verification-decision behaviors (VERIFIED/NEEDS_REVIEW/REJECTED, invalid status, nonexistent event, reason validation, previous-status capture, AdminReviewAction creation, AuditLog creation), 3 persistence (survives a fresh DB connection, audit data matches the decision, no partial writes on validation failure), and 4 bonus queue-filtering tests.
+
+Run: `pytest phase5/tests/ -v` → **63 passed** (39 existing Phase 5 + 24 new Phase 6), 0 failed. Full project regression (`pytest tests/ -q` for Phase 1-4C + `pytest phase5/tests/ -v` for Phase 5-6) → **238 passed, 0 failed.**
