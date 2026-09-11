@@ -12,7 +12,7 @@ services:
       - "5432:5432"
     volumes:
       - ps69_data:/var/lib/postgresql/data
-      - ./phase5/db/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql
+      - ./backend/db/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql
     networks:
       - ps69_network
     healthcheck:
@@ -37,7 +37,7 @@ services:
   fastapi:
     build:
       context: .
-      dockerfile: ./phase5/Dockerfile
+      dockerfile: ./backend/Dockerfile
     container_name: ps69_fastapi
     environment:
       DATABASE_URL: postgresql+psycopg://ps69_admin:ps69_password_dev@postgres:5432/ps69_weather
@@ -50,9 +50,9 @@ services:
       postgres:
         condition: service_healthy
     volumes:
-      - ./phase5:/app/phase5
+      - ./backend:/app/backend
       - ./src:/app/src
-    command: uvicorn phase5.api.main:app --host 0.0.0.0 --port 8000 --reload
+    command: uvicorn backend.api.main:app --host 0.0.0.0 --port 8000 --reload
 
 volumes:
   ps69_data:

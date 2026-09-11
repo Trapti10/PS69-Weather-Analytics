@@ -39,8 +39,8 @@ Write-Host "Prerequisites OK."
 # scripts below can import sqlalchemy/psycopg) ---
 Write-Host ""
 Write-Host "[2/11] Installing Phase 5 Python dependencies..."
-python -m pip install -r phase5/requirements.txt
-Assert-Success "pip install phase5/requirements.txt"
+python -m pip install -r backend/requirements.txt
+Assert-Success "pip install backend/requirements.txt"
 
 # --- 2. Start Docker PostgreSQL/PostGIS ---
 Write-Host ""
@@ -78,7 +78,7 @@ Assert-Success "PostGIS verification"
 # --- 5. Create/load schema ---
 Write-Host ""
 Write-Host "[6/11] Creating/refreshing database schema..."
-Get-Content phase5/db/schema.sql | docker exec -i ps69_postgres psql -v ON_ERROR_STOP=1 -U ps69_admin -d ps69_weather
+Get-Content backend/db/schema.sql | docker exec -i ps69_postgres psql -v ON_ERROR_STOP=1 -U ps69_admin -d ps69_weather
 Assert-Success "schema creation"
 
 # --- 6. Run Phase 3A -> PostgreSQL migration ---
@@ -92,26 +92,26 @@ if (-not (Test-Path $JsonFile)) {
     exit 1
 }
 $env:DATABASE_URL = "postgresql+psycopg://ps69_admin:ps69_password_dev@localhost:5432/ps69_weather"
-python phase5/db/migrate_from_json.py --input "$JsonFile" --database-url "$env:DATABASE_URL"
+python backend/db/migrate_from_json.py --input "$JsonFile" --database-url "$env:DATABASE_URL"
 Assert-Success "Phase 3A migration"
 
 # --- 7. (Dependencies already installed in step 2; re-verify here in case
 #      requirements changed since) ---
 Write-Host ""
 Write-Host "[8/11] Re-checking Python dependencies..."
-python -m pip install -r phase5/requirements.txt
+python -m pip install -r backend/requirements.txt
 Assert-Success "pip install (re-check)"
 
 # --- 8. Run Phase 5 unit tests ---
 Write-Host ""
 Write-Host "[9/11] Running Phase 5 unit tests (no DB required)..."
-python -m pytest phase5/tests/test_phase5_unit.py -v
+python -m pytest backend/tests/test_phase5_unit.py -v
 Assert-Success "Phase 5 unit tests"
 
 # --- 9. Run Phase 5 integration tests against real DB ---
 Write-Host ""
 Write-Host "[10/11] Running Phase 5 integration tests (real PostgreSQL/PostGIS)..."
-python -m pytest phase5/tests/test_phase5_integration.py -v
+python -m pytest backend/tests/test_phase5_integration.py -v
 Assert-Success "Phase 5 integration tests"
 
 # --- 10. Run Phase 1-4C regression tests ---
@@ -127,4 +127,4 @@ Write-Host "PHASE 5 WINDOWS SETUP: ALL STEPS PASSED"
 Write-Host "=========================================="
 Write-Host ""
 Write-Host "Start the API with:"
-Write-Host "  uvicorn phase5.api.main:app --host 0.0.0.0 --port 8000 --reload"
+Write-Host "  uvicorn backend.api.main:app --host 0.0.0.0 --port 8000 --reload"

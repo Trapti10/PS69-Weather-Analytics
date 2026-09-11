@@ -1,15 +1,16 @@
-# Python
 __pycache__/
 *.pyc
 .pytest_cache/
 
-# Environment files
+# Environment files (never commit real secrets)
 .env
-.env.*
-!.env.example
-!.env.*.example
+.env.local
+.env.*.local
+frontend/.env
+frontend/.env.local
 .env.phase5
 
-# Frontend
-frontend/node_modules/
-frontend/dist/
+# Virtual environments
+.venv/
+venv/
+env/

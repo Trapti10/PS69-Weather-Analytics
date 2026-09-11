@@ -2,8 +2,8 @@
 set -e
 
 # PS69 Phase 5 Setup Script (Linux/macOS)
-# NOTE: phase5/setup.sh is the primary documented entry point (see
-# phase5/SETUP.md). This script is a lighter alternate flow kept for
+# NOTE: backend/setup.sh is the primary documented entry point (see
+# backend/SETUP.md). This script is a lighter alternate flow kept for
 # convenience; it is fixed here so it does not silently skip required
 # steps (previously it never ran the Phase 3A migration at all).
 
@@ -26,7 +26,7 @@ echo "   Prerequisites OK"
 
 echo ""
 echo "2. Installing Python dependencies..."
-python3 -m pip install -r phase5/requirements.txt
+python3 -m pip install -r backend/requirements.txt
 
 echo ""
 echo "3. Starting PostgreSQL + PostGIS..."
@@ -68,16 +68,16 @@ if [ ! -f "$JSON_FILE" ]; then
     exit 1
 fi
 DATABASE_URL="postgresql+psycopg://ps69_admin:ps69_password_dev@localhost:5432/ps69_weather"
-python3 phase5/db/migrate_from_json.py --input "$JSON_FILE" --database-url "$DATABASE_URL"
+python3 backend/db/migrate_from_json.py --input "$JSON_FILE" --database-url "$DATABASE_URL"
 
 echo ""
 echo "8. Running Phase 5 unit tests (no DB required)..."
-python3 -m pytest phase5/tests/test_phase5_unit.py -v --tb=short
+python3 -m pytest backend/tests/test_phase5_unit.py -v --tb=short
 # No error-swallowing: set -e above means a failing test fails this script.
 
 echo ""
 echo "9. Running Phase 5 integration tests (real PostgreSQL/PostGIS)..."
-python3 -m pytest phase5/tests/test_phase5_integration.py -v --tb=short
+python3 -m pytest backend/tests/test_phase5_integration.py -v --tb=short
 
 echo ""
 echo "10. Running Phase 1-4C regression tests..."
@@ -89,7 +89,7 @@ echo "PHASE 5 SETUP: ALL STEPS PASSED"
 echo "========================================"
 echo ""
 echo "To start the FastAPI server:"
-echo "  uvicorn phase5.api.main:app --host 0.0.0.0 --port 8000 --reload"
+echo "  uvicorn backend.api.main:app --host 0.0.0.0 --port 8000 --reload"
 echo ""
 echo "To test the API:"
 echo "  curl http://localhost:8000/docs"
