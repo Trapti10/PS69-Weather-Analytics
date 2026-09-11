@@ -701,7 +701,82 @@ pytest tests/ -q          (Phase 1-4C regression)
 Grand total: 238 passed, 0 failed
 ```
 
-**Do not implement Phase 7 (React frontend) until the user explicitly asks for it.**
+---
+
+## Phase 7: React Frontend
+
+**Goal:** a real Citizen/Analyst/Admin web frontend (`frontend/`) consuming the Phase 5/6 FastAPI backend. No backend behavior was rewritten; the two backend changes below were additive and are explained in full.
+
+**Stack:** Vite + React 19 + TypeScript, Tailwind CSS v4 (via `@tailwindcss/vite`, CSS-variable based — no `tailwind.config.js` needed), React Router v7, TanStack Query v5, Axios, Leaflet + `react-leaflet` + OpenStreetMap tiles, Recharts, Vitest + Testing Library.
+
+### Two additive backend changes made during Phase 7
+
+Both were needed because the frontend spec explicitly forbade fabricating data, and neither gap could be closed from the frontend alone without inventing state that isn't really in PostgreSQL.
+
+1. **`GET /reports/me`** (`phase5/api/routes/reports.py`) — Phase 5 only exposed `POST /reports` and `GET /reports/{id}/status` (single lookup by ID); there was no way for a citizen to list *their own* submitted reports, which the "My Reports" page needs. Rather than track submitted report IDs in browser `localStorage` (which breaks across devices/browsers and isn't real backend state), this endpoint was added. It reuses the exact same authorization convention `get_report_status` already used — matching `WeatherReport.author_id_or_hash == f"user:{current_user['user_id']}"` — so no schema/column change was needed. Paginated (`limit`/`offset`/`total`, same shape as `GET /events` and the Phase 6 queue), newest-first, N+1-safe (linked events are batch-fetched in one query). New schema: `ReportListResponse` (appended to `phase5/api/schemas.py`, reuses `ReportStatusResponse` per item rather than duplicating fields). 6 new tests in `phase5/tests/test_phase7_my_reports.py`.
+
+2. **`latitude`/`longitude` on `EventResponse`** (`phase5/api/routes/events.py`) — the Leaflet map requirement ("markers must come from actual backend event coordinates," "no fake hardcoded markers") had nothing to plot: `WeatherEvent.location` (a PostGIS point, already populated at report-submission time whenever a citizen supplies coordinates) was never serialized out of any event endpoint. Added two optional fields to `EventResponse`, populated via `ST_X`/`ST_Y` on the existing geometry column — no schema/column change, no write path touched. `list_events` batch-extracts coordinates for the whole page in one query (avoids N+1); `get_event` does one extra query for the single event. Null when a report was submitted without coordinates (the frontend map simply omits those events and shows a small "N events without coordinates" note rather than guessing a location). 1 new test in `phase5/tests/test_phase7_event_coordinates.py`.
+
+Both were verified live, not just via pytest: register → submit a report with coordinates → `GET /reports/me` → promote to ADMIN → `GET /events` (coordinates present) → `GET /admin/verification-queue` → `GET /admin/events/{id}/evidence` → `POST /admin/events/{id}/verify` were all exercised end-to-end with `curl` against a running `uvicorn` instance before being wired into the frontend.
+
+**Full backend regression after Phase 7: 63 (Phase 5+6) + 6 (My Reports) + 1 (coordinates) = 70 passed, 0 failed.**
+
+### Frontend architecture
+
+Feature-oriented structure under `frontend/src/`, per the project's own scalability requirements:
+
+```
+app/         router (AppRouter, ProtectedRoute, RoleRoute), providers (Theme/Auth/Query), config (navigation)
+components/  ui/ (Button, Badge, StatusBadge, Card, Field/Input/Select/Textarea, Skeleton,
+             AsyncStates, StatCard, Table, Pagination, Modal), common/ (FilterBar), forms/
+             (ReportForm), maps/ (EventMap)
+features/    auth/ (mutations), reports/ (submit + My Reports query), events/ (list/detail +
+             shared EventsListView/EventsMapView), verification/ (queue/evidence/verify hooks),
+             analytics/ (client-side aggregation hook)
+hooks/       useAuth, useTheme
+layouts/     AppLayout, AuthLayout, Sidebar, Topbar
+pages/       auth/, citizen/, analyst/, admin/, shared/ (AccessDenied, NotFound)
+services/api/  client.ts (Axios instance + normalizeApiError), auth.ts, reports.ts, events.ts, admin.ts
+types/       domain.ts — mirrors phase5/api/schemas.py field-for-field
+constants/   status.ts — evidence/final-status/severity label+tone maps
+lib/         authStorage.ts (localStorage JWT persistence), cn.ts (classnames)
+utils/       format.ts (dates/percent/truncate), roleHome.ts
+```
+
+Pages compose feature hooks + reusable UI components; no page calls Axios directly.
+
+**Server state:** every network call goes through TanStack Query (`useQuery`/`useMutation`), never raw `useEffect` + Axios. Key hooks: `useLoginMutation`/`useRegisterMutation`, `useSubmitReportMutation`/`useMyReports`, `useEvents`/`useEvent`, `useVerificationQueue`/`useEventEvidence`/`useVerifyEventMutation`, `useAnalytics`. Mutations invalidate the relevant query keys on success (e.g. verifying an event invalidates `['admin','queue']`, that event's evidence, and `['events']`).
+
+**Polling:** `useVerificationQueue` and the admin dashboard's queue counts use `refetchInterval` (4s, `ADMIN_QUEUE_POLL_INTERVAL_MS`) with `refetchIntervalInBackground: false`; My Reports polls at 5s only while `poll: true` is requested (used right after a fresh submission so evidence status updates without a manual refresh). No `setInterval`/`useEffect` polling loops were hand-rolled — TanStack Query owns cleanup on unmount.
+
+**Local state:** `useState` for form fields, filter values, modal/menu open state — no Redux, no global state library beyond the three providers (Theme/Auth/Query).
+
+**Auth:** JWT stored in `localStorage` (`lib/authStorage.ts`); `AuthProvider` hydrates from storage on load, exposes `login`/`logout`/`hasRole`. Axios request interceptor attaches `Authorization: Bearer <token>`; response interceptor clears storage on any 401. `ProtectedRoute` redirects unauthenticated users to `/login`; `RoleRoute` renders an in-app "Access denied" page (not just a redirect) when an authenticated user's role doesn't match — frontend routing is a UX layer only, the backend's RBAC (`require_citizen`/`require_admin`/etc., unchanged) remains the actual authority.
+
+**Theme system:** dark-default, subtle blue-slate (not near-black) per the design brief, implemented as CSS custom properties in `styles/index.css` under `:root`/`[data-theme='dark']`/`[data-theme='light']`, re-exposed to Tailwind v4 via `@theme inline` so components just use `bg-surface`, `text-muted`, `border-border`, etc. — no component hardcodes a hex color. `ThemeProvider` persists the choice to `localStorage` (`ps69_theme`) and sets `data-theme` on `<html>`; `Topbar` has the toggle.
+
+**Evidence Status vs Final Verification Status:** kept as two independent label/tone maps in `constants/status.ts` and two separate badge components (`EvidenceStatusBadge`, `FinalStatusBadge`) — neither is ever derived from the other anywhere in the codebase (a `CONFLICTING`-evidence event can be `VERIFIED`, and this is intentionally representable in the UI, not collapsed into one status).
+
+**Map:** `components/maps/EventMap.tsx` wraps `react-leaflet` + OpenStreetMap tiles; `features/events/EventsMapView.tsx` fetches real events, filters out any without coordinates (documented count shown, not hidden), and fits map bounds to the actual marker set. Used by Citizen (locked to `VERIFIED`) and Analyst (all statuses) map pages.
+
+**Analytics:** the backend has no dedicated aggregation/stats endpoint. `features/analytics/useAnalytics.ts` fetches up to 500 events (the API's max page size — acceptable for current data volumes, called out as the next backend improvement if event volume grows) and derives every number (totals by final status, category breakdown, events-over-time, top locations) client-side from that live data. No chart in `AnalystAnalyticsPage` uses a hardcoded number.
+
+**No development-phase names in product UI:** navigation and page titles use "Dashboard", "Weather Events", "Analytics", "Verification Queue", "Map", "My Reports", etc. — "Phase 5/6/7" only appears in this document, `phase5/API.md`, code comments, and test filenames.
+
+### Testing
+
+**Frontend (Vitest + Testing Library), `npm test` (`vitest run`) — 28 passed, 0 failed, across 11 files:** theme default/toggle/persistence; `ProtectedRoute` redirect; `RoleRoute` access-denied vs allowed; login success + error display; `ReportForm` validation (missing fields, non-numeric coordinates) and correct payload shape; `EvidenceStatusBadge`/`FinalStatusBadge` never conflating the two axes; shared loading/error/empty state components; My Reports loading/error/empty/populated; admin queue loading/populated/empty; evidence detail rendering plus the "notes required for REJECTED, not required for VERIFIED" validation and the verify mutation call shape; Analyst events page confirmed to render no verification-decision controls (read-only).
+
+**Backend:** `pytest phase5/tests -q` → **70 passed, 0 failed** (see above).
+
+**Build:** `npm run build` (`tsc -b && vite build`) succeeds with zero TypeScript errors and zero broken imports. Bundle is a single ~925 KB (279 KB gzipped) JS chunk — Vite's default chunk-size advisory notes this could be code-split further (e.g. lazy-loading the Leaflet/Recharts-heavy pages), which was not done in this pass since it doesn't affect correctness.
+
+### Known limitations, stated honestly
+
+- Analytics aggregates from a single 500-event page rather than a true backend aggregation endpoint — fine for current volumes, would need a real `GET /analytics/summary`-style endpoint if event counts grow substantially.
+- The JS bundle isn't code-split; first load pulls in Leaflet and Recharts even for a citizen who never opens the map or an analyst dashboard.
+- Frontend tests mock the feature-hook layer (`useMyReports`, `useVerificationQueue`, etc.) rather than spinning up a real backend per test — the actual API contracts were instead verified live via `curl` against a running FastAPI + PostgreSQL/PostGIS instance (documented above), and via the 70-test backend pytest suite. There is no automated end-to-end (browser + real backend) test in this pass.
+- `role: 'CITIZEN'` is sent explicitly in the frontend's register call for clarity, even though the backend already enforces CITIZEN-only registration server-side regardless of what's sent — see Phase 5's own locked-in convention above.
 
 ---
 

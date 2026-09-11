@@ -141,6 +141,17 @@ Get status of a report.
 **Error (403):** Access denied (citizen viewing other user's report)
 **Error (404):** Report not found
 
+### GET /reports/me
+List only the authenticated user's own submitted reports with pagination.
+
+**Authorization:** Any authenticated user; results are always scoped to the caller.
+
+**Query Parameters:**
+- `limit` (optional, default=20, max=100)
+- `offset` (optional, default=0)
+
+The response includes report-level `verification_status`, system `evidence_status`, and linked event `final_verification_status` separately.
+
 ## Events
 
 ### GET /events
@@ -150,9 +161,12 @@ List weather events with role-based filtering.
 
 **Query Parameters:**
 - `status` (optional): `VERIFIED`, `NEEDS_REVIEW`, `REJECTED`
+- `evidence_status` (optional): `SUPPORTED`, `CONFLICTING`, `UNVERIFIED`, `INSUFFICIENT_EVIDENCE`
+- `event_type` (optional): event category such as `RAINFALL`, `FLOODING`
 - `severity` (optional): `LOW`, `MEDIUM`, `HIGH`, `EXTREME`
 - `city` (optional): Location name filter
-- `limit` (optional, default=50, max=1000): Pagination limit
+- `start_date` / `end_date` (optional): `start_time` range
+- `limit` (optional, default=50, max=500): Pagination limit
 - `offset` (optional, default=0): Pagination offset
 
 **Role-Based Visibility:**

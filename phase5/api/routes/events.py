@@ -11,6 +11,7 @@ Role-scoped visibility:
 import logging
 from uuid import UUID
 from typing import Optional, List
+from datetime import datetime
 
 from fastapi import APIRouter, HTTPException, status, Depends, Query
 from sqlalchemy.orm import Session
@@ -28,8 +29,12 @@ router = APIRouter()
 @router.get("", response_model=EventListResponse)
 def list_events(
     status_filter: Optional[str] = Query(None, alias="status"),
+    evidence_status: Optional[str] = Query(None),
+    event_type: Optional[str] = Query(None),
     severity: Optional[str] = Query(None),
     city: Optional[str] = Query(None),
+    start_date: Optional[datetime] = Query(None),
+    end_date: Optional[datetime] = Query(None),
     limit: int = Query(50, ge=1, le=500),
     offset: int = Query(0, ge=0),
     current_user: dict = Depends(get_current_user),
@@ -40,8 +45,11 @@ def list_events(
     
     Filtering:
     - status: VERIFIED|NEEDS_REVIEW|REJECTED (final_verification_status)
+    - evidence_status: SUPPORTED|CONFLICTING|UNVERIFIED|INSUFFICIENT_EVIDENCE
+    - event_type: event category
     - severity: LOW|MEDIUM|HIGH|EXTREME
     - city: Filter by city
+    - start_date/end_date: start_time range
     
     Authorization:
     - CITIZEN: only final_verification_status=VERIFIED
@@ -61,11 +69,23 @@ def list_events(
             if current_user["role"] != "CITIZEN":  # Citizens can't filter to unverified
                 query = query.where(WeatherEvent.final_verification_status == status_filter)
     
+    if evidence_status and evidence_status in {"SUPPORTED", "CONFLICTING", "UNVERIFIED", "INSUFFICIENT_EVIDENCE"}:
+        query = query.where(WeatherEvent.evidence_status == evidence_status)
+
+    if event_type:
+        query = query.where(WeatherEvent.event_type == event_type)
+
     if severity and severity in {"LOW", "MEDIUM", "HIGH", "EXTREME"}:
         query = query.where(WeatherEvent.severity == severity)
-    
+
     if city:
         query = query.where(WeatherEvent.location_name.like(f"%{city}%"))
+
+    if start_date:
+        query = query.where(WeatherEvent.start_time >= start_date)
+
+    if end_date:
+        query = query.where(WeatherEvent.start_time <= end_date)
     
     # Get total count using the same filtered query (before pagination).
     count_query = select(func.count()).select_from(WeatherEvent)
@@ -73,10 +93,18 @@ def list_events(
         count_query = count_query.where(WeatherEvent.final_verification_status == "VERIFIED")
     if status_filter and status_filter in {"VERIFIED", "NEEDS_REVIEW", "REJECTED"} and current_user["role"] != "CITIZEN":
         count_query = count_query.where(WeatherEvent.final_verification_status == status_filter)
+    if evidence_status and evidence_status in {"SUPPORTED", "CONFLICTING", "UNVERIFIED", "INSUFFICIENT_EVIDENCE"}:
+        count_query = count_query.where(WeatherEvent.evidence_status == evidence_status)
+    if event_type:
+        count_query = count_query.where(WeatherEvent.event_type == event_type)
     if severity and severity in {"LOW", "MEDIUM", "HIGH", "EXTREME"}:
         count_query = count_query.where(WeatherEvent.severity == severity)
     if city:
         count_query = count_query.where(WeatherEvent.location_name.like(f"%{city}%"))
+    if start_date:
+        count_query = count_query.where(WeatherEvent.start_time >= start_date)
+    if end_date:
+        count_query = count_query.where(WeatherEvent.start_time <= end_date)
     total_count = db.execute(count_query).scalar_one()
     
     # Apply pagination
@@ -85,9 +113,28 @@ def list_events(
         .limit(limit)
         .offset(offset)
     ).scalars().all()
-    
+
+    # Phase 7: batch-extract lon/lat for every event in this page in a single
+    # query (avoids N+1 ST_X/ST_Y calls). WeatherEvent.location is already
+    # populated at submission time (routes/reports.py) when coordinates were
+    # provided; this only reads it, no schema change.
+    event_ids = [e.event_id for e in events]
+    coords_by_id: dict = {}
+    if event_ids:
+        coord_rows = db.execute(
+            select(
+                WeatherEvent.event_id,
+                func.ST_X(WeatherEvent.location),
+                func.ST_Y(WeatherEvent.location),
+            ).where(WeatherEvent.event_id.in_(event_ids))
+        ).all()
+        coords_by_id = {row[0]: (row[1], row[2]) for row in coord_rows}
+
     return EventListResponse(
-        events=[_event_to_response(e) for e in events],
+        events=[
+            _event_to_response(e, *coords_by_id.get(e.event_id, (None, None)))
+            for e in events
+        ],
         total=total_count,
         limit=limit,
         offset=offset,
@@ -125,11 +172,22 @@ def get_event(
                 detail="You don't have permission to view this event",
             )
     
-    return _event_to_response(event)
+    longitude, latitude = db.execute(
+        select(func.ST_X(WeatherEvent.location), func.ST_Y(WeatherEvent.location)).where(
+            WeatherEvent.event_id == event_id
+        )
+    ).first() or (None, None)
+
+    return _event_to_response(event, longitude, latitude)
 
 
-def _event_to_response(event: WeatherEvent) -> EventResponse:
-    """Convert database WeatherEvent to response schema."""
+def _event_to_response(event: WeatherEvent, longitude: Optional[float] = None, latitude: Optional[float] = None) -> EventResponse:
+    """Convert database WeatherEvent to response schema.
+
+    longitude/latitude are passed in separately (extracted via ST_X/ST_Y in the
+    same query as the event, see list_events/get_event) rather than re-queried
+    per row, to avoid N+1 PostGIS calls.
+    """
     return EventResponse(
         event_id=event.event_id,
         event_type=event.event_type,
@@ -137,6 +195,8 @@ def _event_to_response(event: WeatherEvent) -> EventResponse:
         severity=event.severity,
         start_time=event.start_time,
         end_time=event.end_time,
+        latitude=latitude,
+        longitude=longitude,
         evidence_status=event.evidence_status,
         evidence_support_score=event.evidence_support_score,
         evidence_detail=event.evidence_detail,

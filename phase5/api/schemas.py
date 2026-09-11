@@ -96,12 +96,27 @@ class ReportStatusResponse(BaseModel):
     verification_status: str
     evidence_status: Optional[str]
     evidence_support_score: Optional[float]
+    final_verification_status: Optional[str] = None
     created_at: datetime
     updated_at: datetime
     event_id: Optional[UUID] = None
     
     class Config:
         from_attributes = True
+
+
+# ============================================================================
+# PHASE 7: MY REPORTS LIST SCHEMA
+# Additive only. Reuses ReportStatusResponse per-item instead of duplicating
+# its fields. Backing endpoint: GET /reports/me (see routes/reports.py).
+# ============================================================================
+
+class ReportListResponse(BaseModel):
+    """Paginated list of the authenticated user's own submitted reports."""
+    reports: List[ReportStatusResponse]
+    total: int
+    limit: int
+    offset: int
 
 
 # ============================================================================
@@ -134,6 +149,14 @@ class EventResponse(BaseModel):
     severity: str
     start_time: datetime
     end_time: Optional[datetime] = None
+
+    # Phase 7 addition: surfaces the PostGIS point already stored on
+    # WeatherEvent.location so the frontend map can plot real coordinates
+    # instead of geocoding location_name. Null when a report was submitted
+    # without coordinates. No schema/column change — this is read from the
+    # existing geometry column via ST_X/ST_Y in routes/events.py.
+    latitude: Optional[float] = None
+    longitude: Optional[float] = None
     
     # Evidence Status (Phase 3C)
     evidence_status: str  # SUPPORTED, CONFLICTING, UNVERIFIED, INSUFFICIENT_EVIDENCE

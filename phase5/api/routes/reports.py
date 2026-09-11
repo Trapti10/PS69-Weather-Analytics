@@ -23,7 +23,7 @@ from uuid import UUID
 from typing import Optional
 from datetime import datetime, timezone, timedelta
 
-from fastapi import APIRouter, HTTPException, status, Depends
+from fastapi import APIRouter, HTTPException, status, Depends, Query
 from sqlalchemy.orm import Session
 from sqlalchemy import select, and_, func, cast
 from geoalchemy2 import functions as geofuncs
@@ -41,7 +41,12 @@ from corroboration.report_correlator import correlate_report, build_default_evid
 
 # Phase 5 database models
 from phase5.api.models import WeatherReport, WeatherEvent, AuditLog
-from phase5.api.schemas import ReportSubmissionRequest, ReportSubmissionResponse, ReportStatusResponse
+from phase5.api.schemas import (
+    ReportSubmissionRequest,
+    ReportSubmissionResponse,
+    ReportStatusResponse,
+    ReportListResponse,
+)
 from phase5.api.db import get_db
 from phase5.api.auth.rbac import get_current_user
 
@@ -415,6 +420,7 @@ def get_report_status(
 
     event_evidence_status = None
     event_evidence_score = None
+    event_final_verification_status = None
     
     if report.event_id:
         event = db.execute(
@@ -424,6 +430,7 @@ def get_report_status(
         if event:
             event_evidence_status = event.evidence_status
             event_evidence_score = event.evidence_support_score
+            event_final_verification_status = event.final_verification_status
     
     return ReportStatusResponse(
         report_id=report.report_id,
@@ -435,7 +442,100 @@ def get_report_status(
         verification_status=report.verification_status,
         evidence_status=event_evidence_status,
         evidence_support_score=event_evidence_score,
+        final_verification_status=event_final_verification_status,
         created_at=report.created_at,
         updated_at=report.updated_at,
         event_id=report.event_id,
     )
+
+
+# ============================================================================
+# PHASE 7: GET /reports/me — the citizen "My Reports" view.
+#
+# WHY THIS WAS ADDED: the frontend needs a real, backend-driven way to list a
+# user's own submitted reports. Phase 5 only exposed POST /reports and
+# GET /reports/{id}/status (single-report lookup), with no list endpoint.
+# Rather than fabricate this data in the frontend (or track it client-side in
+# localStorage, which would break across devices/browsers and isn't
+# real backend state), this endpoint was added.
+#
+# WHAT WAS CHANGED / WHAT WASN'T:
+# - No database schema change: WeatherReport.author_id_or_hash already encodes
+#   the submitting user as f"user:{user_id}" (set in submit_report above), and
+#   get_report_status already relies on exact-matching that same string for
+#   its own-report authorization check. This endpoint reuses that exact
+#   convention rather than introducing a new column or migration.
+# - No existing route, schema, or model was modified. ReportListResponse
+#   (schemas.py) and this function are additive; they reuse ReportStatusResponse
+#   per item instead of duplicating its fields.
+# - Authorization follows the same model already used elsewhere in this file:
+#   any authenticated user (CITIZEN/ANALYST/ADMIN) may call this endpoint, and
+#   it always returns only *that caller's own* reports — there is no
+#   "list everyone's reports" mode here, so no new privilege is introduced.
+# - Real PostgreSQL pagination (limit/offset) plus a total count, following the
+#   same limit/offset/total shape already used by GET /events and
+#   GET /admin/verification-queue.
+# ============================================================================
+
+@router.get("/me", response_model=ReportListResponse)
+def list_my_reports(
+    limit: int = Query(20, ge=1, le=100),
+    offset: int = Query(0, ge=0),
+    current_user: dict = Depends(get_current_user),
+    db: Session = Depends(get_db),
+) -> ReportListResponse:
+    """
+    List the authenticated user's own submitted reports, newest first.
+
+    Authorization: always scoped to the caller (str(author_id_or_hash) ==
+    f"user:{current_user['user_id']}"), for every role. There is no
+    cross-user listing here.
+    """
+    author_key = f"user:{current_user['user_id']}"
+
+    count_query = (
+        select(func.count())
+        .select_from(WeatherReport)
+        .where(WeatherReport.author_id_or_hash == author_key)
+    )
+    total = db.execute(count_query).scalar_one()
+
+    reports = db.execute(
+        select(WeatherReport)
+        .where(WeatherReport.author_id_or_hash == author_key)
+        .order_by(WeatherReport.created_at.desc())
+        .limit(limit)
+        .offset(offset)
+    ).scalars().all()
+
+    # Batch-fetch linked events in one query to avoid N+1 lookups.
+    event_ids = [r.event_id for r in reports if r.event_id is not None]
+    events_by_id = {}
+    if event_ids:
+        linked_events = db.execute(
+            select(WeatherEvent).where(WeatherEvent.event_id.in_(event_ids))
+        ).scalars().all()
+        events_by_id = {e.event_id: e for e in linked_events}
+
+    items = []
+    for r in reports:
+        linked_event = events_by_id.get(r.event_id) if r.event_id else None
+        items.append(
+            ReportStatusResponse(
+                report_id=r.report_id,
+                source_type=r.source_type,
+                text=r.text,
+                city=r.city,
+                state=r.state,
+                event_type=r.event_type,
+                verification_status=r.verification_status,
+                evidence_status=linked_event.evidence_status if linked_event else None,
+                evidence_support_score=linked_event.evidence_support_score if linked_event else None,
+                final_verification_status=linked_event.final_verification_status if linked_event else None,
+                created_at=r.created_at,
+                updated_at=r.updated_at,
+                event_id=r.event_id,
+            )
+        )
+
+    return ReportListResponse(reports=items, total=total, limit=limit, offset=offset)

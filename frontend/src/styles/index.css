@@ -1,0 +1,174 @@
+@import "tailwindcss";
+
+/* ==========================================================================
+   PS69 Weather Analytics — Design Tokens
+   Subtle blue-slate intelligence theme. Dark is default, light is supported.
+   All components consume these CSS variables — never hardcode raw colors.
+   ========================================================================== */
+
+:root {
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.08);
+  --shadow-md: 0 4px 16px rgba(15, 23, 42, 0.12);
+  --shadow-lg: 0 12px 32px rgba(15, 23, 42, 0.18);
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+}
+
+/* ---------- Dark theme (default) ---------- */
+:root,
+[data-theme='dark'] {
+  --color-background: #0f1620;
+  --color-surface: #151f2c;
+  --color-surface-muted: #1b2635;
+  --color-surface-hover: #202c3d;
+  --color-foreground: #e7ecf3;
+  --color-muted: #93a3b8;
+  --color-border: #26334533;
+  --color-border-strong: #2c3b50;
+
+  --color-primary: #4f8ff0;
+  --color-primary-hover: #6ba0f2;
+  --color-primary-foreground: #0b1220;
+
+  --color-success: #34c78e;
+  --color-success-bg: #16302a;
+  --color-warning: #f0b654;
+  --color-warning-bg: #382c15;
+  --color-danger: #f0616b;
+  --color-danger-bg: #341a1e;
+  --color-info: #58b8e0;
+  --color-info-bg: #16303a;
+
+  /* Chart series palette — used by Recharts via constants/chartColors.ts.
+     Chosen to stay legible against the dark surface while still reading
+     clearly as distinct categories. */
+  --color-chart-1: #4f8ff0;
+  --color-chart-2: #34c78e;
+  --color-chart-3: #f0b654;
+  --color-chart-4: #f0616b;
+  --color-chart-5: #58b8e0;
+  --color-chart-6: #a78bfa;
+  --color-chart-7: #f472b6;
+  --color-chart-8: #facc15;
+}
+
+/* ---------- Light theme ---------- */
+[data-theme='light'] {
+  --color-background: #f5f7fb;
+  --color-surface: #ffffff;
+  --color-surface-muted: #eef2f8;
+  --color-surface-hover: #e6ecf5;
+  --color-foreground: #101826;
+  --color-muted: #5b6b81;
+  --color-border: #d8e0ec;
+  --color-border-strong: #c3d0e0;
+
+  --color-primary: #2f6fe0;
+  --color-primary-hover: #245ec2;
+  --color-primary-foreground: #ffffff;
+
+  --color-success: #1a9b6a;
+  --color-success-bg: #e4f6ee;
+  --color-warning: #b3790f;
+  --color-warning-bg: #fbf0dc;
+  --color-danger: #d43f4c;
+  --color-danger-bg: #fbe6e8;
+  --color-info: #1c85ad;
+  --color-info-bg: #e2f3f9;
+
+  /* Chart series palette — slightly deepened for contrast against the
+     light surface while keeping the same hue identity as the dark theme. */
+  --color-chart-1: #2f6fe0;
+  --color-chart-2: #1a9b6a;
+  --color-chart-3: #b3790f;
+  --color-chart-4: #d43f4c;
+  --color-chart-5: #1c85ad;
+  --color-chart-6: #7c5cf0;
+  --color-chart-7: #d1467e;
+  --color-chart-8: #b58a05;
+}
+
+@theme inline {
+  --color-background: var(--color-background);
+  --color-surface: var(--color-surface);
+  --color-surface-muted: var(--color-surface-muted);
+  --color-surface-hover: var(--color-surface-hover);
+  --color-foreground: var(--color-foreground);
+  --color-muted: var(--color-muted);
+  --color-border: var(--color-border);
+  --color-border-strong: var(--color-border-strong);
+  --color-primary: var(--color-primary);
+  --color-primary-hover: var(--color-primary-hover);
+  --color-primary-foreground: var(--color-primary-foreground);
+  --color-success: var(--color-success);
+  --color-success-bg: var(--color-success-bg);
+  --color-warning: var(--color-warning);
+  --color-warning-bg: var(--color-warning-bg);
+  --color-danger: var(--color-danger);
+  --color-danger-bg: var(--color-danger-bg);
+  --color-info: var(--color-info);
+  --color-info-bg: var(--color-info-bg);
+  --color-chart-1: var(--color-chart-1);
+  --color-chart-2: var(--color-chart-2);
+  --color-chart-3: var(--color-chart-3);
+  --color-chart-4: var(--color-chart-4);
+  --color-chart-5: var(--color-chart-5);
+  --color-chart-6: var(--color-chart-6);
+  --color-chart-7: var(--color-chart-7);
+  --color-chart-8: var(--color-chart-8);
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-border-strong);
+  border-radius: 8px;
+}
+
+.leaflet-container {
+  background: var(--color-surface-muted) !important;
+  border-radius: var(--radius-md);
+}
+
+.leaflet-popup-content-wrapper {
+  background: var(--color-surface) !important;
+  color: var(--color-foreground) !important;
+  border-radius: var(--radius-sm) !important;
+}
+.leaflet-popup-tip {
+  background: var(--color-surface) !important;
+}
