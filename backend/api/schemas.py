@@ -357,3 +357,4 @@ class ErrorResponse(BaseModel):
     detail: str
     code: Optional[str] = None
     timestamp: datetime = Field(default_factory=datetime.utcnow)
+

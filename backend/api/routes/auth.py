@@ -8,10 +8,10 @@ from sqlalchemy.orm import Session
 from sqlalchemy import select
 import logging
 
-from backend.api.models import User
-from backend.api.schemas import UserRegisterRequest, UserLoginRequest, TokenResponse
-from backend.api.db import get_db
-from backend.api.auth.jwt_handler import JWTHandler, create_tokens_for_user
+from api.models import User
+from api.schemas import UserRegisterRequest, UserLoginRequest, TokenResponse
+from api.db import get_db
+from api.auth.jwt_handler import JWTHandler, create_tokens_for_user
 
 logger = logging.getLogger(__name__)
 router = APIRouter()
@@ -207,3 +207,4 @@ def refresh_token(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Error refreshing token"
         )
+

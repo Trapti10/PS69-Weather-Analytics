@@ -17,10 +17,10 @@ from fastapi import APIRouter, HTTPException, status, Depends, Query
 from sqlalchemy.orm import Session
 from sqlalchemy import select, func
 
-from backend.api.models import WeatherEvent
-from backend.api.schemas import EventResponse, EventListResponse
-from backend.api.db import get_db
-from backend.api.auth.rbac import get_current_user
+from api.models import WeatherEvent
+from api.schemas import EventResponse, EventListResponse
+from api.db import get_db
+from api.auth.rbac import get_current_user
 
 logger = logging.getLogger(__name__)
 router = APIRouter()
@@ -210,3 +210,4 @@ def _event_to_response(event: WeatherEvent, longitude: Optional[float] = None, l
         created_at=event.created_at,
         updated_at=event.updated_at,
     )
+

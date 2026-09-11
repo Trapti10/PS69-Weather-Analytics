@@ -28,10 +28,10 @@ from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
 
 # Import FastAPI app and models
-from backend.api.main import app
-from backend.api.db import Base, get_db
-from backend.api.models import User, WeatherReport, WeatherEvent, AuditLog
-from backend.api.auth.jwt_handler import JWTHandler
+from api.main import app
+from api.db import Base, get_db
+from api.models import User, WeatherReport, WeatherEvent, AuditLog
+from api.auth.jwt_handler import JWTHandler
 
 
 # Test database setup
@@ -483,7 +483,7 @@ class TestEventQuerying:
         # bare name `db_session` inside this function resolves to the
         # module-level fixture *function* object, not a session instance,
         # and `db_session.add(...)` fails with AttributeError.
-        from backend.api.auth.jwt_handler import create_tokens_for_user, JWTHandler
+        from api.auth.jwt_handler import create_tokens_for_user, JWTHandler
         analyst = User(
             email="eventanalyst@test.com",
             password_hash=JWTHandler.hash_password("TestPassword123!"),
@@ -530,3 +530,4 @@ class TestHealthAndMetadata:
 if __name__ == "__main__":
     # Run with: pytest backend/tests/test_phase5_integration.py -v
     pytest.main([__file__, "-v"])
+

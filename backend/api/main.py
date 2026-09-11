@@ -20,7 +20,7 @@ import os
 from datetime import datetime
 
 # Import routes
-from backend.api.routes import auth, reports, events
+from api.routes import auth, reports, events
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -94,7 +94,7 @@ def health_check():
 def readiness_check():
     """Readiness check - verifies database connectivity."""
     try:
-        from backend.api.db import SessionLocal
+        from api.db import SessionLocal
         db = SessionLocal()
         # Simple query to verify connectivity
         db.execute(text("SELECT 1"))
@@ -117,7 +117,7 @@ def readiness_check():
 
 # Try to include routers, handle import errors gracefully
 try:
-    from backend.api.routes import auth, reports, events, admin
+    from api.routes import auth, reports, events, admin
     app.include_router(auth.router, prefix="/auth", tags=["Authentication"])
     app.include_router(reports.router, prefix="/reports", tags=["Reports"])
     app.include_router(events.router, prefix="/events", tags=["Events"])
@@ -145,8 +145,9 @@ def root():
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(
-        "backend.api.main:app",
+        "api.main:app",
         host=os.getenv("FASTAPI_HOST", "0.0.0.0"),
         port=int(os.getenv("FASTAPI_PORT", 8000)),
         reload=os.getenv("FASTAPI_ENV", "development") == "development",
     )
+

@@ -310,3 +310,4 @@ def prepare_event_data(
         "report_count": len(all_reports),
         "unique_sources": len(sources),
     }
+

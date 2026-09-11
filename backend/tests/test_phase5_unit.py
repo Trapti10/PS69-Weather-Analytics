@@ -31,14 +31,14 @@ except ImportError:
     # Fallback: try direct imports
     from schemas.weather_report import WeatherReport, EVENT_TYPES, VERIFICATION_STATUSES, SOURCE_TYPES
 # Test imports of Phase 5
-from backend.api.schemas import (
+from api.schemas import (
     ReportSubmissionRequest,
     ReportSubmissionResponse,
     UserRegisterRequest,
     UserLoginRequest,
     TokenResponse,
 )
-from backend.api.auth.jwt_handler import JWTHandler
+from api.auth.jwt_handler import JWTHandler
 
 
 class TestPhase1to4CImports:
@@ -349,7 +349,7 @@ class TestPhase5Configuration:
     
     def test_pydantic_schema_imports(self):
         """Test that all Pydantic schemas are importable."""
-        from backend.api.schemas import (
+        from api.schemas import (
             ReportStatusResponse,
             EventResponse,
             EventListResponse,
@@ -362,13 +362,13 @@ class TestPhase5Configuration:
     
     def test_db_config_imports(self):
         """Test that database configuration imports work."""
-        from backend.api.config import get_settings
+        from api.config import get_settings
         settings = get_settings()
         assert settings is not None
     
     def test_auth_rbac_imports(self):
         """Test that RBAC imports work."""
-        from backend.api.auth.rbac import require_citizen, require_analyst, require_admin
+        from api.auth.rbac import require_citizen, require_analyst, require_admin
         assert require_citizen is not None
         assert require_analyst is not None
         assert require_admin is not None
@@ -376,3 +376,4 @@ class TestPhase5Configuration:
 
 if __name__ == "__main__":
     pytest.main([__file__, "-v", "--tb=short"])
+

@@ -8,7 +8,7 @@ from functools import wraps
 from typing import Optional, Callable
 import logging
 
-from backend.api.auth.jwt_handler import JWTHandler
+from api.auth.jwt_handler import JWTHandler
 
 logger = logging.getLogger(__name__)
 
@@ -103,3 +103,4 @@ def get_current_user(request: Request) -> dict:
         "email": payload.get("email"),
         "role": payload.get("role"),
     }
+

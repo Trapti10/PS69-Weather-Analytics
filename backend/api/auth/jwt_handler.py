@@ -9,7 +9,7 @@ from jose import JWTError, jwt
 from passlib.context import CryptContext
 import logging
 
-from backend.api.config import get_settings
+from api.config import get_settings
 
 logger = logging.getLogger(__name__)
 
@@ -131,3 +131,4 @@ def create_tokens_for_user(user_id: str, email: str, role: str) -> dict:
         "token_type": "bearer",
         "expires_in": settings.JWT_EXPIRATION_HOURS * 3600,  # seconds
     }
+

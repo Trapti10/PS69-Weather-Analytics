@@ -19,8 +19,8 @@ from fastapi.testclient import TestClient
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
 
-from backend.api.main import app
-from backend.api.db import Base, get_db
+from api.main import app
+from api.db import Base, get_db
 
 TEST_DATABASE_URL = os.getenv(
     "TEST_DATABASE_URL",
@@ -113,7 +113,7 @@ class TestEventCoordinates:
 
         # Promote this user to ADMIN directly via the test DB session so they can
         # see the (likely NEEDS_REVIEW) event through GET /events and GET /events/{id}.
-        from backend.api.models import User
+        from api.models import User
 
         user_obj = db_session.query(User).filter(User.email == "coorduser@test.com").first()
         assert user_obj is not None
@@ -150,7 +150,7 @@ class TestEventFilters:
     """Phase 7 regression: dashboard filters must map to real backend query parameters."""
 
     def test_event_type_and_date_filters(self, client, db_session):
-        from backend.api.models import User
+        from api.models import User
         from datetime import datetime, timezone
 
         token = _register(client, "filteruser@test.com")
@@ -199,3 +199,4 @@ class TestEventFilters:
         )
         assert filtered_by_date.status_code == 200
         assert filtered_by_date.json()["total"] >= 2
+

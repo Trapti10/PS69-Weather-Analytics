@@ -8,7 +8,7 @@ from sqlalchemy.orm import sessionmaker, Session, declarative_base
 from sqlalchemy.pool import QueuePool
 import logging
 
-from backend.api.config import get_database_url, get_settings
+from api.config import get_database_url, get_settings
 
 logger = logging.getLogger(__name__)
 
@@ -96,3 +96,4 @@ def drop_all_tables():
     """Drop all tables (for testing/reset only)."""
     Base.metadata.drop_all(bind=engine)
     logger.warning("All database tables dropped")
+

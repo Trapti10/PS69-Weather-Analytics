@@ -19,8 +19,8 @@ from fastapi.testclient import TestClient
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
 
-from backend.api.main import app
-from backend.api.db import Base, get_db
+from api.main import app
+from api.db import Base, get_db
 
 TEST_DATABASE_URL = os.getenv(
     "TEST_DATABASE_URL",
@@ -193,3 +193,4 @@ class TestMyReportsEndpoint:
         assert "verification_status" in item
         assert "final_verification_status" in item
         assert "created_at" in item
+

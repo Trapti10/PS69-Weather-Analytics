@@ -11,7 +11,7 @@ from geoalchemy2 import Geometry
 from datetime import datetime
 import uuid
 
-from backend.api.db import Base
+from api.db import Base
 
 
 class User(Base):
@@ -180,3 +180,4 @@ class AuditLog(Base):
     
     # Relationships
     actor = relationship("User", back_populates="audit_log_entries")
+

@@ -33,10 +33,10 @@ from fastapi.testclient import TestClient
 from sqlalchemy import create_engine, text, select
 from sqlalchemy.orm import sessionmaker
 
-from backend.api.main import app
-from backend.api.db import Base, get_db
-from backend.api.models import User, WeatherEvent, WeatherReport, AdminReviewAction, AuditLog
-from backend.api.auth.jwt_handler import JWTHandler, create_tokens_for_user
+from api.main import app
+from api.db import Base, get_db
+from api.models import User, WeatherEvent, WeatherReport, AdminReviewAction, AuditLog
+from api.auth.jwt_handler import JWTHandler, create_tokens_for_user
 
 TEST_DATABASE_URL = os.getenv(
     "TEST_DATABASE_URL",
@@ -554,3 +554,4 @@ class TestQueueFiltering:
 
 if __name__ == "__main__":
     pytest.main([__file__, "-v", "--tb=short"])
+

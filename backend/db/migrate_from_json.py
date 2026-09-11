@@ -43,8 +43,8 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(REPO_ROOT))
 sys.path.insert(0, str(REPO_ROOT / "src"))
 
-from backend.api.db import Base
-from backend.api.models import WeatherReport
+from api.db import Base
+from api.models import WeatherReport
 
 
 def validate_coordinates(lat, lon):
@@ -263,3 +263,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

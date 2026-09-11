@@ -40,15 +40,15 @@ from corroboration.verification_engine import verify_report
 from corroboration.report_correlator import correlate_report, build_default_evidence_sources
 
 # Phase 5 database models
-from backend.api.models import WeatherReport, WeatherEvent, AuditLog
-from backend.api.schemas import (
+from api.models import WeatherReport, WeatherEvent, AuditLog
+from api.schemas import (
     ReportSubmissionRequest,
     ReportSubmissionResponse,
     ReportStatusResponse,
     ReportListResponse,
 )
-from backend.api.db import get_db
-from backend.api.auth.rbac import get_current_user
+from api.db import get_db
+from api.auth.rbac import get_current_user
 
 logger = logging.getLogger(__name__)
 router = APIRouter()
@@ -539,3 +539,4 @@ def list_my_reports(
         )
 
     return ReportListResponse(reports=items, total=total, limit=limit, offset=offset)
+
