@@ -29,8 +29,8 @@ logger = logging.getLogger(__name__)
 # Create FastAPI app
 app = FastAPI(
     title="PS69 Weather Analytics",
-    description="National Weather Intelligence Platform - Phase 5 Foundation",
-    version="0.5.0",
+    description="National Weather Intelligence Platform - Phase 7",
+version="0.7.0",
     docs_url="/docs",
     redoc_url="/redoc",
 )
@@ -132,7 +132,7 @@ def root():
     """Root endpoint - API information."""
     return {
         "app": "PS69 Weather Analytics",
-        "phase": "Phase 5 - Foundation",
+        "phase":"Phase 7",
         "processing_model": "Synchronous (no async queue)",
         "database": "PostgreSQL + PostGIS",
         "endpoints": {

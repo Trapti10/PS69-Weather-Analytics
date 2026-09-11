@@ -1,0 +1,42 @@
+# Git
+.git/
+.gitignore
+
+# Python
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Node / frontend
+frontend/node_modules/
+frontend/dist/
+node_modules/
+
+# Logs
+*.log
+
+# Local environment / secrets
+.env
+.env.local
+.env.*.local
+.env.phase5
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Archives
+*.zip
+
+# Local generated caches
+.vite/
+
+# Large project datasets
+data/
