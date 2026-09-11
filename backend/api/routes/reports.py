@@ -30,7 +30,7 @@ from geoalchemy2 import functions as geofuncs
 from geoalchemy2 import Geography
 
 # Import Phase 1-4C pipeline modules
-sys.path.insert(0, str(Path(__file__).resolve().parents[3] / "src"))
+sys.path.insert(0, "/app/src")
 
 from schemas.weather_report import WeatherReport as Phase3AWeatherReport, EVENT_TYPES
 from ingestion.report_normalizer import normalize_report
