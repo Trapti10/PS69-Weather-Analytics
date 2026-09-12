@@ -20,7 +20,12 @@ import os
 from datetime import datetime
 
 # Import routes
-from api.routes import auth, reports, events
+
+from api.db import create_tables
+from api import models
+
+
+
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -34,6 +39,12 @@ version="0.7.0",
     docs_url="/docs",
     redoc_url="/redoc",
 )
+
+@app.on_event("startup")
+def startup():
+    logger.info("Initializing database tables...")
+    create_tables()
+    logger.info("Database tables created/verified successfully")
 
 # CORS middleware
 origins = os.getenv("CORS_ORIGINS", "http://localhost:3000,http://localhost:8000").split(",")
