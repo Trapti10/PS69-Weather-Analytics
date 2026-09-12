@@ -11,6 +11,8 @@ Synchronous processing model:
 No async queue, no background workers, no message broker in MVP.
 """
 
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI, Request, status
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
@@ -19,35 +21,55 @@ import logging
 import os
 from datetime import datetime
 
-# Import routes
-
 from api.db import create_tables
 from api import models
-
-
 
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+
+# Database initialization lifecycle
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """
+    Application lifecycle handler.
+
+    Creates/verifies all SQLAlchemy tables before the application
+    starts accepting requests.
+    """
+    logger.info("Initializing database tables...")
+
+    try:
+        create_tables()
+        logger.info("Database tables created/verified successfully")
+    except Exception:
+        logger.exception("Database table initialization failed")
+        raise
+
+    yield
+
+    logger.info("Application shutdown complete")
+
+
 # Create FastAPI app
 app = FastAPI(
     title="PS69 Weather Analytics",
     description="National Weather Intelligence Platform - Phase 7",
-version="0.7.0",
+    version="0.7.0",
     docs_url="/docs",
     redoc_url="/redoc",
+    lifespan=lifespan,
 )
 
-@app.on_event("startup")
-def startup():
-    logger.info("Initializing database tables...")
-    create_tables()
-    logger.info("Database tables created/verified successfully")
 
 # CORS middleware
-origins = os.getenv("CORS_ORIGINS", "http://localhost:3000,http://localhost:8000").split(",")
+origins = os.getenv(
+    "CORS_ORIGINS",
+    "http://localhost:3000,http://localhost:8000"
+).split(",")
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
@@ -56,39 +78,43 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 # Request logging middleware
 @app.middleware("http")
 async def log_requests(request: Request, call_next):
     """Log incoming requests and outgoing responses."""
     start_time = datetime.now()
-    
+
     # Process request
     response = await call_next(request)
-    
+
     # Calculate latency
     process_time = (datetime.now() - start_time).total_seconds()
-    
+
     # Log
     logger.info(
         f"{request.method} {request.url.path} - "
         f"Status: {response.status_code} - "
         f"Latency: {process_time:.3f}s"
     )
-    
+
     # Add latency header
     response.headers["X-Process-Time"] = str(process_time)
-    
+
     return response
+
 
 # Error handling
 @app.exception_handler(Exception)
 async def global_exception_handler(request: Request, exc: Exception):
     """Global exception handler."""
     logger.error(f"Unhandled exception: {exc}", exc_info=True)
+
     return JSONResponse(
         status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
         content={"detail": "Internal server error"},
     )
+
 
 # Health check
 @app.get("/health")
@@ -100,23 +126,29 @@ def health_check():
         "version": "0.5.0",
     }
 
+
 # Ready check (includes DB connectivity)
 @app.get("/ready")
 def readiness_check():
     """Readiness check - verifies database connectivity."""
     try:
         from api.db import SessionLocal
+
         db = SessionLocal()
+
         # Simple query to verify connectivity
         db.execute(text("SELECT 1"))
         db.close()
+
         return {
             "status": "ready",
             "database": "connected",
             "timestamp": datetime.now().isoformat(),
         }
+
     except Exception as e:
         logger.error(f"Database connectivity check failed: {e}")
+
         return JSONResponse(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
             content={
@@ -126,16 +158,40 @@ def readiness_check():
             },
         )
 
-# Try to include routers, handle import errors gracefully
+
+# Include routers
 try:
     from api.routes import auth, reports, events, admin
-    app.include_router(auth.router, prefix="/auth", tags=["Authentication"])
-    app.include_router(reports.router, prefix="/reports", tags=["Reports"])
-    app.include_router(events.router, prefix="/events", tags=["Events"])
-    app.include_router(admin.router, prefix="/admin", tags=["Admin - Phase 6 Verification Workflow"])
+
+    app.include_router(
+        auth.router,
+        prefix="/auth",
+        tags=["Authentication"]
+    )
+
+    app.include_router(
+        reports.router,
+        prefix="/reports",
+        tags=["Reports"]
+    )
+
+    app.include_router(
+        events.router,
+        prefix="/events",
+        tags=["Events"]
+    )
+
+    app.include_router(
+        admin.router,
+        prefix="/admin",
+        tags=["Admin - Phase 6 Verification Workflow"]
+    )
+
     logger.info("Routes imported successfully")
+
 except ImportError as e:
     logger.warning(f"Error importing routes: {e}")
+
 
 # Root endpoint
 @app.get("/")
@@ -143,7 +199,7 @@ def root():
     """Root endpoint - API information."""
     return {
         "app": "PS69 Weather Analytics",
-        "phase":"Phase 7",
+        "phase": "Phase 7",
         "processing_model": "Synchronous (no async queue)",
         "database": "PostgreSQL + PostGIS",
         "endpoints": {
@@ -153,12 +209,13 @@ def root():
         },
     }
 
+
 if __name__ == "__main__":
     import uvicorn
+
     uvicorn.run(
         "api.main:app",
         host=os.getenv("FASTAPI_HOST", "0.0.0.0"),
         port=int(os.getenv("FASTAPI_PORT", 8000)),
         reload=os.getenv("FASTAPI_ENV", "development") == "development",
     )
-
