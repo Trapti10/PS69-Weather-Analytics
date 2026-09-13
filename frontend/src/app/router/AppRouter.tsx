@@ -23,6 +23,8 @@ import { AnalystMapPage } from '@/pages/analyst/AnalystMapPage'
 import { AdminDashboardPage } from '@/pages/admin/AdminDashboardPage'
 import { AdminVerificationQueuePage } from '@/pages/admin/AdminVerificationQueuePage'
 import { AdminEvidenceDetailPage } from '@/pages/admin/AdminEvidenceDetailPage'
+import { AdminEventsPage } from '@/pages/admin/AdminEventsPage'
+import { AdminMapPage } from '@/pages/admin/AdminMapPage'
 
 function RootRedirect() {
   const { user } = useAuth()
@@ -136,10 +138,26 @@ export function AppRouter() {
           }
         />
         <Route
+          path="/admin/events"
+          element={
+            <RoleRoute allow={['ADMIN']}>
+              <AdminEventsPage />
+            </RoleRoute>
+          }
+        />
+        <Route
           path="/admin/events/:eventId"
           element={
             <RoleRoute allow={['ADMIN']}>
               <AdminEvidenceDetailPage />
+            </RoleRoute>
+          }
+        />
+        <Route
+          path="/admin/map"
+          element={
+            <RoleRoute allow={['ADMIN']}>
+              <AdminMapPage />
             </RoleRoute>
           }
         />

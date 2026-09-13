@@ -1,4 +1,4 @@
-import type { EvidenceStatus, FinalVerificationStatus, Severity } from '@/types/domain'
+import type { EvidenceStatus, FinalVerificationStatus, Severity, AnomalySeverity } from '@/types/domain'
 
 /**
  * Evidence Status and Final Verification Status are two SEPARATE axes and
@@ -59,3 +59,31 @@ export const EVENT_TYPE_LABEL: Record<string, string> = {
 
 export const ADMIN_QUEUE_POLL_INTERVAL_MS = 4000
 export const MY_REPORTS_POLL_INTERVAL_MS = 5000
+
+/**
+ * Phase 4C's own severity vocabulary (LOW/MEDIUM/HIGH/CRITICAL) for
+ * weather_anomalies. Deliberately a separate map from SEVERITY_LABEL/TONE
+ * above (event severity is LOW/MEDIUM/HIGH/EXTREME) — the two are different
+ * concepts with different value sets and must never be merged.
+ */
+export const ANOMALY_SEVERITY_LABEL: Record<AnomalySeverity, string> = {
+  LOW: 'Low',
+  MEDIUM: 'Medium',
+  HIGH: 'High',
+  CRITICAL: 'Critical',
+}
+
+export const ANOMALY_SEVERITY_TONE: Record<AnomalySeverity, 'muted' | 'info' | 'warning' | 'danger'> = {
+  LOW: 'muted',
+  MEDIUM: 'info',
+  HIGH: 'warning',
+  CRITICAL: 'danger',
+}
+
+export const WEATHER_VARIABLE_LABEL: Record<string, string> = {
+  temperature: 'Temperature',
+  rainfall: 'Rainfall',
+  wind_speed: 'Wind Speed',
+  pressure: 'Pressure',
+  humidity: 'Humidity',
+}

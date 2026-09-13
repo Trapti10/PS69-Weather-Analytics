@@ -11,7 +11,7 @@ from geoalchemy2 import Geometry
 from datetime import datetime
 import uuid
 
-from api.db import Base
+from backend.api.db import Base
 
 
 class User(Base):
@@ -121,6 +121,70 @@ class WeatherEvent(Base):
     reviewed_by_user = relationship("User", foreign_keys=[reviewed_by])
 
 
+class WeatherObservation(Base):
+    """Real ERA5 / Open-Meteo sensor observation (Phase 2/2C fusion output).
+
+    Ingested by backend/db/ingest_analytics_data.py from the repository's
+    real collected datasets - this is the raw weather-intelligence layer,
+    deliberately separate from the citizen-report/verification pipeline
+    (WeatherReport/WeatherEvent below).
+    """
+    __tablename__ = "weather_observations"
+
+    id = Column(UUID, primary_key=True)  # carried over from the source dataset's own id
+    source = Column(String(50), nullable=False, index=True)
+    observed_at = Column(DateTime, nullable=False, index=True)
+    latitude = Column(Float)
+    longitude = Column(Float)
+    location_name = Column(String(255))
+    temperature = Column(Float)
+    humidity = Column(Float)
+    rainfall = Column(Float)
+    wind_speed = Column(Float)
+    wind_direction = Column(Float)
+    pressure = Column(Float)
+    verification_status = Column(String(20))
+    confidence_score = Column(Float)
+    quality_flags = Column(Text)
+    location = Column(Geometry("POINT", srid=4326))
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+
+class WeatherAnomaly(Base):
+    """Flagged statistical anomaly from Phase 4C anomaly detection.
+
+    Every row is already a flagged anomaly (the source file
+    data/phase4c/anomalies.csv only contains flagged rows, not every
+    evaluated observation).
+    """
+    __tablename__ = "weather_anomalies"
+
+    id = Column(UUID, primary_key=True)  # carried over from data/phase4c/anomalies.csv id
+    source = Column(String(50), nullable=False, index=True)
+    observed_at = Column(DateTime, nullable=False, index=True)
+    detected_at = Column(DateTime)
+    variable = Column(String(50), nullable=False, index=True)
+    observed_value = Column(Float)
+    baseline_value = Column(Float)
+    deviation = Column(Float)
+    method = Column(String(50))
+    threshold = Column(Float)
+    anomaly_score = Column(Float)
+    severity = Column(String(20), index=True)  # LOW/MEDIUM/HIGH/CRITICAL - Phase 4C's own vocabulary, distinct from WeatherEvent.severity
+    classification = Column(String(50))
+    status = Column(String(20))
+    explanation = Column(Text)
+    latitude = Column(Float)
+    longitude = Column(Float)
+    location_name = Column(String(255))
+    location = Column(Geometry("POINT", srid=4326))
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+    __table_args__ = (
+        CheckConstraint("severity IN ('LOW', 'MEDIUM', 'HIGH', 'CRITICAL')"),
+    )
+
+
 class AdminReviewAction(Base):
     """Admin decision audit log (immutable)."""
     __tablename__ = "admin_review_actions"
@@ -180,4 +244,3 @@ class AuditLog(Base):
     
     # Relationships
     actor = relationship("User", back_populates="audit_log_entries")
-

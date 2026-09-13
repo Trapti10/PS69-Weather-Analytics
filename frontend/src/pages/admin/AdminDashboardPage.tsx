@@ -3,6 +3,7 @@ import { StatCard } from '@/components/ui/StatCard'
 import { Button } from '@/components/ui/Button'
 import { LoadingState, ErrorState } from '@/components/ui/AsyncStates'
 import { useVerificationQueue } from '@/features/verification/useVerification'
+import { WeatherIntelligenceSection } from '@/features/analytics/WeatherIntelligenceSection'
 import { normalizeApiError } from '@/services/api/client'
 
 export function AdminDashboardPage() {
@@ -16,8 +17,11 @@ export function AdminDashboardPage() {
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <h1 className="text-xl font-semibold text-foreground">Admin dashboard</h1>
-        <p className="text-sm text-muted">Verification workload at a glance, updating automatically.</p>
+        <h1 className="text-xl font-semibold text-foreground">Verification Operations</h1>
+        <p className="text-sm text-muted">
+          Verification workload, updating automatically, combined with the same database-backed weather intelligence
+          Analysts see.
+        </p>
       </div>
 
       {isLoading && <LoadingState label="Loading dashboard" rows={2} />}
@@ -34,6 +38,12 @@ export function AdminDashboardPage() {
       <Link to="/admin/verification">
         <Button size="lg">Open verification queue</Button>
       </Link>
+
+      <hr className="border-border" />
+
+      {/* B-D. Weather intelligence, real charts, anomaly/incident monitoring — same
+          database-backed section Analyst uses, no duplicated aggregation logic. */}
+      <WeatherIntelligenceSection />
     </div>
   )
 }

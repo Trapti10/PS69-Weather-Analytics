@@ -130,6 +130,18 @@ python3 backend/db/migrate_from_json.py \
   --database-url "$DATABASE_URL"
 ```
 
+### Step 4b: Load Weather Intelligence Analytics Data
+
+Populates the Analyst/Admin intelligence dashboards with the real ERA5 +
+Open-Meteo + Phase 4C anomaly data already collected by this project (see
+"Weather Intelligence Analytics" below for the full architecture):
+
+```bash
+python3 -m backend.db.ingest_analytics_data
+```
+
+Safe to re-run any time (idempotent - already-loaded rows are skipped).
+
 ### Step 5: Run Tests
 
 ```bash
@@ -315,6 +327,47 @@ FASTAPI_DEBUG=false
 CORS_ORIGINS=https://yourdomain.com
 ```
 
+## Production Database Migrations
+
+This project has no Alembic/migration runner - `backend/db/schema.sql` and
+`backend/api/models.py` are hand-kept in sync, and every statement in
+`schema.sql` is written as `CREATE TABLE`/`CREATE INDEX ... IF NOT EXISTS`
+(or an existence-guarded `ALTER TABLE ... ADD CONSTRAINT`) specifically so
+it is always safe to re-run against an existing database without touching
+data already there.
+
+**Known gap this fixes:** locally, `docker-compose.yml` mounts `schema.sql`
+into `postgres`'s `docker-entrypoint-initdb.d/` - but Postgres only runs
+files there once, the first time a *brand-new, empty* volume is
+initialized. A schema change made after a database already exists (for
+example, this project's `weather_observations`/`weather_anomalies` tables,
+added after most deployments already had `users`/`weather_events`/etc.)
+would never reach that database automatically.
+
+**The fix:** `backend/api/main.py` now calls `create_tables()`
+(`Base.metadata.create_all()`) on every application startup. Because every
+table/index is declared `IF NOT EXISTS`, this is a safe no-op against
+tables that already exist and only adds what's missing - so the very next
+deploy of the API container picks up any schema change with no separate
+migration step, manual `psql` command, or release hook required. If it
+ever fails (e.g. a transient DB connection issue during a rolling deploy)
+it logs the error rather than crashing the app; `/ready` will still
+correctly report the database as unreachable if that's a real
+connectivity problem.
+
+If you ever need to apply the schema manually against a specific database
+(e.g. before running ingestion against a database the API hasn't started
+against yet):
+
+```bash
+DATABASE_URL="<production-url>" python3 -c "from backend.api.db import create_tables; create_tables()"
+# or, equivalently:
+psql "<production-url>" -f backend/db/schema.sql
+```
+
+Neither of these touches existing rows - they only create tables/indexes
+that don't already exist.
+
 ## Monitoring
 
 ### API Health
@@ -353,26 +406,160 @@ SELECT
 FROM pg_stat_activity;
 ```
 
-## Next Steps
+## Weather Intelligence Analytics
 
-### Phase 5 MVP Demo
+The Analyst and Admin dashboards are backed by two additional tables -
+`weather_observations` and `weather_anomalies` - populated from the real
+datasets this project already collected, cleaned, fused, and analyzed in
+Phases 1-4C. This is deliberately separate from the citizen-report/
+verification pipeline (`weather_reports`/`weather_events`): those are the
+Phase 3-6 pipeline, this is the raw scientific observation record.
 
-1. Register 2-3 users (citizen, analyst, admin roles)
-2. Submit report as citizen
-3. View event as analyst
-4. Check evidence status (verify Phase 3C integration)
+### Where the data comes from
 
-### Phase 6 (Admin Workflow)
+| Source dataset | Destination table | Real row count |
+|---|---|---|
+| `data/phase2/fused/era5_weather_records.csv` (source=ERA5) | `weather_observations` | 17,544 |
+| `data/phase2c/fused/openmeteo_weather_records.csv` (source=Open-Meteo) | `weather_observations` | 17,544 |
+| `data/phase4c/anomalies.csv` (Phase 4C rolling z-score / rainfall-ratio detector output - every row is already a flagged anomaly) | `weather_anomalies` | 1,309 |
 
-- Add POST /admin/events/{id}/review endpoint
-- Implement admin verification queue
-- Add alert engine
-- Implement final_verification_status workflow
+Both source CSVs were inspected column-by-column before the schema was
+designed (see `backend/db/schema.sql` for the full column mapping and
+provenance comments on both tables) - no field was invented that isn't in
+the source data. `location_name` is left NULL by ingestion: the source
+CSVs only carry raw latitude/longitude (this project's ERA5/Open-Meteo data
+covers a single station - the same one as `jabalpur_weather_2024_2025.csv` -
+but no name for it appears in these particular files), so nothing is
+guessed at ingestion time. The column stays in the schema, nullable, for
+any future source that does provide a place name; the dashboard/map fall
+back to showing raw coordinates when it's NULL.
 
-### Phase 7 (React Frontend)
+`weather_anomalies.severity` (LOW/MEDIUM/HIGH/CRITICAL, Phase 4C's own
+vocabulary) is intentionally a different set of values from
+`weather_events.severity` (LOW/MEDIUM/HIGH/EXTREME) - the two are not the
+same concept and are never conflated in the schema, ingestion, or API.
 
-- Build React + Tailwind UI
-- Integrate with Phase 5 API
+### Loading the data
+
+```bash
+# Load everything (idempotent - safe to re-run)
+python -m backend.db.ingest_analytics_data
+
+# Or just one half
+python -m backend.db.ingest_analytics_data --observations-only
+python -m backend.db.ingest_analytics_data --anomalies-only
+```
+
+Idempotency works the same way as `migrate_from_json.py`: every source row
+already carries a stable id from when Phase 2/4C produced it, so re-running
+against the same files after the first successful load is a no-op (every
+row reports `skipped_existing`). Malformed rows (unparseable timestamp,
+missing id, unrecognized severity) are logged and skipped without failing
+the rest of the batch; the script exits non-zero if anything was skipped
+this way so it's visible in CI/deploy logs.
+
+### Analytics API
+
+All aggregation (COUNT/AVG/SUM/MIN/MAX/GROUP BY/date_trunc) happens in
+PostgreSQL - `backend/api/routes/analytics.py` never loads raw rows into
+Python to compute a number, and no endpoint here ever sends raw
+observation/anomaly rows to the frontend for client-side math. All
+endpoints require ANALYST or ADMIN (same `require_analyst` dependency
+`/events` already uses) - there is no citizen-facing analytics endpoint.
+
+| Endpoint | Returns |
+|---|---|
+| `GET /analytics/overview` | Top-line KPIs: observation/event/report/anomaly/source totals, verification counts, avg/max temperature, total rainfall |
+| `GET /analytics/weather-trends` | Day-bucketed avg temperature / rainfall / humidity / wind. Filters: `source`, `start_date`, `end_date` |
+| `GET /analytics/rainfall` | Day-bucketed total rainfall + overall total and max-rainfall day. Same filters |
+| `GET /analytics/temperature` | Day-bucketed avg/min/max temperature + overall avg/min/max. Same filters |
+| `GET /analytics/source-comparison` | Per-source (ERA5 vs Open-Meteo) observation count and averages. Filters: `start_date`, `end_date` |
+| `GET /analytics/anomalies` | Counts grouped by variable+severity and by severity, plus the most recent flagged anomalies. Filters: `source`, `variable`, `severity`, `start_date`, `end_date`, `latest_limit` |
+| `GET /analytics/event-distribution` | Real `WeatherEvent` counts by `event_type` and `severity`. Filters: `start_date`, `end_date`, `city` |
+| `GET /analytics/verification` | `VERIFIED`/`NEEDS_REVIEW`/`REJECTED` counts (`final_verification_status`, kept separate from `evidence_status`). Filters: `start_date`, `end_date` |
+
+Example response (`GET /analytics/overview`):
+
+```json
+{
+  "total_weather_observations": 35088,
+  "total_weather_events": 0,
+  "total_reports": 0,
+  "total_anomalies": 1309,
+  "total_sources": 2,
+  "verified_events": 0,
+  "needs_review": 0,
+  "rejected_events": 0,
+  "average_temperature": 25.46,
+  "max_temperature": 44.7,
+  "total_rainfall": 5855.99,
+  "observations_date_range_start": "2024-01-01T00:00:00",
+  "observations_date_range_end": "2025-12-31T23:00:00"
+}
+```
+
+### How the Analyst dashboard uses this
+
+The Analyst dashboard (frontend `src/pages/analyst/AnalystDashboardPage.tsx`
+and `src/features/analytics/`) calls these endpoints through TanStack Query
+hooks (`useAnalyticsOverview`, `useWeatherTrends`, `useRainfallAnalytics`,
+`useTemperatureAnalytics`, `useSourceComparison`, `useAnomalyAnalytics`,
+`useEventDistribution`, `useVerificationAnalytics`) and renders them as KPI
+cards, Recharts line/bar/pie charts, and the existing Leaflet map - all
+read-only, with zero verify/reject controls anywhere in that page tree.
+
+### How the Admin dashboard uses this
+
+Admin reuses the exact same analytics endpoints and hooks as Analyst (no
+duplicated aggregation logic) for the weather-intelligence half of its
+dashboard, combined with the existing Phase 6 verification-queue widgets for
+the operational half (needs-review count, latest queue items). Admin's
+verify/reject workflow itself is unchanged by this work.
+
+## Creating test accounts for all three roles
+
+`POST /auth/register` intentionally only ever creates **CITIZEN** accounts —
+this is enforced server-side (`UserRegisterRequest.role` is pinned to
+`^CITIZEN$` in `backend/api/schemas.py`, and `routes/auth.py` hardcodes
+`role="CITIZEN"` regardless of what's sent). This is by design: public
+self-registration must not be able to grant itself elevated access.
+
+ANALYST and ADMIN accounts must be provisioned by an operator instead, using:
+
+```bash
+# Create an analyst (prompts for a password interactively; never echoed,
+# never written to shell history or logs)
+python -m backend.db.provision_role_user --email analyst@example.com --role ANALYST
+
+# Create an admin
+python -m backend.db.provision_role_user --email admin@example.com --role ADMIN
+
+# Change an existing account's role (e.g. promote a citizen to analyst)
+python -m backend.db.provision_role_user --email someone@example.com --role ADMIN --update-existing
+```
+
+Run it with the same `DATABASE_URL` (and `JWT_SECRET`, for consistency with
+the running API) as the deployed backend. See
+`backend/db/provision_role_user.py` for full usage notes. No credentials are
+ever hardcoded in source — the script always reads the password interactively
+unless `PS69_PROVISION_PASSWORD` is set in the environment for scripted/CI
+setup, and never prints or logs it either way.
+
+## End-to-end role smoke test
+
+1. Register a CITIZEN via `POST /auth/register` (or the frontend's
+   "Register as a citizen" link) and submit a report — confirm it appears
+   under "My Reports" with an evidence status.
+2. Provision an ANALYST with the script above, log in, and confirm the
+   Analyst dashboard/events/analytics/map pages load real data with no
+   verify/reject controls anywhere.
+3. Provision an ADMIN with the script above, log in, open the verification
+   queue, inspect an event's evidence, and submit a VERIFIED/NEEDS_REVIEW/
+   REJECTED decision — confirm it persists (`AdminReviewAction` + `AuditLog`
+   rows written) and that the event's evidence status is untouched by it.
+4. Confirm a CITIZEN token gets 403 on `/admin/*` and that an ANALYST token
+   gets 403 on `/admin/events/{id}/verify` (both already covered by
+   `backend/tests/test_phase6_admin_verification.py::TestAdminAuthorization`).
 - Real-time map visualization
 - Role-based dashboard views
 

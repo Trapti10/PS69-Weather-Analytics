@@ -165,3 +165,71 @@ COMMENT ON COLUMN weather_events.final_verification_status IS 'Admin-assigned: V
 COMMENT ON TABLE admin_review_actions IS 'Immutable audit log: every admin decision is traceable';
 COMMENT ON TABLE audit_log IS 'Change tracking: every state change logged with actor, timestamp, and delta';
 
+-- 7. WEATHER OBSERVATIONS (analytics intelligence layer)
+-- Populated from the real Phase 1-2C sensor datasets (ERA5 reanalysis,
+-- Open-Meteo API) by backend/db/ingest_analytics_data.py. This is
+-- deliberately separate from weather_events/weather_reports: those are the
+-- citizen-report/verification pipeline (Phase 3-6), this is the raw
+-- collected scientific observation record the platform was built to surface.
+CREATE TABLE IF NOT EXISTS weather_observations (
+    id UUID PRIMARY KEY,                          -- carried over from the source dataset's own id column (stable across re-runs -> idempotent upsert key)
+    source VARCHAR(50) NOT NULL,                  -- e.g. ERA5, Open-Meteo (exactly what the source file's `source` column says)
+    observed_at TIMESTAMP NOT NULL,
+    latitude DOUBLE PRECISION,
+    longitude DOUBLE PRECISION,
+    location_name VARCHAR(255),                   -- NULL: source CSVs have no place-name column, only raw lat/lon (see ingest_analytics_data.py)
+    temperature DOUBLE PRECISION,                  -- degrees C
+    humidity DOUBLE PRECISION,                     -- percent; not present in every source (e.g. ERA5 fused records have none)
+    rainfall DOUBLE PRECISION,                     -- mm
+    wind_speed DOUBLE PRECISION,                   -- m/s
+    wind_direction DOUBLE PRECISION,                -- degrees
+    pressure DOUBLE PRECISION,                     -- hPa
+    verification_status VARCHAR(20),               -- as recorded by the Phase 2 fusion step (e.g. 'validated')
+    confidence_score NUMERIC(3, 2),
+    quality_flags TEXT,
+    location GEOMETRY(Point, 4326),
+    created_at TIMESTAMP DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_weather_observations_observed_at ON weather_observations(observed_at);
+CREATE INDEX IF NOT EXISTS idx_weather_observations_source ON weather_observations(source);
+CREATE INDEX IF NOT EXISTS idx_weather_observations_location ON weather_observations USING GIST (location);
+
+COMMENT ON TABLE weather_observations IS 'Real ERA5 + Open-Meteo sensor observations (Phase 2/2C fusion output), ingested for database-backed analytics. NOT the citizen-report pipeline.';
+
+-- 8. WEATHER ANOMALIES (analytics intelligence layer)
+-- Populated from the Phase 4C statistical anomaly detection output
+-- (rolling z-score / rainfall-ratio methods against each source's own
+-- history). Every row here is already a flagged anomaly, not a raw
+-- evaluated observation - the source file only contains flagged rows.
+CREATE TABLE IF NOT EXISTS weather_anomalies (
+    id UUID PRIMARY KEY,                          -- carried over from data/phase4c/anomalies.csv `id`
+    source VARCHAR(50) NOT NULL,                  -- ERA5, Open-Meteo
+    observed_at TIMESTAMP NOT NULL,               -- when the anomalous reading occurred (source file `timestamp`)
+    detected_at TIMESTAMP,                        -- when Phase 4C's detector produced this record (source file `generated_at`)
+    variable VARCHAR(50) NOT NULL,                -- temperature, rainfall, wind_speed, pressure
+    observed_value DOUBLE PRECISION,
+    baseline_value DOUBLE PRECISION,
+    deviation DOUBLE PRECISION,
+    method VARCHAR(50),                           -- e.g. rolling_zscore
+    threshold DOUBLE PRECISION,
+    anomaly_score DOUBLE PRECISION,
+    severity VARCHAR(20) CHECK (severity IN ('LOW', 'MEDIUM', 'HIGH', 'CRITICAL')),  -- Phase 4C's own vocabulary - distinct from weather_events.severity (LOW/MEDIUM/HIGH/EXTREME); do not conflate the two
+    classification VARCHAR(50),                   -- e.g. STATISTICAL_ANOMALY
+    status VARCHAR(20),                           -- e.g. EVALUATED
+    explanation TEXT,
+    latitude DOUBLE PRECISION,
+    longitude DOUBLE PRECISION,
+    location_name VARCHAR(255),
+    location GEOMETRY(Point, 4326),
+    created_at TIMESTAMP DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_weather_anomalies_observed_at ON weather_anomalies(observed_at);
+CREATE INDEX IF NOT EXISTS idx_weather_anomalies_variable ON weather_anomalies(variable);
+CREATE INDEX IF NOT EXISTS idx_weather_anomalies_severity ON weather_anomalies(severity);
+CREATE INDEX IF NOT EXISTS idx_weather_anomalies_source ON weather_anomalies(source);
+CREATE INDEX IF NOT EXISTS idx_weather_anomalies_location ON weather_anomalies USING GIST (location);
+
+COMMENT ON TABLE weather_anomalies IS 'Flagged statistical anomalies from Phase 4C (rolling z-score / rainfall-ratio detection against each source''s own history), ingested for database-backed analytics.';
+

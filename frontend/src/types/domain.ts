@@ -257,3 +257,160 @@ export interface ApiErrorBody {
   detail?: string | { msg: string; loc?: (string | number)[] }[]
   code?: string
 }
+
+// ---------------------------------------------------------------------------
+// Analytics (database-backed weather intelligence — mirrors
+// backend/api/schemas.py "ANALYTICS SCHEMAS" exactly). Backed by
+// weather_observations / weather_anomalies (real ERA5 + Open-Meteo +
+// Phase 4C data) plus the existing WeatherEvent table. ANALYST/ADMIN only.
+// ---------------------------------------------------------------------------
+
+/** Phase 4C's own severity vocabulary — distinct from Severity (event
+ * severity is LOW/MEDIUM/HIGH/EXTREME). Never conflate the two. */
+export type AnomalySeverity = 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL'
+
+export interface AnalyticsFilters {
+  source?: string
+  start_date?: string
+  end_date?: string
+}
+
+export interface AnalyticsOverview {
+  total_weather_observations: number
+  total_weather_events: number
+  total_reports: number
+  total_anomalies: number
+  total_sources: number
+  verified_events: number
+  needs_review: number
+  rejected_events: number
+  average_temperature?: number | null
+  max_temperature?: number | null
+  total_rainfall?: number | null
+  observations_date_range_start?: string | null
+  observations_date_range_end?: string | null
+}
+
+export interface WeatherTrendPoint {
+  date: string
+  average_temperature?: number | null
+  rainfall?: number | null
+  average_humidity?: number | null
+  average_wind_speed?: number | null
+  average_pressure?: number | null
+  observation_count: number
+}
+
+export interface WeatherTrendsResponse {
+  trends: WeatherTrendPoint[]
+  source?: string | null
+  start_date?: string | null
+  end_date?: string | null
+}
+
+export interface RainfallTrendPoint {
+  date: string
+  total_rainfall?: number | null
+  observation_count: number
+}
+
+export interface RainfallAnalytics {
+  trends: RainfallTrendPoint[]
+  total_rainfall?: number | null
+  max_daily_rainfall?: number | null
+}
+
+export interface TemperatureTrendPoint {
+  date: string
+  average_temperature?: number | null
+  min_temperature?: number | null
+  max_temperature?: number | null
+  observation_count: number
+}
+
+export interface TemperatureAnalytics {
+  trends: TemperatureTrendPoint[]
+  average_temperature?: number | null
+  min_temperature?: number | null
+  max_temperature?: number | null
+}
+
+export interface SourceComparisonItem {
+  source: string
+  observation_count: number
+  average_temperature?: number | null
+  rainfall?: number | null
+  average_humidity?: number | null
+  average_wind_speed?: number | null
+}
+
+export interface SourceComparisonResponse {
+  sources: SourceComparisonItem[]
+}
+
+export interface AnomalyFilters extends AnalyticsFilters {
+  variable?: string
+  severity?: AnomalySeverity
+  latest_limit?: number
+}
+
+export interface AnomalyVariableSeverityCount {
+  variable: string
+  severity: AnomalySeverity
+  count: number
+}
+
+export interface AnomalySeverityCount {
+  severity: AnomalySeverity
+  count: number
+}
+
+export interface AnomalyItem {
+  id: string
+  source: string
+  observed_at: string
+  variable: string
+  observed_value?: number | null
+  baseline_value?: number | null
+  severity: AnomalySeverity
+  explanation?: string | null
+  latitude?: number | null
+  longitude?: number | null
+  location_name?: string | null
+}
+
+export interface AnomalyAnalytics {
+  total_anomalies: number
+  by_variable_severity: AnomalyVariableSeverityCount[]
+  by_severity: AnomalySeverityCount[]
+  latest: AnomalyItem[]
+}
+
+export interface EventDistributionFilters {
+  start_date?: string
+  end_date?: string
+  city?: string
+}
+
+export interface EventTypeCount {
+  event_type: string
+  count: number
+}
+
+export interface EventSeverityCount {
+  severity: Severity
+  count: number
+}
+
+export interface EventDistribution {
+  total_events: number
+  by_event_type: EventTypeCount[]
+  by_severity: EventSeverityCount[]
+}
+
+export interface VerificationAnalytics {
+  total_events: number
+  verified: number
+  needs_review: number
+  rejected: number
+}

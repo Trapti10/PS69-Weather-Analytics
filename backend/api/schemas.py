@@ -349,6 +349,149 @@ class AdminVerifyResponse(BaseModel):
 
 
 # ============================================================================
+# ANALYTICS SCHEMAS (database-backed weather intelligence dashboards)
+# Additive only. Backed by weather_observations / weather_anomalies
+# (real ERA5 + Open-Meteo + Phase 4C data, see backend/db/ingest_analytics_data.py)
+# and the existing weather_events / weather_reports tables. All aggregation
+# happens in SQL (routes/analytics.py) - these schemas only shape the
+# already-aggregated response.
+# ============================================================================
+
+class AnalyticsOverviewResponse(BaseModel):
+    """Top-line KPIs for the Analyst/Admin intelligence dashboard."""
+    total_weather_observations: int
+    total_weather_events: int
+    total_reports: int
+    total_anomalies: int
+    total_sources: int
+    verified_events: int
+    needs_review: int
+    rejected_events: int
+    average_temperature: Optional[float] = None
+    max_temperature: Optional[float] = None
+    total_rainfall: Optional[float] = None
+    observations_date_range_start: Optional[datetime] = None
+    observations_date_range_end: Optional[datetime] = None
+
+
+class WeatherTrendPoint(BaseModel):
+    """One time bucket of aggregated weather_observations."""
+    date: str  # ISO date (day-bucketed)
+    average_temperature: Optional[float] = None
+    rainfall: Optional[float] = None
+    average_humidity: Optional[float] = None
+    average_wind_speed: Optional[float] = None
+    average_pressure: Optional[float] = None
+    observation_count: int
+
+
+class WeatherTrendsResponse(BaseModel):
+    trends: List[WeatherTrendPoint]
+    source: Optional[str] = None
+    start_date: Optional[datetime] = None
+    end_date: Optional[datetime] = None
+
+
+class RainfallTrendPoint(BaseModel):
+    date: str
+    total_rainfall: Optional[float] = None
+    observation_count: int
+
+
+class RainfallAnalyticsResponse(BaseModel):
+    trends: List[RainfallTrendPoint]
+    total_rainfall: Optional[float] = None
+    max_daily_rainfall: Optional[float] = None
+
+
+class TemperatureTrendPoint(BaseModel):
+    date: str
+    average_temperature: Optional[float] = None
+    min_temperature: Optional[float] = None
+    max_temperature: Optional[float] = None
+    observation_count: int
+
+
+class TemperatureAnalyticsResponse(BaseModel):
+    trends: List[TemperatureTrendPoint]
+    average_temperature: Optional[float] = None
+    min_temperature: Optional[float] = None
+    max_temperature: Optional[float] = None
+
+
+class SourceComparisonItem(BaseModel):
+    source: str
+    observation_count: int
+    average_temperature: Optional[float] = None
+    rainfall: Optional[float] = None
+    average_humidity: Optional[float] = None
+    average_wind_speed: Optional[float] = None
+
+
+class SourceComparisonResponse(BaseModel):
+    sources: List[SourceComparisonItem]
+
+
+class AnomalyVariableSeverityCount(BaseModel):
+    variable: str
+    severity: str
+    count: int
+
+
+class AnomalySeverityCount(BaseModel):
+    severity: str
+    count: int
+
+
+class AnomalyItem(BaseModel):
+    """A single flagged anomaly, for the 'latest anomalies' feed."""
+    id: UUID
+    source: str
+    observed_at: datetime
+    variable: str
+    observed_value: Optional[float] = None
+    baseline_value: Optional[float] = None
+    severity: str
+    explanation: Optional[str] = None
+    latitude: Optional[float] = None
+    longitude: Optional[float] = None
+    location_name: Optional[str] = None
+
+    class Config:
+        from_attributes = True
+
+
+class AnomalyAnalyticsResponse(BaseModel):
+    total_anomalies: int
+    by_variable_severity: List[AnomalyVariableSeverityCount]
+    by_severity: List[AnomalySeverityCount]
+    latest: List[AnomalyItem]
+
+
+class EventTypeCount(BaseModel):
+    event_type: str
+    count: int
+
+
+class EventSeverityCount(BaseModel):
+    severity: str
+    count: int
+
+
+class EventDistributionResponse(BaseModel):
+    total_events: int
+    by_event_type: List[EventTypeCount]
+    by_severity: List[EventSeverityCount]
+
+
+class VerificationAnalyticsResponse(BaseModel):
+    total_events: int
+    verified: int
+    needs_review: int
+    rejected: int
+
+
+# ============================================================================
 # ERROR SCHEMAS
 # ============================================================================
 
@@ -357,4 +500,3 @@ class ErrorResponse(BaseModel):
     detail: str
     code: Optional[str] = None
     timestamp: datetime = Field(default_factory=datetime.utcnow)
-

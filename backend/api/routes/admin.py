@@ -23,8 +23,8 @@ from fastapi import APIRouter, HTTPException, status, Depends, Query
 from sqlalchemy.orm import Session
 from sqlalchemy import select, func, and_
 
-from api.models import WeatherEvent, WeatherReport, AdminReviewAction, AuditLog
-from api.schemas import (
+from backend.api.models import WeatherEvent, WeatherReport, AdminReviewAction, AuditLog
+from backend.api.schemas import (
     AdminReviewRequest,
     AdminQueueEntry,
     AdminQueueResponse,
@@ -33,8 +33,8 @@ from api.schemas import (
     EvidenceDetailResponse,
     AdminVerifyResponse,
 )
-from api.db import get_db
-from api.auth.rbac import require_admin
+from backend.api.db import get_db
+from backend.api.auth.rbac import require_admin
 
 logger = logging.getLogger(__name__)
 router = APIRouter()
@@ -327,4 +327,3 @@ def verify_event(
         reviewed_at=now,
         notes=notes,
     )
-

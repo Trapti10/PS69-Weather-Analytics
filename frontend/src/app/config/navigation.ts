@@ -23,6 +23,8 @@ export const NAV_ITEMS_BY_ROLE: Record<UserRole, NavItem[]> = {
   ADMIN: [
     { label: 'Dashboard', to: '/admin', end: true },
     { label: 'Verification Queue', to: '/admin/verification' },
+    { label: 'Weather Events', to: '/admin/events' },
+    { label: 'Map', to: '/admin/map' },
   ],
 }
 

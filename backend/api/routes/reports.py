@@ -30,7 +30,7 @@ from geoalchemy2 import functions as geofuncs
 from geoalchemy2 import Geography
 
 # Import Phase 1-4C pipeline modules
-sys.path.insert(0, "/app/src")
+sys.path.insert(0, str(Path(__file__).resolve().parents[3] / "src"))
 
 from schemas.weather_report import WeatherReport as Phase3AWeatherReport, EVENT_TYPES
 from ingestion.report_normalizer import normalize_report
@@ -40,15 +40,15 @@ from corroboration.verification_engine import verify_report
 from corroboration.report_correlator import correlate_report, build_default_evidence_sources
 
 # Phase 5 database models
-from api.models import WeatherReport, WeatherEvent, AuditLog
-from api.schemas import (
+from backend.api.models import WeatherReport, WeatherEvent, AuditLog
+from backend.api.schemas import (
     ReportSubmissionRequest,
     ReportSubmissionResponse,
     ReportStatusResponse,
     ReportListResponse,
 )
-from api.db import get_db
-from api.auth.rbac import get_current_user
+from backend.api.db import get_db
+from backend.api.auth.rbac import get_current_user
 
 logger = logging.getLogger(__name__)
 router = APIRouter()
@@ -539,4 +539,3 @@ def list_my_reports(
         )
 
     return ReportListResponse(reports=items, total=total, limit=limit, offset=offset)
-

@@ -347,9 +347,17 @@ Assigned by admin user after reviewing evidence:
 - `REJECTED` - admin rejected event
 
 ### Roles
-- `CITIZEN` - report submission, see verified events
-- `ANALYST` - see all events, export data, view evidence
-- `ADMIN` - full access (not yet implemented in Phase 5)
+- `CITIZEN` - report submission, see verified events. The only role
+  `POST /auth/register` can create.
+- `ANALYST` - see all events (any verification status), view evidence,
+  read-only (no verify/reject/needs-review actions).
+- `ADMIN` - everything ANALYST can do, plus the Phase 6 verification
+  workflow: `/admin/verification-queue`, `/admin/events/{id}/evidence`,
+  `/admin/events/{id}/verify`.
+
+ANALYST and ADMIN accounts are provisioned by an operator, not through
+public registration — see "Creating test accounts for all three roles" in
+`SETUP.md`.
 
 ## Examples
 
@@ -560,3 +568,46 @@ Uses the existing `require_admin` dependency from `backend/api/auth/rbac.py` (al
 `backend/tests/test_phase6_admin_verification.py` — 24 tests: 8 auth/RBAC, 9 verification-decision behaviors (VERIFIED/NEEDS_REVIEW/REJECTED, invalid status, nonexistent event, reason validation, previous-status capture, AdminReviewAction creation, AuditLog creation), 3 persistence (survives a fresh DB connection, audit data matches the decision, no partial writes on validation failure), and 4 bonus queue-filtering tests.
 
 Run: `pytest backend/tests/ -v` → **63 passed** (39 existing Phase 5 + 24 new Phase 6), 0 failed. Full project regression (`pytest tests/ -q` for Phase 1-4C + `pytest backend/tests/ -v` for Phase 5-6) → **238 passed, 0 failed.**
+
+## Analytics (Weather Intelligence)
+
+Eight read-only, database-backed endpoints under `/analytics/*`, all requiring ANALYST or ADMIN (same `require_analyst` dependency `/events` uses — no citizen-facing analytics endpoint exists). All aggregation (COUNT/AVG/SUM/MIN/MAX/GROUP BY/`date_trunc`) happens in PostgreSQL in `backend/api/routes/analytics.py` — nothing here loads raw rows into Python to compute a number.
+
+Backed by two new tables populated from this project's own real Phase 2/2C/4C datasets (see `SETUP.md` → "Weather Intelligence Analytics" for the full schema/ingestion writeup): `weather_observations` (ERA5 + Open-Meteo, 35,088 real rows) and `weather_anomalies` (Phase 4C flagged anomalies, 1,309 real rows). This is separate from `weather_events`/`weather_reports` (the citizen-report/verification pipeline), which these endpoints also read from for the event/verification-related figures.
+
+| Endpoint | Filters | Returns |
+|---|---|---|
+| `GET /analytics/overview` | — | Top-line KPIs across observations, events, reports, anomalies, sources, verification counts, avg/max temperature, total rainfall |
+| `GET /analytics/weather-trends` | `source`, `start_date`, `end_date` | Day-bucketed avg temperature, total rainfall, avg humidity, avg wind speed, avg pressure |
+| `GET /analytics/rainfall` | `source`, `start_date`, `end_date` | Day-bucketed total rainfall + overall total and max-rainfall day |
+| `GET /analytics/temperature` | `source`, `start_date`, `end_date` | Day-bucketed avg/min/max temperature + overall avg/min/max |
+| `GET /analytics/source-comparison` | `start_date`, `end_date` | Per-source (ERA5 vs Open-Meteo) observation count and averages |
+| `GET /analytics/anomalies` | `source`, `variable`, `severity`, `start_date`, `end_date`, `latest_limit` | Counts by variable+severity and by severity, plus the most recent flagged anomalies (with full explanation text) |
+| `GET /analytics/event-distribution` | `start_date`, `end_date`, `city` | Real `WeatherEvent` counts grouped by `event_type` and `severity` |
+| `GET /analytics/verification` | `start_date`, `end_date` | `VERIFIED`/`NEEDS_REVIEW`/`REJECTED` counts (`final_verification_status` — kept separate from `evidence_status`, see "Core concept" above) |
+
+`weather_anomalies.severity` uses Phase 4C's own vocabulary (`LOW`/`MEDIUM`/`HIGH`/`CRITICAL`) — a different value set from `weather_events.severity` (`LOW`/`MEDIUM`/`HIGH`/`EXTREME`). The two are never conflated in the schema, ingestion script, or API responses.
+
+Real example (`GET /analytics/overview` against the fully-ingested dataset):
+
+```json
+{
+  "total_weather_observations": 35088,
+  "total_weather_events": 0,
+  "total_reports": 0,
+  "total_anomalies": 1309,
+  "total_sources": 2,
+  "verified_events": 0,
+  "needs_review": 0,
+  "rejected_events": 0,
+  "average_temperature": 25.46,
+  "max_temperature": 44.7,
+  "total_rainfall": 5855.99,
+  "observations_date_range_start": "2024-01-01T00:00:00",
+  "observations_date_range_end": "2025-12-31T23:00:00"
+}
+```
+
+**Loading the data:** `python -m backend.db.ingest_analytics_data` (idempotent — see `backend/db/ingest_analytics_data.py`).
+
+**Testing:** `backend/tests/test_phase7b_analytics.py` — 30 tests: authorization (citizen 403 / analyst+admin 200 / unauthenticated 401, parametrized across all 8 endpoints), empty-state (zeros not errors), aggregation correctness (verified against hand-built fixture rows, not just "endpoint returns 200"), date/source filtering, and ingestion idempotency/validation/malformed-row handling.

@@ -91,4 +91,3 @@ def get_database_url() -> str:
         )
     
     return url
-
