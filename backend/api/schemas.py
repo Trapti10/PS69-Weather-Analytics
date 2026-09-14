@@ -21,9 +21,21 @@ class UserRegisterRequest(BaseModel):
 
 
 class UserLoginRequest(BaseModel):
-    """User login request."""
+    """User login request.
+
+    `role` is optional and additive: when the frontend's required "Login as"
+    dropdown sends it, the backend verifies it against the account's actual
+    role before issuing a token (see routes/auth.py:login). It is never used
+    to grant a role - the account's own `role` column remains the sole
+    source of truth for what gets encoded into the JWT. Omitting it (e.g.
+    from another API client, or the existing test suite) skips the extra
+    check entirely, preserving the pre-existing email+password-only contract.
+    """
     email: EmailStr
     password: str
+    role: Optional[str] = Field(
+        None, pattern="^(CITIZEN|ANALYST|ADMIN)$", description="Optional: must match the account's actual role if provided"
+    )
 
 
 class TokenResponse(BaseModel):

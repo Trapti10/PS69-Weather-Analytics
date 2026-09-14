@@ -1,4 +1,15 @@
-import type { EvidenceStatus, FinalVerificationStatus, Severity, AnomalySeverity } from '@/types/domain'
+import type { EvidenceStatus, FinalVerificationStatus, Severity, AnomalySeverity, UserRole } from '@/types/domain'
+
+/**
+ * Login-time role display labels only. The backend enum/database values
+ * (CITIZEN/ANALYST/ADMIN) are never renamed - this is purely how the
+ * "Login as" dropdown and role badges present them to a person.
+ */
+export const LOGIN_ROLE_LABEL: Record<UserRole, string> = {
+  CITIZEN: 'Citizen',
+  ANALYST: 'Analyst / Researcher',
+  ADMIN: 'Administrator',
+}
 
 /**
  * Evidence Status and Final Verification Status are two SEPARATE axes and

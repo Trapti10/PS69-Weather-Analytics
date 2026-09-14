@@ -115,6 +115,22 @@ def login(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid email or password"
         )
+
+    # Optional role check: the frontend's "Login as" dropdown sends the role
+    # the person believes they're signing in as. This NEVER grants a role -
+    # user.role (the account's actual, database-backed role) is what gets
+    # encoded into the JWT either way. It only rejects login when the two
+    # disagree, so a citizen account can't be used to "log in as Admin" even
+    # though credentials were correct - RBAC enforcement is unchanged and
+    # still lives entirely in the JWT/RoleChecker, not in this comparison.
+    if request.role and request.role != user.role:
+        logger.warning(
+            f"Login role mismatch for {user.email}: account is {user.role}, selected {request.role}"
+        )
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="These credentials belong to a different role. Please select the correct login type."
+        )
     
     try:
         # Update last login
