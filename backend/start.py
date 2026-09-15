@@ -1,11 +1,19 @@
 import os
 import sys
 
-from api import models
-from api.db import Base, create_tables, engine
+# backend/ directory ko Python import path mein ensure karo
+BACKEND_DIR = os.path.dirname(os.path.abspath(__file__))
+if BACKEND_DIR not in sys.path:
+    sys.path.insert(0, BACKEND_DIR)
+
 from sqlalchemy import text
 
+from api import models  # noqa: F401
+from api.db import Base, create_tables, engine
+
+
 print("=== DATABASE INITIALIZATION ===", flush=True)
+
 print("MODELS:", list(Base.metadata.tables.keys()), flush=True)
 
 create_tables()
@@ -24,7 +32,9 @@ with engine.connect() as conn:
     ]
 
 print("DB TABLES:", tables, flush=True)
+
 print("=== DATABASE INITIALIZATION COMPLETE ===", flush=True)
+
 
 os.execvp(
     "uvicorn",
