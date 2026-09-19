@@ -38,5 +38,4 @@ Thumbs.db
 # Local generated caches
 .vite/
 
-# Large project datasets
-data/
+
