@@ -21,21 +21,9 @@ class UserRegisterRequest(BaseModel):
 
 
 class UserLoginRequest(BaseModel):
-    """User login request.
-
-    `role` is optional and additive: when the frontend's required "Login as"
-    dropdown sends it, the backend verifies it against the account's actual
-    role before issuing a token (see routes/auth.py:login). It is never used
-    to grant a role - the account's own `role` column remains the sole
-    source of truth for what gets encoded into the JWT. Omitting it (e.g.
-    from another API client, or the existing test suite) skips the extra
-    check entirely, preserving the pre-existing email+password-only contract.
-    """
+    """User login request."""
     email: EmailStr
     password: str
-    role: Optional[str] = Field(
-        None, pattern="^(CITIZEN|ANALYST|ADMIN)$", description="Optional: must match the account's actual role if provided"
-    )
 
 
 class TokenResponse(BaseModel):
@@ -382,8 +370,29 @@ class AnalyticsOverviewResponse(BaseModel):
     average_temperature: Optional[float] = None
     max_temperature: Optional[float] = None
     total_rainfall: Optional[float] = None
+    measurements_analyzed: Optional[int] = None
+    anomaly_rate: Optional[float] = None
     observations_date_range_start: Optional[datetime] = None
     observations_date_range_end: Optional[datetime] = None
+
+
+class DataQualitySourceSummary(BaseModel):
+    source: str
+    input_records: int
+    records_without_timestamp: int
+    duplicate_timestamps_dropped: int
+    invalid_rainfall_count: int
+
+
+class DataQualityAnalyticsResponse(BaseModel):
+    total_observations_analyzed: int
+    evaluated_observations: int
+    insufficient_history_count: int
+    missing_value_count: int
+    invalid_value_count: int
+    zero_variance_count: int
+    variables_analyzed: int
+    by_source: List[DataQualitySourceSummary]
 
 
 class WeatherTrendPoint(BaseModel):
@@ -473,10 +482,28 @@ class AnomalyItem(BaseModel):
         from_attributes = True
 
 
+class AnomalyMonthCount(BaseModel):
+    month: str
+    count: int
+
+
+class AnomalySourceCount(BaseModel):
+    source: str
+    count: int
+
+
+class AnomalyVariableCount(BaseModel):
+    variable: str
+    count: int
+
+
 class AnomalyAnalyticsResponse(BaseModel):
     total_anomalies: int
     by_variable_severity: List[AnomalyVariableSeverityCount]
     by_severity: List[AnomalySeverityCount]
+    by_month: List[AnomalyMonthCount] = []
+    by_source: List[AnomalySourceCount] = []
+    by_variable: List[AnomalyVariableCount] = []
     latest: List[AnomalyItem]
 
 
@@ -512,3 +539,129 @@ class ErrorResponse(BaseModel):
     detail: str
     code: Optional[str] = None
     timestamp: datetime = Field(default_factory=datetime.utcnow)
+
+# ============================================================================
+# RESEARCH / INTELLIGENCE ARTIFACT SCHEMAS
+# ============================================================================
+
+class FusionAnalyticsResponse(BaseModel):
+    era5_records: int
+    openmeteo_records: int
+    matched_temporal: int
+    matched_temporal_spatial: int
+    not_matched: int
+    grid_distance_km: Optional[float] = None
+    confidence_count: int
+    confidence_mean: Optional[float] = None
+    confidence_min: Optional[float] = None
+    confidence_max: Optional[float] = None
+    agreement_by_variable: List[Dict[str, Any]]
+    scientific_note: Optional[str] = None
+
+
+class CorroborationAnalyticsResponse(BaseModel):
+    total_reports: int
+    supported: int
+    conflicting: int
+    unverified: int
+    insufficient_evidence: int
+    average_evidence_support_score: Optional[float] = None
+    reports_with_a_score: int
+    evidence_source_usage: List[Dict[str, Any]]
+    honest_note: Optional[str] = None
+
+
+class IntelligenceAnalyticsResponse(BaseModel):
+    total_intelligence_records: int
+    matched_sources: int
+    source_agreement_mean: Optional[float] = None
+    supported_reports: int
+    unverified_reports: int
+    conflicting_reports: int
+    average_evidence_support_score: Optional[float] = None
+    average_overall_confidence: Optional[float] = None
+    confidence_bands: List[Dict[str, Any]]
+    corroboration_counts: List[Dict[str, Any]]
+    latest_signals: List[Dict[str, Any]]
+    scientific_note: Optional[str] = None
+
+
+class ModelPerformanceRow(BaseModel):
+    model: str
+    target: str
+    horizon_h: int
+    mae: Optional[float] = None
+    rmse: Optional[float] = None
+    r2: Optional[float] = None
+    precision: Optional[float] = None
+    recall: Optional[float] = None
+    f1: Optional[float] = None
+    roc_auc: Optional[float] = None
+    train_samples: Optional[int] = None
+    test_samples: Optional[int] = None
+
+
+class ModelPerformanceResponse(BaseModel):
+    horizons: List[int]
+    temperature: List[ModelPerformanceRow]
+    rainfall: List[ModelPerformanceRow]
+    headline: Dict[str, Any]
+
+
+class ResearchArtifact(BaseModel):
+    artifact_id: str
+    name: str
+    category: str
+    format: str
+    size_bytes: int
+    row_count: Optional[int] = None
+    description: str
+    source_path: str
+    download_endpoint: str
+
+
+class ResearchArtifactListResponse(BaseModel):
+    artifacts: List[ResearchArtifact]
+
+
+class ResearchArtifactPreviewResponse(BaseModel):
+    artifact: ResearchArtifact
+    columns: List[str]
+    rows: List[Any]
+
+
+class LocationSearchItem(BaseModel):
+    name: str
+    latitude: Optional[float] = None
+    longitude: Optional[float] = None
+    observation_count: int = 0
+    anomaly_count: int = 0
+    event_count: int = 0
+    coverage_start: Optional[datetime] = None
+    coverage_end: Optional[datetime] = None
+
+
+class LocationSearchResponse(BaseModel):
+    locations: List[LocationSearchItem]
+
+
+class PublicLocationEvent(BaseModel):
+    event_id: UUID
+    event_type: str
+    location_name: str
+    severity: str
+    start_time: datetime
+    end_time: Optional[datetime] = None
+    final_verification_status: str
+
+
+class PublicLocationSummaryResponse(BaseModel):
+    location: str
+    latitude: Optional[float] = None
+    longitude: Optional[float] = None
+    dataset_coverage_start: Optional[datetime] = None
+    dataset_coverage_end: Optional[datetime] = None
+    observation_count: int = 0
+    anomaly_count: int = 0
+    events: List[PublicLocationEvent]
+    note: Optional[str] = None

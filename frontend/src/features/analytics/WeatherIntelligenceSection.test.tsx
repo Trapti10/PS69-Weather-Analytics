@@ -28,6 +28,8 @@ const EMPTY_OVERVIEW = {
   average_temperature: null,
   max_temperature: null,
   total_rainfall: null,
+  measurements_analyzed: 0,
+  anomaly_rate: 0,
 }
 
 const POPULATED_OVERVIEW = {
@@ -42,6 +44,8 @@ const POPULATED_OVERVIEW = {
   average_temperature: 25.46,
   max_temperature: 44.7,
   total_rainfall: 5855.99,
+  measurements_analyzed: 140352,
+  anomaly_rate: 0.009327,
 }
 
 function mockAllHooks({
@@ -50,11 +54,15 @@ function mockAllHooks({
   temperature = baseQueryResult({ trends: [] }),
   rainfall = baseQueryResult({ trends: [] }),
   sourceComparison = baseQueryResult({ sources: [] }),
-  anomalies = baseQueryResult({ total_anomalies: 0, by_variable_severity: [], by_severity: [], latest: [] }),
+  anomalies = baseQueryResult({ total_anomalies: 0, by_variable_severity: [], by_severity: [], by_month: [], by_source: [], by_variable: [], latest: [] }),
   eventDistribution = baseQueryResult({ total_events: 0, by_event_type: [], by_severity: [] }),
   verification = baseQueryResult({ total_events: 0, verified: 0, needs_review: 0, rejected: 0 }),
 } = {}) {
   vi.spyOn(analyticsHooks, 'useAnalyticsOverview').mockReturnValue(overview)
+  vi.spyOn(analyticsHooks, 'useDataQualityAnalytics').mockReturnValue(baseQueryResult({
+    total_observations_analyzed: 0, evaluated_observations: 0, insufficient_history_count: 0, missing_value_count: 0,
+    invalid_value_count: 0, zero_variance_count: 0, variables_analyzed: 4, by_source: [],
+  }))
   vi.spyOn(analyticsHooks, 'useWeatherTrends').mockReturnValue(trends)
   vi.spyOn(analyticsHooks, 'useTemperatureAnalytics').mockReturnValue(temperature)
   vi.spyOn(analyticsHooks, 'useRainfallAnalytics').mockReturnValue(rainfall)
@@ -62,6 +70,23 @@ function mockAllHooks({
   vi.spyOn(analyticsHooks, 'useAnomalies').mockReturnValue(anomalies)
   vi.spyOn(analyticsHooks, 'useEventDistribution').mockReturnValue(eventDistribution)
   vi.spyOn(analyticsHooks, 'useVerificationAnalytics').mockReturnValue(verification)
+  vi.spyOn(analyticsHooks, 'useFusionAnalytics').mockReturnValue(baseQueryResult({
+    era5_records: 0, openmeteo_records: 0, matched_temporal: 0, matched_temporal_spatial: 0, not_matched: 0,
+    grid_distance_km: null, confidence_count: 0, confidence_mean: null, confidence_min: null, confidence_max: null,
+    agreement_by_variable: [], scientific_note: null,
+  }))
+  vi.spyOn(analyticsHooks, 'useCorroborationAnalytics').mockReturnValue(baseQueryResult({
+    total_reports: 0, supported: 0, conflicting: 0, unverified: 0, insufficient_evidence: 0,
+    average_evidence_support_score: null, reports_with_a_score: 0, evidence_source_usage: [], honest_note: null,
+  }))
+  vi.spyOn(analyticsHooks, 'useIntelligenceAnalytics').mockReturnValue(baseQueryResult({
+    total_intelligence_records: 0, matched_sources: 0, source_agreement_mean: null, supported_reports: 0,
+    unverified_reports: 0, conflicting_reports: 0, average_evidence_support_score: null, average_overall_confidence: null,
+    confidence_bands: [], corroboration_counts: [], latest_signals: [], scientific_note: null,
+  }))
+  vi.spyOn(analyticsHooks, 'useModelPerformance').mockReturnValue(baseQueryResult({
+    horizons: [], temperature: [], rainfall: [], headline: { models_saved: 0 },
+  }))
 }
 
 describe('WeatherIntelligenceSection', () => {
@@ -91,6 +116,8 @@ describe('WeatherIntelligenceSection', () => {
     renderWithProviders(<WeatherIntelligenceSection />)
 
     expect(screen.getByText('35,088')).toBeInTheDocument() // total_weather_observations
+    expect(screen.getByText('140,352')).toBeInTheDocument() // measurements_analyzed
+    expect(screen.getByText('0.93%')).toBeInTheDocument() // anomaly_rate
     expect(screen.getByText('1,309')).toBeInTheDocument() // total_anomalies
     expect(screen.getByText('25.5°C')).toBeInTheDocument() // average_temperature
     expect(screen.getByText(/5,855\.99\s*mm/)).toBeInTheDocument() // total_rainfall
@@ -103,6 +130,9 @@ describe('WeatherIntelligenceSection', () => {
         total_anomalies: 2,
         by_variable_severity: [{ variable: 'rainfall', severity: 'CRITICAL', count: 2 }],
         by_severity: [{ severity: 'CRITICAL', count: 2 }],
+        by_month: [],
+        by_source: [{ source: 'ERA5', count: 2 }],
+        by_variable: [{ variable: 'rainfall', count: 2 }],
         latest: [
           {
             id: 'a1',
@@ -134,6 +164,9 @@ describe('WeatherIntelligenceSection', () => {
         total_anomalies: 1,
         by_variable_severity: [{ variable: 'temperature', severity: 'LOW', count: 1 }],
         by_severity: [{ severity: 'LOW', count: 1 }],
+        by_month: [],
+        by_source: [{ source: 'Open-Meteo', count: 1 }],
+        by_variable: [{ variable: 'temperature', count: 1 }],
         latest: [
           {
             id: 'a2',

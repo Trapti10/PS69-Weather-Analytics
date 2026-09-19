@@ -15,21 +15,22 @@ export const NAV_ITEMS_BY_ROLE: Record<UserRole, NavItem[]> = {
     { label: 'Map', to: '/citizen/map' },
   ],
   ANALYST: [
-    { label: 'Dashboard', to: '/analyst', end: true },
+    { label: 'Command Center', to: '/analyst', end: true },
+    { label: 'Weather Analytics', to: '/analyst/analytics' },
     { label: 'Weather Events', to: '/analyst/events' },
-    { label: 'Analytics', to: '/analyst/analytics' },
-    { label: 'Map', to: '/analyst/map' },
+    { label: 'Research Data', to: '/analyst/data' },
+    { label: 'Live Map', to: '/analyst/map' },
   ],
   ADMIN: [
-    { label: 'Dashboard', to: '/admin', end: true },
+    { label: 'Operations Center', to: '/admin', end: true },
     { label: 'Verification Queue', to: '/admin/verification' },
     { label: 'Weather Events', to: '/admin/events' },
-    { label: 'Map', to: '/admin/map' },
+    { label: 'Live Map', to: '/admin/map' },
   ],
 }
 
 export const ROLE_LABEL: Record<UserRole, string> = {
   CITIZEN: 'Citizen',
-  ANALYST: 'Analyst',
+  ANALYST: 'Analyst / Researcher',
   ADMIN: 'Administrator',
 }

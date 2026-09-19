@@ -129,10 +129,6 @@ python3 "$BACKEND_DIR/db/migrate_from_json.py" \
     --input "$JSON_FILE" \
     --database-url "$DATABASE_URL"
 
-echo ""
-echo "Loading weather intelligence analytics data (ERA5/Open-Meteo/anomalies)..."
-python3 -m backend.db.ingest_analytics_data --database-url "$DATABASE_URL"
-
 # Verify database
 echo ""
 echo "Verifying database connectivity..."

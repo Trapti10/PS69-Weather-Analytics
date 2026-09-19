@@ -287,8 +287,29 @@ export interface AnalyticsOverview {
   average_temperature?: number | null
   max_temperature?: number | null
   total_rainfall?: number | null
+  measurements_analyzed?: number | null
+  anomaly_rate?: number | null
   observations_date_range_start?: string | null
   observations_date_range_end?: string | null
+}
+
+export interface DataQualitySourceSummary {
+  source: string
+  input_records: number
+  records_without_timestamp: number
+  duplicate_timestamps_dropped: number
+  invalid_rainfall_count: number
+}
+
+export interface DataQualityAnalytics {
+  total_observations_analyzed: number
+  evaluated_observations: number
+  insufficient_history_count: number
+  missing_value_count: number
+  invalid_value_count: number
+  zero_variance_count: number
+  variables_analyzed: number
+  by_source: DataQualitySourceSummary[]
 }
 
 export interface WeatherTrendPoint {
@@ -383,6 +404,9 @@ export interface AnomalyAnalytics {
   total_anomalies: number
   by_variable_severity: AnomalyVariableSeverityCount[]
   by_severity: AnomalySeverityCount[]
+  by_month: Array<{ month: string; count: number }>
+  by_source: Array<{ source: string; count: number }>
+  by_variable: Array<{ variable: string; count: number }>
   latest: AnomalyItem[]
 }
 
@@ -413,4 +437,146 @@ export interface VerificationAnalytics {
   verified: number
   needs_review: number
   rejected: number
+}
+
+
+// ---------------------------------------------------------------------------
+// Extended scientific/weather intelligence
+// ---------------------------------------------------------------------------
+
+export interface FusionAnalytics {
+  era5_records: number
+  openmeteo_records: number
+  matched_temporal: number
+  matched_temporal_spatial: number
+  not_matched: number
+  grid_distance_km?: number | null
+  confidence_count: number
+  confidence_mean?: number | null
+  confidence_min?: number | null
+  confidence_max?: number | null
+  agreement_by_variable: Array<{
+    variable: string
+    SOURCE_AGREEMENT_HIGH?: number
+    SOURCE_AGREEMENT_MEDIUM?: number
+    SOURCE_DISAGREEMENT?: number
+  }>
+  scientific_note?: string | null
+}
+
+export interface CorroborationAnalytics {
+  total_reports: number
+  supported: number
+  conflicting: number
+  unverified: number
+  insufficient_evidence: number
+  average_evidence_support_score?: number | null
+  reports_with_a_score: number
+  evidence_source_usage: Array<{ source: string; count: number }>
+  honest_note?: string | null
+}
+
+export interface IntelligenceAnalytics {
+  total_intelligence_records: number
+  matched_sources: number
+  source_agreement_mean?: number | null
+  supported_reports: number
+  unverified_reports: number
+  conflicting_reports: number
+  average_evidence_support_score?: number | null
+  average_overall_confidence?: number | null
+  confidence_bands: Array<{ band: string; count: number }>
+  corroboration_counts: Array<{ status: string; count: number }>
+  latest_signals: Array<{
+    timestamp?: string | null
+    latitude?: number | null
+    longitude?: number | null
+    sources: string[]
+    source_agreement?: string | null
+    confidence?: number | null
+    corroboration?: string | null
+    event_category?: string | null
+  }>
+  scientific_note?: string | null
+}
+
+export interface ModelPerformanceRow {
+  model: string
+  target: string
+  horizon_h: number
+  mae?: number | null
+  rmse?: number | null
+  r2?: number | null
+  precision?: number | null
+  recall?: number | null
+  f1?: number | null
+  roc_auc?: number | null
+  train_samples?: number | null
+  test_samples?: number | null
+}
+
+export interface ModelPerformance {
+  horizons: number[]
+  temperature: ModelPerformanceRow[]
+  rainfall: ModelPerformanceRow[]
+  headline: Record<string, number | string | null>
+}
+
+export interface ResearchArtifact {
+  artifact_id: string
+  name: string
+  category: string
+  format: string
+  size_bytes: number
+  row_count?: number | null
+  description: string
+  source_path: string
+  download_endpoint: string
+}
+
+export interface ResearchArtifactListResponse {
+  artifacts: ResearchArtifact[]
+}
+
+export interface ResearchArtifactPreviewResponse {
+  artifact: ResearchArtifact
+  columns: string[]
+  rows: Array<Record<string, unknown>>
+}
+
+export interface LocationSearchItem {
+  name: string
+  latitude?: number | null
+  longitude?: number | null
+  observation_count: number
+  anomaly_count: number
+  event_count: number
+  coverage_start?: string | null
+  coverage_end?: string | null
+}
+
+export interface LocationSearchResponse {
+  locations: LocationSearchItem[]
+}
+
+export interface PublicLocationEvent {
+  event_id: string
+  event_type: string
+  location_name: string
+  severity: Severity
+  start_time: string
+  end_time?: string | null
+  final_verification_status: FinalVerificationStatus
+}
+
+export interface PublicLocationSummary {
+  location: string
+  latitude?: number | null
+  longitude?: number | null
+  dataset_coverage_start?: string | null
+  dataset_coverage_end?: string | null
+  observation_count: number
+  anomaly_count: number
+  events: PublicLocationEvent[]
+  note?: string | null
 }

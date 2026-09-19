@@ -1,52 +1,27 @@
 import { Link } from 'react-router-dom'
-import { StatCard } from '@/components/ui/StatCard'
 import { Button } from '@/components/ui/Button'
-import { LoadingState, ErrorState } from '@/components/ui/AsyncStates'
-import { useAnalyticsOverview } from '@/features/analytics/useAnalytics'
-import { normalizeApiError } from '@/services/api/client'
+import { WeatherGlyph } from '@/components/common/WeatherGlyph'
+import { WeatherIntelligenceSection } from '@/features/analytics/WeatherIntelligenceSection'
+import { EventsMapView } from '@/features/events/EventsMapView'
 
 export function AnalystDashboardPage() {
-  const { data, isLoading, isError, error, refetch } = useAnalyticsOverview()
-
   return (
     <div className="flex flex-col gap-6">
-      <div>
-        <h1 className="text-xl font-semibold text-foreground">National Weather Intelligence</h1>
-        <p className="text-sm text-muted">
-          A read-only snapshot of the collected weather data and event activity. Every figure is aggregated in the
-          database.
-        </p>
-      </div>
-
-      {isLoading && <LoadingState label="Loading dashboard" rows={2} />}
-      {isError && <ErrorState message={normalizeApiError(error).message} onRetry={() => refetch()} />}
-
-      {!isLoading && !isError && data && (
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <StatCard label="Weather observations" value={data.total_weather_observations.toLocaleString()} />
-          <StatCard label="Weather events" value={data.total_weather_events.toLocaleString()} />
-          <StatCard label="Detected anomalies" value={data.total_anomalies.toLocaleString()} tone="warning" />
-          <StatCard label="Verified events" value={data.verified_events} tone="success" />
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between animate-rise-in">
+        <div>
+          <p className="eyebrow text-primary">RESEARCHER / ANALYST WORKSPACE</p>
+          <h1 className="mt-1 text-2xl font-semibold tracking-tight text-foreground">Weather Intelligence Command Center</h1>
+          <p className="mt-2 max-w-3xl text-sm leading-6 text-muted">Explore the collected 2024–2025 Jabalpur weather record, multi-source fusion, corroboration, anomalies, model performance and structured events from the production analytics layer.</p>
         </div>
-      )}
-
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-        <Link to="/analyst/events">
-          <Button variant="outline" className="w-full" size="lg">
-            Browse events
-          </Button>
-        </Link>
-        <Link to="/analyst/analytics">
-          <Button variant="outline" className="w-full" size="lg">
-            View full intelligence
-          </Button>
-        </Link>
-        <Link to="/analyst/map">
-          <Button variant="outline" className="w-full" size="lg">
-            View event map
-          </Button>
-        </Link>
+        <div className="flex gap-2"><Link to="/analyst/data"><Button variant="outline"><WeatherGlyph name="database" className="mr-2 h-4 w-4" />Research Data</Button></Link><Link to="/analyst/events"><Button><WeatherGlyph name="event" className="mr-2 h-4 w-4" />Weather Events</Button></Link></div>
       </div>
+
+      <WeatherIntelligenceSection />
+
+      <EventsMapView
+        title="Live geographic intelligence"
+        description="Real event coordinates from PostgreSQL/PostGIS. Use the map to connect detected event activity with the structured event and verification layer."
+      />
     </div>
   )
 }

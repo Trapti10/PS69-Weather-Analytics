@@ -1,5 +1,5 @@
 """
-PS69 Weather Analytics - Phase 5: Foundation
+National Weather Intelligence Platform
 FastAPI Application Entry Point
 
 Synchronous processing model:
@@ -28,46 +28,28 @@ from backend.api.routes import auth, reports, events
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """Apply any schema changes on boot, then run.
-
-    This project has no Alembic/migration runner - schema.sql and
-    models.py are hand-kept in sync, and every statement in schema.sql is
-    written as CREATE TABLE/INDEX IF NOT EXISTS (or an existence-guarded
-    ALTER TABLE) specifically so it is always safe to re-run against an
-    existing database. Previously nothing actually invoked it against a
-    running deployment: local dev only got it via docker-compose's
-    docker-entrypoint-initdb.d mount, which Postgres only executes once,
-    on a brand-new empty volume - so a schema change (e.g. this project's
-    weather_observations/weather_anomalies tables) would silently never
-    reach an already-provisioned production database.
-
-    Base.metadata.create_all() only creates tables/indexes that don't
-    already exist - it is a no-op on unrelated existing tables/data, so
-    running it on every boot is safe and requires no separate release step.
-    """
+    # ORM metadata uses IF NOT EXISTS semantics through create_all for new
+    # tables, so a deployment with an existing PostgreSQL volume can add the
+    # current analytics tables without destroying existing data.
     try:
         from backend.api.db import create_tables
         create_tables()
-    except Exception as e:
-        # Don't crash the whole app over a migration hiccup (e.g. a
-        # transient DB connection issue during rolling deploy) - /ready
-        # will still correctly report the database as unreachable if this
-        # is a real connectivity problem.
-        logger.error(f"Startup schema migration failed: {e}", exc_info=True)
+        logger.info("Database schema verified on application startup")
+    except Exception as exc:
+        logger.error("Database schema verification failed during startup: %s", exc)
     yield
 
 
 # Create FastAPI app
 app = FastAPI(
-    title="PS69 Weather Analytics",
-    description="National Weather Intelligence Platform - Phase 5 Foundation",
-    version="0.5.0",
+    title="National Weather Intelligence Platform",
+    description="Scalable weather intelligence, analytics, corroboration, anomaly detection and event verification for India.",
+    version="1.0.0",
+    lifespan=lifespan,
     docs_url="/docs",
     redoc_url="/redoc",
-    lifespan=lifespan,
 )
 
 # CORS middleware
@@ -121,7 +103,7 @@ def health_check():
     return {
         "status": "healthy",
         "timestamp": datetime.now().isoformat(),
-        "version": "0.5.0",
+        "version": "1.0.0",
     }
 
 # Ready check (includes DB connectivity)
@@ -152,12 +134,14 @@ def readiness_check():
 
 # Try to include routers, handle import errors gracefully
 try:
-    from backend.api.routes import auth, reports, events, admin, analytics
+    from backend.api.routes import auth, reports, events, admin, analytics, research, locations
     app.include_router(auth.router, prefix="/auth", tags=["Authentication"])
     app.include_router(reports.router, prefix="/reports", tags=["Reports"])
     app.include_router(events.router, prefix="/events", tags=["Events"])
     app.include_router(admin.router, prefix="/admin", tags=["Admin - Phase 6 Verification Workflow"])
     app.include_router(analytics.router, prefix="/analytics", tags=["Analytics - Weather Intelligence"])
+    app.include_router(research.router, prefix="/research", tags=["Research Data"])
+    app.include_router(locations.router, prefix="/locations", tags=["Locations"])
     logger.info("Routes imported successfully")
 except ImportError as e:
     logger.warning(f"Error importing routes: {e}")
@@ -167,9 +151,8 @@ except ImportError as e:
 def root():
     """Root endpoint - API information."""
     return {
-        "app": "PS69 Weather Analytics",
-        "phase": "Phase 5 - Foundation",
-        "processing_model": "Synchronous (no async queue)",
+        "app": "National Weather Intelligence Platform",
+        "processing_model": "Synchronous MVP processing",
         "database": "PostgreSQL + PostGIS",
         "endpoints": {
             "docs": "/docs",

@@ -19,6 +19,7 @@ import { AnalystDashboardPage } from '@/pages/analyst/AnalystDashboardPage'
 import { AnalystEventsPage } from '@/pages/analyst/AnalystEventsPage'
 import { AnalystAnalyticsPage } from '@/pages/analyst/AnalystAnalyticsPage'
 import { AnalystMapPage } from '@/pages/analyst/AnalystMapPage'
+import { ResearchDataPage } from '@/pages/analyst/ResearchDataPage'
 
 import { AdminDashboardPage } from '@/pages/admin/AdminDashboardPage'
 import { AdminVerificationQueuePage } from '@/pages/admin/AdminVerificationQueuePage'
@@ -117,6 +118,14 @@ export function AppRouter() {
           element={
             <RoleRoute allow={['ANALYST']}>
               <AnalystMapPage />
+            </RoleRoute>
+          }
+        />
+        <Route
+          path="/analyst/data"
+          element={
+            <RoleRoute allow={['ANALYST']}>
+              <ResearchDataPage />
             </RoleRoute>
           }
         />

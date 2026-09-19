@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import {
   getAnalyticsOverview,
+  getDataQualityAnalytics,
   getAnomalyAnalytics,
   getEventDistribution,
   getRainfallAnalytics,
@@ -8,11 +9,15 @@ import {
   getTemperatureAnalytics,
   getVerificationAnalytics,
   getWeatherTrends,
+  getFusionAnalytics,
+  getCorroborationAnalytics,
+  getIntelligenceAnalytics,
+  getModelPerformance,
 } from '@/services/api/analytics'
 import type { AnalyticsFilters, AnomalyFilters, EventDistributionFilters } from '@/types/domain'
 
 /**
- * All eight hooks below are thin TanStack Query wrappers over the
+ * Analytics hooks are thin TanStack Query wrappers over the
  * database-backed /analytics/* endpoints (backend/api/routes/analytics.py).
  * Every number rendered from these hooks was aggregated in PostgreSQL, not
  * computed here — there is no client-side reduction of raw rows anywhere in
@@ -27,7 +32,8 @@ import type { AnalyticsFilters, AnomalyFilters, EventDistributionFilters } from 
 const STALE_TIME_MS = 60_000
 
 export const analyticsQueryKeys = {
-  overview: ['analytics', 'overview'] as const,
+  overview: (filters: AnalyticsFilters = {}) => ['analytics', 'overview', filters] as const,
+  dataQuality: ['analytics', 'data-quality'] as const,
   weatherTrends: (filters: AnalyticsFilters) => ['analytics', 'weather-trends', filters] as const,
   rainfall: (filters: AnalyticsFilters) => ['analytics', 'rainfall', filters] as const,
   temperature: (filters: AnalyticsFilters) => ['analytics', 'temperature', filters] as const,
@@ -39,11 +45,19 @@ export const analyticsQueryKeys = {
     ['analytics', 'verification', filters] as const,
 }
 
-export function useAnalyticsOverview() {
+export function useAnalyticsOverview(filters: AnalyticsFilters = {}) {
   return useQuery({
-    queryKey: analyticsQueryKeys.overview,
-    queryFn: getAnalyticsOverview,
+    queryKey: analyticsQueryKeys.overview(filters),
+    queryFn: () => getAnalyticsOverview(filters),
     staleTime: STALE_TIME_MS,
+  })
+}
+
+export function useDataQualityAnalytics() {
+  return useQuery({
+    queryKey: analyticsQueryKeys.dataQuality,
+    queryFn: getDataQualityAnalytics,
+    staleTime: STALE_TIME_MS * 5,
   })
 }
 
@@ -102,5 +116,38 @@ export function useVerificationAnalytics(
     queryKey: analyticsQueryKeys.verification(filters),
     queryFn: () => getVerificationAnalytics(filters),
     staleTime: STALE_TIME_MS,
+  })
+}
+
+
+export function useFusionAnalytics() {
+  return useQuery({
+    queryKey: ['analytics', 'fusion'],
+    queryFn: getFusionAnalytics,
+    staleTime: STALE_TIME_MS * 5,
+  })
+}
+
+export function useCorroborationAnalytics() {
+  return useQuery({
+    queryKey: ['analytics', 'corroboration'],
+    queryFn: getCorroborationAnalytics,
+    staleTime: STALE_TIME_MS * 5,
+  })
+}
+
+export function useIntelligenceAnalytics() {
+  return useQuery({
+    queryKey: ['analytics', 'intelligence'],
+    queryFn: getIntelligenceAnalytics,
+    staleTime: STALE_TIME_MS * 5,
+  })
+}
+
+export function useModelPerformance() {
+  return useQuery({
+    queryKey: ['analytics', 'model-performance'],
+    queryFn: getModelPerformance,
+    staleTime: STALE_TIME_MS * 5,
   })
 }

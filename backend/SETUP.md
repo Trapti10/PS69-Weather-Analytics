@@ -327,47 +327,6 @@ FASTAPI_DEBUG=false
 CORS_ORIGINS=https://yourdomain.com
 ```
 
-## Production Database Migrations
-
-This project has no Alembic/migration runner - `backend/db/schema.sql` and
-`backend/api/models.py` are hand-kept in sync, and every statement in
-`schema.sql` is written as `CREATE TABLE`/`CREATE INDEX ... IF NOT EXISTS`
-(or an existence-guarded `ALTER TABLE ... ADD CONSTRAINT`) specifically so
-it is always safe to re-run against an existing database without touching
-data already there.
-
-**Known gap this fixes:** locally, `docker-compose.yml` mounts `schema.sql`
-into `postgres`'s `docker-entrypoint-initdb.d/` - but Postgres only runs
-files there once, the first time a *brand-new, empty* volume is
-initialized. A schema change made after a database already exists (for
-example, this project's `weather_observations`/`weather_anomalies` tables,
-added after most deployments already had `users`/`weather_events`/etc.)
-would never reach that database automatically.
-
-**The fix:** `backend/api/main.py` now calls `create_tables()`
-(`Base.metadata.create_all()`) on every application startup. Because every
-table/index is declared `IF NOT EXISTS`, this is a safe no-op against
-tables that already exist and only adds what's missing - so the very next
-deploy of the API container picks up any schema change with no separate
-migration step, manual `psql` command, or release hook required. If it
-ever fails (e.g. a transient DB connection issue during a rolling deploy)
-it logs the error rather than crashing the app; `/ready` will still
-correctly report the database as unreachable if that's a real
-connectivity problem.
-
-If you ever need to apply the schema manually against a specific database
-(e.g. before running ingestion against a database the API hasn't started
-against yet):
-
-```bash
-DATABASE_URL="<production-url>" python3 -c "from backend.api.db import create_tables; create_tables()"
-# or, equivalently:
-psql "<production-url>" -f backend/db/schema.sql
-```
-
-Neither of these touches existing rows - they only create tables/indexes
-that don't already exist.
-
 ## Monitoring
 
 ### API Health
@@ -572,3 +531,17 @@ For issues or questions:
 3. Run tests: `pytest backend/tests/ -v`
 4. Check logs: `docker-compose logs`
 5. Examine database: `docker-compose exec postgres psql ...`
+
+## Weather Intelligence Dashboard Data
+
+The Analyst/Researcher and Administrator workspaces are backed by PostgreSQL/PostGIS analytics rather than browser-side CSV parsing. After the database is running, load the real historical intelligence dataset once with:
+
+```bash
+python -m backend.db.ingest_analytics_data
+```
+
+The ingestion is idempotent and safe to re-run. The application exposes aggregated analytics under `/analytics/*`, location summaries under `/locations/*`, and a whitelisted Research Data catalog/download API under `/research/artifacts/*`.
+
+The shipped historical scientific dataset is centered on Jabalpur for 2024–2025. The UI surfaces that coverage explicitly rather than implying unsupported national historical coverage.
+
+Key analytical sources surfaced in the product include cleaned observations, ERA5/Open-Meteo source comparison and fusion outputs, corroboration summaries, weather intelligence records, anomaly analysis, forecast/model metrics, and the existing PostgreSQL weather-event verification pipeline.
