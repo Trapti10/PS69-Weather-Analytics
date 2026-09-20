@@ -21,9 +21,19 @@ class UserRegisterRequest(BaseModel):
 
 
 class UserLoginRequest(BaseModel):
-    """User login request."""
+    """User login request.
+
+    ``role`` is optional for backwards compatibility with existing API clients,
+    but the frontend login flow sends it so the server can verify that the
+    selected login type matches the account's actual database role.
+    """
     email: EmailStr
     password: str
+    role: Optional[str] = Field(
+        None,
+        pattern="^(CITIZEN|ANALYST|ADMIN)$",
+        description="Selected login type; when provided it must match the account's actual role",
+    )
 
 
 class TokenResponse(BaseModel):

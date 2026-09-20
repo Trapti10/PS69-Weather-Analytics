@@ -30,7 +30,7 @@ export function Sidebar({ role, open, onNavigate }: SidebarProps) {
   return (
     <aside
       className={cn(
-        'fixed inset-y-0 left-0 z-40 w-64 shrink-0 transform border-r border-border bg-surface transition-transform duration-200 md:static md:translate-x-0',
+        'fixed left-0 top-0 z-40 flex h-screen w-64 shrink-0 transform flex-col overflow-y-auto overscroll-contain border-r border-border bg-surface transition-transform duration-200 md:sticky md:top-0 md:self-start md:translate-x-0',
         open ? 'translate-x-0' : '-translate-x-full'
       )}
       aria-label="Primary navigation"

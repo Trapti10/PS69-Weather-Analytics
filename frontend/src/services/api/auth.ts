@@ -1,9 +1,11 @@
 import { apiClient } from '@/services/api/client'
-import type { TokenResponse } from '@/types/domain'
+import type { TokenResponse, UserRole } from '@/types/domain'
 
 export interface LoginPayload {
   email: string
   password: string
+  /** Selected login type; backend validates it against the account role. */
+  role: UserRole
 }
 
 export interface RegisterPayload {

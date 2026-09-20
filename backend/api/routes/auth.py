@@ -115,7 +115,18 @@ def login(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid email or password"
         )
-    
+
+    # The selected login type is only a validation check. The account's
+    # database role remains the sole source of truth for the JWT and RBAC.
+    if request.role and request.role != user.role:
+        logger.warning(
+            f"Login role mismatch for {user.email}: account is {user.role}, selected {request.role}"
+        )
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="These credentials belong to a different role. Please select the correct login type."
+        )
+
     try:
         # Update last login
         from datetime import datetime
